@@ -1,0 +1,93 @@
+.title {
+  font-size: 32rem;
+  padding: 44rem 0 39rem;
+  font-weight: bold;
+}
+
+.billImage {
+  width: 100%;
+  background-color: #000;
+
+  filter: drop-shadow(0px 4px 108.6px rgba(0, 0, 0, 0.25));
+  border-radius: 24rem;
+
+
+}
+
+.billItem {
+  width: 100%;
+  margin-bottom: 20rem;
+  font-size: 0;
+}
+
+.billButton {
+  width: 44px;
+  height: 44px;
+  background-color: rgba(256, 256, 256, 0.1);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  right: 0;
+  margin: auto;
+  transition: all;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(256, 256, 256, 0.3);
+  }
+
+  &.buttonTop {
+    top: 46px;
+    bottom: unset;
+
+  }
+}
+
+.previewBox {
+  width: 1800rem;
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.desc {
+  width: 100%;
+  height: 88rem;
+  background: #FFFFFF;
+  border: 1px solid #EDEBEB;
+  border-radius: 24rem;
+  display: flex;
+  align-items: center;
+  padding: 0px 20rem;
+
+  .date {
+    color: inherit;
+    font-size: 16rem;
+  }
+
+  h3 {
+    font-size: 20rem;
+    margin: 0 30rem 0 10rem;
+    color: inherit;
+  }
+
+  &[data-preview] {
+    color: #fff;
+    background: transparent;
+    border: none;
+
+    h3 {
+      font-size: 28rem;
+    }
+
+    .date {
+      font-size: 24rem;
+    }
+  }
+}

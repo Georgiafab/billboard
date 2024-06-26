@@ -1,45 +1,62 @@
-import '../styles/globals.css';
+import '../public/styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import type { AppProps } from 'next/app';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
-import {
-  arbitrum,
-  base,
-  mainnet,
-  optimism,
-  polygon,
-  sepolia,
-} from 'wagmi/chains';
-import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 
-const config = getDefaultConfig({
-  appName: 'RainbowKit App',
-  projectId: 'YOUR_PROJECT_ID',
-  chains: [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    base,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
-  ],
-  ssr: true,
+import { SessionProvider } from 'next-auth/react';
+import type { Session } from 'next-auth';
+import {
+  RainbowKitSiweNextAuthProvider,
+  GetSiweMessageOptions,
+} from '@rainbow-me/rainbowkit-siwe-next-auth';
+
+
+import { config } from '../wagmi';
+import { ConfigProvider } from 'antd';
+import SideBar from '../components/SideBar';
+
+const getSiweMessageOptions: GetSiweMessageOptions = () => ({
+  statement: 'Sign in to the RainbowKit + SIWE example app',
 });
 
-const client = new QueryClient();
+const queryClient = new QueryClient();
 
-function MyApp({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps,
+}: AppProps<{
+  session: Session;
+}>) {
+
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={client}>
-        <RainbowKitProvider>
-          <Component {...pageProps} />
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#726DF9',
+          borderRadius: 2,
+          colorBgContainer: '#F1F0FF',
+        },
+      }}
+    >
+      <SessionProvider refetchInterval={0} session={pageProps.session}>
+        <WagmiProvider config={config}>
+          <QueryClientProvider client={queryClient}>
+            <RainbowKitSiweNextAuthProvider
+              getSiweMessageOptions={getSiweMessageOptions}
+            >
+              <RainbowKitProvider modalSize="compact">
+                <>
+                  <SideBar></SideBar>
+                  <Component {...pageProps} />
+                </>
+              </RainbowKitProvider>
+            </RainbowKitSiweNextAuthProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
+      </SessionProvider>
+    </ConfigProvider>
   );
 }
-
-export default MyApp;

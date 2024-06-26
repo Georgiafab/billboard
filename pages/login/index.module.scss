@@ -1,0 +1,81 @@
+.logins {
+    width: 100vw;
+    height: 100vh;
+    background: url("/images/Intro-Banner.jpg") center bottom;
+    background-attachment: fixed;
+    background-size: cover;
+
+    .logo {
+        position: absolute;
+        top: 60rem;
+        left: 60rem;
+    }
+}
+
+.loginButton {
+    border: none;
+    width: 454rem;
+    height: 72rem;
+    background-color: #DAD9FF;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+
+    img {
+        margin: 0 auto;
+    }
+
+    &:hover {
+        background-color: #726DF9;
+        color: #726DF9;
+    }
+
+    &.matemask {
+        background-color: #DAD9FF;
+        margin-bottom: 20rem;
+
+        img {
+            height: 32rem;
+        }
+    }
+
+    &.walletconnet {
+        background-color: #F2F2FF;
+
+        img {
+            height: 20rem;
+        }
+    }
+}
+
+
+
+
+.loginBox {
+    position: absolute;
+    width: 518rem;
+    height: 500rem;
+
+    background: #FFFFFF;
+    border: 1px solid #FFFFFF;
+    box-shadow: 0px 2px 32px #FFFFFF;
+    border-radius: 16rem;
+    right: 120rem;
+    bottom: 192rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 72rem 32rem;
+    text-align: center;
+
+    p {
+        font-size: 18rem;
+    }
+
+    h1 {
+        font-size: 28rem;
+        font-weight: bold;
+        margin-top: 12rem;
+        margin-bottom: 72rem;
+    }
+}

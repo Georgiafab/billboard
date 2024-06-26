@@ -1,0 +1,91 @@
+.sideBar {
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
+    align-items: center;
+    padding: 24rem 0px;
+    gap: 24rem;
+    background-color: #fff;
+
+    position: fixed;
+    width: 96rem;
+    height: 496rem;
+    top: 0;
+    bottom: 0;
+    left: 40rem;
+    margin: auto;
+    background: linear-gradient(180deg, rgba(252, 253, 252, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%);
+    box-shadow: 0px 0px 68.8px rgba(1, 1, 1, 0.1);
+    backdrop-filter: blur(11px);
+    border-radius: 13px;
+    justify-content: center;
+
+}
+
+.barLinks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    &::after {
+        content: "";
+        display: block;
+        width: 56rem;
+        height: 1rem;
+        background-color: #EAEAEA;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+}
+
+.barItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #D7D7DE;
+    width: 72rem;
+    height: 72rem;
+    border-radius: 12rem;
+    margin-bottom: 24rem;
+
+    &:hover {
+        background-color: #F1F0FF;
+    }
+
+    &.curr {
+        color: var(--primary-color);
+
+        span {
+            color: var(--primary-color);
+        }
+    }
+
+    span {
+        margin-top: 4px;
+        line-height: 1.5;
+        font-size: 16rem;
+        color: rgba(30, 30, 30, 0.6);
+    }
+
+}
+
+.avar {
+    cursor: pointer;
+}
+
+.loginoutTip .ant-popover-inner {
+    width: 83rem;
+    height: 43rem;
+    border-radius: 8;
+    color: rgba(30, 30, 30, 0.6);
+    font-size: 16rem;
+    padding: 0;
+    background: linear-gradient(180deg, rgba(252, 253, 252, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%);
+    box-shadow: 0px 0px 68.8px rgba(1, 1, 1, 0.1);
+    backdrop-filter: blur(11px);
+}

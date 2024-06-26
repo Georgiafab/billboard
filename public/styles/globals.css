@@ -1,0 +1,149 @@
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+dl,
+dd,
+input,
+textarea,
+fieldset,
+legend,
+option,
+th,
+td,
+hr,
+button {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 0.052vw;
+  --primary-color: #726DF9;
+
+
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font: 16rem "微软雅黑";
+  line-height: 1.5;
+  color: #333;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: #666;
+}
+
+img {
+  border: none;
+  display: block;
+  /*vertical-align: top;*/
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong {
+  font-weight: normal;
+}
+
+i,
+em {
+  font-style: normal;
+}
+
+input,
+textarea,
+select,
+area {
+  outline: none;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.border0 {
+  border: none;
+}
+
+.clear:after {
+  content: " ";
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+
+.clear {
+  zoom: 1;
+}
+
+a:hover {
+  color: var(--primary-color);
+}
+
+.loginoutTip .ant-popover-inner {
+  width: 83rem;
+  height: 43rem;
+  border-radius: 8px;
+  color: rgba(30, 30, 30, 0.6);
+  font-size: 16rem;
+  padding: 0;
+  background: linear-gradient(180deg, rgba(252, 253, 252, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%);
+  box-shadow: 0px 0px 68.8px rgba(1, 1, 1, 0.1);
+  backdrop-filter: blur(11px);
+  line-height: 43rem;
+  text-align: center;
+  transform: translateX(30rem);
+  cursor: pointer;
+}
+
+.loginoutTip .ant-popover-inner:hover {
+  background-color: #F1F0FF;
+}
+
+main {
+  min-width: 100vw;
+  min-height: 100vh;
+  background: linear-gradient(181.25deg, #DFDEFF 15.08%, #FFFFFF 98.93%);
+  background-attachment: fixed;
+
+}
+
+.container {
+  max-width: 1400rem;
+  margin: 0 auto;
+
+}
+
+.ant-image-mask {
+  display: none !important;
+}
+
+.ant-image-preview-mask {
+  background-color: rgba(0, 0, 0, 0.95) !important;
+}
