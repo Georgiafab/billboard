@@ -7,43 +7,55 @@
 
     .logo {
         position: absolute;
-        top: 60rem;
-        left: 60rem;
+        top: 60px;
+        left: 60px;
     }
 }
 
 .loginButton {
     border: none;
-    width: 454rem;
-    height: 72rem;
+    width: 454px;
+    height: 72px;
     background-color: #DAD9FF;
     border-radius: 8px;
     cursor: pointer;
     text-align: center;
+    background-color: #F2F2FF;
+    transition: all 0.3s;
+    position: relative;
 
     img {
         margin: 0 auto;
     }
 
     &:hover {
-        background-color: #726DF9;
-        color: #726DF9;
+        background-color: #DAD9FF;
     }
 
-    &.matemask {
-        background-color: #DAD9FF;
-        margin-bottom: 20rem;
+    // &:disabled::after {
+    //     content: "";
+    //     display: block;
+    //     position: absolute;
+    //     width: 10px;
+    //     height: 10px;
+    //     background-color: greenyellow;
+    //     border-radius: 100%;
+    // }
+
+
+    &.metamask {
+        margin-bottom: 20px;
 
         img {
-            height: 32rem;
+            height: 32px;
         }
     }
 
-    &.walletconnet {
-        background-color: #F2F2FF;
+    &.WalletConnect {
+
 
         img {
-            height: 20rem;
+            height: 20px;
         }
     }
 }
@@ -53,29 +65,60 @@
 
 .loginBox {
     position: absolute;
-    width: 518rem;
-    height: 500rem;
+    width: 518px;
+    height: 500px;
 
     background: #FFFFFF;
     border: 1px solid #FFFFFF;
     box-shadow: 0px 2px 32px #FFFFFF;
-    border-radius: 16rem;
-    right: 120rem;
-    bottom: 192rem;
+    border-radius: 16px;
+    right: 120px;
+    bottom: 192px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 72rem 32rem;
+    padding: 72px 32px;
     text-align: center;
 
     p {
-        font-size: 18rem;
+        font-size: 18px;
     }
 
     h1 {
-        font-size: 28rem;
+        font-size: 28px;
         font-weight: bold;
-        margin-top: 12rem;
-        margin-bottom: 72rem;
+        margin-top: 12px;
+        margin-bottom: 72px;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .logins {
+        background-repeat: no-repeat;
+        background-image: url("/images/Intro-Banner-m.jpg");
+        background-size: 100%;
+        background-position: center;
+    }
+
+    .loginBox {
+        width: 100%;
+        bottom: 0;
+        right: 0;
+        padding: 36.5px 32px;
+        height: auto;
+
+        h1 {
+            margin-bottom: 31px;
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+    }
+
+    .loginButton {
+        width: 100%;
     }
 }

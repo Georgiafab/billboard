@@ -1,6 +1,8 @@
 import '../public/styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
+import '~/styles/output.css';
 import type { AppProps } from 'next/app';
+import Layout from './layout';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
@@ -16,7 +18,8 @@ import {
 
 import { config } from '../wagmi';
 import { ConfigProvider } from 'antd';
-import SideBar from '../components/SideBar';
+
+import { useRouter } from 'next/router';
 
 const getSiweMessageOptions: GetSiweMessageOptions = () => ({
   statement: 'Sign in to the RainbowKit + SIWE example app',
@@ -24,20 +27,24 @@ const getSiweMessageOptions: GetSiweMessageOptions = () => ({
 
 const queryClient = new QueryClient();
 
+
 export default function App({
   Component,
   pageProps,
 }: AppProps<{
   session: Session;
 }>) {
-
+  const { pathname } = useRouter()
   return (
     <ConfigProvider
       theme={{
         token: {
           colorPrimary: '#726DF9',
-          borderRadius: 2,
+          colorError: '#EB6E5D',
+          borderRadius: 12,
           colorBgContainer: '#F1F0FF',
+          fontSize: 16,
+          controlHeight: 47
         },
       }}
     >
@@ -48,10 +55,9 @@ export default function App({
               getSiweMessageOptions={getSiweMessageOptions}
             >
               <RainbowKitProvider modalSize="compact">
-                <>
-                  <SideBar></SideBar>
+                <Layout session={pageProps.session} pathname={pathname}>
                   <Component {...pageProps} />
-                </>
+                </Layout>
               </RainbowKitProvider>
             </RainbowKitSiweNextAuthProvider>
           </QueryClientProvider>

@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Popover } from 'antd';
 import style from './index.module.scss';
 import { adIcon, homeIcon, introduceIcon, purchaseIcon } from '../../public/icons'
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { signOut } from 'next-auth/react';
 
 
 const sidebarList = [
@@ -34,8 +35,15 @@ const sidebarList = [
 
 
 export default function SideBar({ }) {
+    const { pathname, push } = useRouter()
+    const rootPath = useMemo(() => {
+        return '/' + pathname.split('/')[1]
+    }, [pathname])
 
-    const { pathname } = useRouter()
+    const handleLogout = async () => {
+        await signOut({ redirect: false });
+        push('/login');
+    };
 
     return (
         <div className={style.sideBar}>
@@ -43,7 +51,7 @@ export default function SideBar({ }) {
                 {
                     sidebarList.map(item => {
                         return (
-                            <Link href={item.href} key={item.href} className={`${style.barItem} ${pathname == item.href ? style.curr : ""}`}>
+                            <Link href={item.href} key={item.href} className={`${style.barItem} ${rootPath == item.href ? style.curr : ""}`}>
                                 <item.icon></item.icon>
                                 <span>{item.label}</span>
                             </Link>
@@ -53,7 +61,7 @@ export default function SideBar({ }) {
             </div>
             <Popover
                 placement="right"
-                content={"退出登陆"}
+                content={<><span onClick={handleLogout}>退出登陆</span></>}
                 arrow={false} overlayClassName="loginoutTip">
                 <Image className={style.avar} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image>
             </Popover>

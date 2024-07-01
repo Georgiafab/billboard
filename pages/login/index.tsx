@@ -1,118 +1,91 @@
-
-
-
-
+import { WalletButton, ConnectButton } from '@rainbow-me/rainbowkit';
+import { useAccount } from 'wagmi';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import style from './index.module.scss';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import Image from 'next/image';
-function LoginButton({ type }: { type: "matemask" | "walletconnet" }) {
 
+
+
+const LoginButton = ({ type }: { type: "metamask" | "WalletConnect" }) => {
+    const { address, isConnected } = useAccount();
     return (
-        <ConnectButton.Custom>
-            {({
-                account,
-                chain,
-                openAccountModal,
-                openChainModal,
-                openConnectModal,
-                authenticationStatus,
-                mounted,
-            }) => {
-                const ready = mounted && authenticationStatus !== 'loading';
-                const connected =
-                    ready &&
-                    account &&
-                    chain &&
-                    (!authenticationStatus ||
-                        authenticationStatus === 'authenticated');
+        <>{!isConnected ?
+            <WalletButton.Custom wallet={type}>
+                {({ ready, connect, connected }) => {
+                    return (
+                        <button
+                            type="button"
+                            disabled={!ready}
+                            onClick={connect}
+                            className={`${style.loginButton} ${style[type]}  `}>
+                            <img src={`/images/${type}.svg`} alt={type} />
+                        </button>
+                    );
+                }}
+            </WalletButton.Custom> :
+            <ConnectButton.Custom>
+                {({
+                    account,
+                    chain,
+                    openConnectModal,
+                    authenticationStatus,
+                    mounted,
+                }) => {
+                    const ready = mounted && authenticationStatus !== 'loading';
+                    const walletConnected = ready && account && chain
+                    const authed =
+                        (!authenticationStatus ||
+                            authenticationStatus === 'authenticated');
 
-                return (
-                    <div
-                        {...(!ready && {
-                            'aria-hidden': true,
-                            'style': {
-                                opacity: 0,
-                                pointerEvents: 'none',
-                                userSelect: 'none',
-                            },
-                        })}
-                    >
-                        {(() => {
-                            if (!connected) {
-                                return (
-                                    <button onClick={openConnectModal} type="button"
-                                        className={`${style.loginButton} ${style[type]}`}>
-                                        <img src={`/images/${type}.svg`} alt={`type`} />
-                                    </button>
-                                );
-                            }
+                    return (
+                        <div
+                            className='w-full'
+                            {...(!ready && {
+                                'aria-hidden': true,
+                                'style': {
+                                    opacity: 0,
+                                    pointerEvents: 'none',
+                                    userSelect: 'none',
+                                },
+                            })}
+                        >
+                            {(() => {
+                                if (walletConnected && !authed) {
+                                    return (
+                                        <button onClick={openConnectModal} type="button"
+                                            className={`${style.loginButton} ${style[type]} `}>
+                                            <img src={`/images/${type}.svg`} alt={`type`} />
+                                        </button>
+                                    );
+                                }
 
-                            if (chain.unsupported) {
-                                return (
-                                    <button onClick={openChainModal} type="button">
-                                        Wrong network
-                                    </button>
-                                );
-                            }
-
-                            return (
-                                <div style={{ display: 'flex', gap: 12 }}>
-                                    <button
-                                        onClick={openChainModal}
-                                        style={{ display: 'flex', alignItems: 'center' }}
-                                        type="button"
-
-                                    >
-                                        {chain.hasIcon && (
-                                            <div
-                                                style={{
-                                                    background: chain.iconBackground,
-                                                    width: 12,
-                                                    height: 12,
-                                                    borderRadius: 999,
-                                                    overflow: 'hidden',
-                                                    marginRight: 4,
-                                                }}
-                                            >
-                                                {chain.iconUrl && (
-                                                    <Image
-                                                        alt={chain.name ?? 'Chain icon'}
-                                                        src={chain.iconUrl}
-                                                        width={12}
-                                                        height={12}
-                                                    />
-                                                )}
-                                            </div>
-                                        )}
-                                        {chain.name}
-                                    </button>
-
-                                    <button onClick={openAccountModal} type="button">
-                                        {account.displayName}
-                                        {account.displayBalance
-                                            ? ` (${account.displayBalance})`
-                                            : ''}
-                                    </button>
-                                </div>
-                            );
-                        })()}
-                    </div>
-                );
-            }}
-        </ConnectButton.Custom>
+                            })()}
+                        </div>
+                    );
+                }}
+            </ConnectButton.Custom>}</>
     );
 }
 export default function Login() {
+    const { data: session } = useSession();
+    const router = useRouter();
+    const { callbackUrl } = router.query;
+    useEffect(() => {
+        if (session) {
+            const redirectUrl = callbackUrl || '/';
+            router.push(redirectUrl as string);
+        }
+    }, [session]);
+
     return (
         <div className={style.logins}>
-            <div className={style.logo}>
-                <Image src="images/logo.svg" alt="logo" width={50} height={48} />
-            </div>
+            {/* {session.address} */}
             <div className={style.loginBox}>
                 <p>欢迎来到“一块广告牌”</p>
                 <h1>登陆</h1>
-                <LoginButton type='matemask' />
-                <LoginButton type='walletconnet' />
+                <LoginButton type='metamask' />
+                <LoginButton type='WalletConnect' />
             </div>
         </div>
     )

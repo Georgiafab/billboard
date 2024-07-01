@@ -7,9 +7,22 @@ const nextConfig = {
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
-
-    config.resolve.alias["@src"] = path.resolve("./src");
+    // config.resolve.alias = {
+    //   "@/*": path.resolve("./"),
+    //   "~/*": path.resolve("./public"),
+    // };
+    config.resolve.alias["@"] = path.resolve("./");
+    config.resolve.alias["~"] = path.resolve("./public");
     return config;
+  },
+  async rewrites() {
+    return [
+      // request proxy
+      {
+        source: "/text-api/:path*",
+        destination: `${process.env.DESTINATION_URL}:path*`,
+      },
+    ];
   },
 };
 

@@ -1,7 +1,5 @@
-// Code in this file is based on https://docs.login.xyz/integrations/nextauth.js
-// with added process.env.VERCEL_URL detection to support preview deployments
-// and with auth option logic extracted into a 'getAuthOptions' function so it
-// can be used to get the session server-side with 'getServerSession'
+// pages/api/auth/[...nextauth].ts
+
 import { IncomingMessage } from "http";
 import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { NextAuthOptions } from "next-auth";
@@ -72,8 +70,12 @@ export function getAuthOptions(req: IncomingMessage): NextAuthOptions {
         };
         return session;
       },
+      async redirect({ url, baseUrl }) {
+        if (url.startsWith(baseUrl)) return url;
+        // 默认重定向到首页
+        return baseUrl;
+      },
     },
-    // https://next-auth.js.org/configuration/providers/oauth
     providers,
     secret: process.env.NEXTAUTH_SECRET,
     session: {
@@ -82,8 +84,6 @@ export function getAuthOptions(req: IncomingMessage): NextAuthOptions {
   };
 }
 
-// For more information on each option (and a full list of options) go to
-// https://next-auth.js.org/configuration/options
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   const authOptions = getAuthOptions(req);
 
@@ -96,7 +96,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     req.method === "GET" &&
     req.query.nextauth.find((value) => value === "signin");
 
-  // Hide Sign-In with Ethereum from default sign page
   if (isDefaultSigninPage) {
     authOptions.providers.pop();
   }

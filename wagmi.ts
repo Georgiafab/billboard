@@ -1,39 +1,35 @@
-import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import {
   metaMaskWallet,
+  rainbowWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
+import { createConfig, http } from "wagmi";
+import { mainnet } from "wagmi/chains";
+import { coinbaseWallet, metaMask, walletConnect } from "wagmi/connectors";
+
+const projectId = "2c01535b38b05886544b0c8c2b544d28";
+const appName = "RainbowKit demo";
+
 const connectors = connectorsForWallets(
   [
     {
       groupName: "Recommended",
-      wallets: [metaMaskWallet, walletConnectWallet],
+      wallets: [metaMaskWallet, walletConnectWallet, rainbowWallet],
     },
   ],
-  { appName: "RainbowKit App", projectId: "YOUR_PROJECT_ID" }
+  {
+    projectId,
+    appName,
+  }
 );
 
-import {
-  arbitrum,
-  base,
-  mainnet,
-  optimism,
-  polygon,
-  sepolia,
-} from "wagmi/chains";
-
-export const config = getDefaultConfig({
-  appName: "RainbowKit demo",
-  projectId: "2c01535b38b05886544b0c8c2b544d28",
-  chains: [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    base,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [sepolia] : []),
-  ],
+export const config = createConfig({
+  connectors,
+  chains: [mainnet],
+  transports: {
+    [mainnet.id]: http(),
+  },
+  multiInjectedProviderDiscovery: false,
   ssr: true,
-  connectors: connectors,
 });

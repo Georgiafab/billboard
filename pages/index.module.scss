@@ -1,6 +1,6 @@
 .title {
-  font-size: 32rem;
-  padding: 44rem 0 39rem;
+  font-size: 32px;
+  padding: 44px 0 39px;
   font-weight: bold;
 }
 
@@ -9,14 +9,14 @@
   background-color: #000;
 
   filter: drop-shadow(0px 4px 108.6px rgba(0, 0, 0, 0.25));
-  border-radius: 24rem;
+  border-radius: 24px;
 
 
 }
 
 .billItem {
   width: 100%;
-  margin-bottom: 20rem;
+  margin-bottom: 20px;
   font-size: 0;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .previewBox {
-  width: 1800rem;
+  width: 1800px;
   position: relative;
   height: 100vh;
   display: flex;
@@ -58,22 +58,22 @@
 
 .desc {
   width: 100%;
-  height: 88rem;
+  height: 88px;
   background: #FFFFFF;
   border: 1px solid #EDEBEB;
-  border-radius: 24rem;
+  border-radius: 24px;
   display: flex;
   align-items: center;
-  padding: 0px 20rem;
+  padding: 0px 20px;
 
   .date {
     color: inherit;
-    font-size: 16rem;
+    font-size: 16px;
   }
 
   h3 {
-    font-size: 20rem;
-    margin: 0 30rem 0 10rem;
+    font-size: 20px;
+    margin: 0 30px 0 10px;
     color: inherit;
   }
 
@@ -83,11 +83,11 @@
     border: none;
 
     h3 {
-      font-size: 28rem;
+      font-size: 28px;
     }
 
     .date {
-      font-size: 24rem;
+      font-size: 24px;
     }
   }
 }
