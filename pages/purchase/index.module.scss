@@ -56,6 +56,7 @@
     .right {
         img {
             margin: 0 7px;
+            border-radius: 100%;
         }
 
         display: flex;
@@ -82,4 +83,84 @@
     height: 48px;
     font-size: 18px;
     border-radius: 8px;
+}
+
+@media (max-width: 1024px) {
+    .purchaseList {
+        max-width: 96%;
+        width: 100%;
+        margin: 40px auto;
+    }
+
+    .purItem {
+        width: max-content;
+        display: flex;
+        margin: 0 auto;
+
+
+        img {
+            width: 43vw;
+            margin-right: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+    }
+
+    .descItems {
+        font-size: 16px;
+        margin-bottom: 6px;
+        justify-content: space-between;
+    }
+
+    .amount {
+        position: relative;
+        display: flex;
+        align-items: end;
+        font-size: 16px;
+        justify-content: space-between;
+
+        span {
+            font-size: 20px;
+        }
+    }
+
+    .button {
+        height: 32px;
+        margin-bottom: 8px;
+        border-radius: 4px;
+    }
+
+    .right img {
+        width: 20px;
+        height: 20px;
+        margin-left: 0 !important;
+
+    }
+
+    .right [class*='ant-typography'] {
+        font-size: 12px !important;
+
+    }
+}
+
+@media (max-width: 768px) {
+
+    .descItems {
+        font-size: 12px;
+    }
+
+    .amount {
+        font-size: 12px;
+
+        span {
+            font-size: 16px;
+        }
+    }
+
+    .button {
+        font-size: 12px;
+    }
 }

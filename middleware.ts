@@ -1,11 +1,20 @@
-// pages/_middleware.ts
-
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  // 允许所有来源访问
+  const response = NextResponse.next();
+  // response.headers.set("Access-Control-Allow-Origin", "*");
+  // response.headers.set(
+  //   "Access-Control-Allow-Methods",
+  //   "GET,POST,PUT,DELETE,OPTIONS"
+  // );
+  // response.headers.set(
+  //   "Access-Control-Allow-Headers",
+  //   "Content-Type, Authorization"
+  // );
 
   // No authentication is required if the request path is /login or /api/auth
   if (
@@ -13,7 +22,7 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith("/api/auth") ||
     pathname.match(/\.(.*)$/) // Matches static resources such as.js,.css,.png,.jpg,.jpeg,.svg,.gif, etc
   ) {
-    return NextResponse.next();
+    return response;
   }
 
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
@@ -26,5 +35,5 @@ export async function middleware(req: NextRequest) {
   }
 
   // If there is a token, the request is allowed to continue processing
-  return NextResponse.next();
+  return response;
 }

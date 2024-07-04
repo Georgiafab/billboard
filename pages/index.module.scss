@@ -10,8 +10,6 @@
 
   filter: drop-shadow(0px 4px 108.6px rgba(0, 0, 0, 0.25));
   border-radius: 24px;
-
-
 }
 
 .billItem {
@@ -27,7 +25,7 @@
   border-radius: 50%;
   position: absolute;
   bottom: 46px;
-  display: flex;
+  // display: flex;
   align-items: center;
   justify-content: center;
   left: 0;
@@ -66,6 +64,11 @@
   align-items: center;
   padding: 0px 20px;
 
+  .avar {
+    width: 56px;
+    height: 56px;
+  }
+
   .date {
     color: inherit;
     font-size: 16px;
@@ -90,4 +93,27 @@
       font-size: 24px;
     }
   }
+}
+
+@media (max-width: 1024px) {
+  .desc {
+    height: 58px;
+    font-size: 12px;
+
+    h3 {
+      font-size: 13px;
+      margin-left: 7px;
+    }
+
+    .date {
+      font-size: 12px;
+    }
+
+    .avar {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+
 }

@@ -10,11 +10,14 @@
     "css": "npx tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css --watch"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
     "@rainbow-me/rainbowkit": "^2.1.2",
     "@rainbow-me/rainbowkit-siwe-next-auth": "^0.4.1",
     "@tanstack/react-query": "^5.28.4",
     "antd": "^5.18.3",
+    "axios": "^1.7.2",
     "ethers": "^5",
+    "http-proxy-middleware": "^3.0.0",
     "next": "^14.2.3",
     "next-auth": "^4.24.7",
     "react": "^18.3.0",

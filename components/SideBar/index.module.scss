@@ -1,5 +1,4 @@
 .sideBar {
-    display: flex;
     flex-direction: column;
     // justify-content: center;
     align-items: center;
@@ -40,6 +39,12 @@
         left: 0;
         right: 0;
         margin: auto;
+    }
+}
+
+.mbarItem {
+    svg {
+        width: 17px;
     }
 }
 
