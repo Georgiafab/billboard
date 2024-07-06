@@ -72,8 +72,9 @@ export default function Login() {
     const router = useRouter();
     const { callbackUrl } = router.query;
     useEffect(() => {
+        console.log(session, 'session')
         if (session) {
-            const redirectUrl = callbackUrl || '/';
+            const redirectUrl = '/';
             router.push(redirectUrl as string);
         }
     }, [session]);
@@ -83,7 +84,7 @@ export default function Login() {
             {/* {session.address} */}
             <div className={style.loginBox}>
                 <p>欢迎来到“一块广告牌”</p>
-                <h1>登陆</h1>
+                <h1 data-link={process.env.NEXT_PUBLIC_NEXTAUTH_URL}>登陆</h1>
                 <LoginButton type='metamask' />
                 <LoginButton type='WalletConnect' />
             </div>

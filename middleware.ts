@@ -6,15 +6,6 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   // 允许所有来源访问
   const response = NextResponse.next();
-  // response.headers.set("Access-Control-Allow-Origin", "*");
-  // response.headers.set(
-  //   "Access-Control-Allow-Methods",
-  //   "GET,POST,PUT,DELETE,OPTIONS"
-  // );
-  // response.headers.set(
-  //   "Access-Control-Allow-Headers",
-  //   "Content-Type, Authorization"
-  // );
 
   // No authentication is required if the request path is /login or /api/auth
   if (
