@@ -61,6 +61,7 @@ const Home = ({ data }: { data: IAdvertise[] }) => {
 
       <div className="2xl:max-w-[1400px] 2xl:m-auto lg:mx-8 lg:my-0 md:mx-0">
         <h1 className=" lg:pb-[39px] text-xl lg:text-[32px] lg:pt-[44px] pl-[36px] py-[17px] lg:pl-0">历史广告牌</h1>
+        <span className='hide'>{process.env.NEXT_PUBLIC_NEXTAUTH_URL}</span>
         {data.map((item: IAdvertise, index) => {
           return (<div className={`${style.billItem} lg:block hidden`} key={item.id}>
             <Image width={'100%'} className={`bg-deep-black drop-shadow-lg w-full max-h-[498px] rounded-3xl object-contain`} src={process.env.NEXT_PUBLIC_API_BASE_URL + item.pcimage} alt={item.useraddr}
