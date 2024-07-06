@@ -7,7 +7,7 @@ import { GetServerSideProps } from 'next/types';
 import { getAdvertise } from '@/services';
 import { AUD_STATUS, IAdvertise } from '@/types/response';
 import SuffixText from '@/components/SuffixText';
-
+import { useRouter } from 'next/router';
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     return {
         props: {
@@ -30,6 +30,7 @@ const Tabs = [{
     audstatus: AUD_STATUS.success
 }]
 const History = ({ data }: { data: IAdvertise[] }) => {
+    const router = useRouter()
 
     const [currTab, setCurrTab] = useState<AUD_STATUS>(AUD_STATUS.all)
 
@@ -52,9 +53,9 @@ const History = ({ data }: { data: IAdvertise[] }) => {
                     ))}
                 </div>
 
-                <div className='grid gap-2 grid-cols-4 max-2xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 text-sm'>
+                <div className='grid gap-2 grid-cols-4 max-2xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 text-sm' >
                     {showList.map(item => {
-                        return <div className="rounded-xl  relative overflow-hidden" key={item.id}>
+                        return <div className="rounded-xl  relative overflow-hidden cursor-pointer" key={item.id} onClick={() => router.push(`/ad/history/${item.id}`)}>
                             <div className={`${item.audstatus === AUD_STATUS.pending ? 'bg-gray' : item.audstatus === AUD_STATUS.success ? 'bg-purple' : 'bg-orange'} pt-5 pb-8 px-5`}>
                                 <p className='flex items-center mb-[10px]'>
                                     <span className='text-white text-opacity-60 w-14'>提交时间</span>
