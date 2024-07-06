@@ -8,6 +8,7 @@ import Back from '@/components/Back';
 import NotifAlert from '@/components/NotifAlert';
 import { addAdvertise } from '@/services';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 
 const STEPS = [
@@ -42,8 +43,10 @@ export function StepsIcon({ index, isMobile, ...props }: { index: number, isMobi
 }
 export default function Images() {
     const { data: session } = useSession();
+    const router = useRouter()
     const [currStep, setCurrStep] = useState<number>(0)
     const [note, setNote] = useState<string>('')
+
     const [imgUrls, setImgUrls] = useState<string[]>([])
     const props: UploadProps = {
         name: 'image',
@@ -65,7 +68,12 @@ export default function Images() {
             if (status !== 'uploading') {
             }
             if (status === 'done') {
-                setImgUrls(prev => ([...prev.splice(currStep, 1, info.file.response.image)]))
+                console.log(currStep, 1, info.file.response.image)
+                setImgUrls(prev => {
+                    let arr = [...prev]
+                    arr[currStep] = info.file.response.image
+                    return arr
+                })
                 message.success(`${info.file.name} 上传成功!`);
             } else if (status === 'error') {
                 message.error(`${info.file.name} 上传失败.`);
@@ -97,12 +105,15 @@ export default function Images() {
     const handleSubmit = () => {
         addAdvertise({ useraddr: session?.address, usersignature: note, pcimage: imgUrls[0], mobimage: imgUrls[1] }).then((res: any) => {
             setNotifShow(true)
+            setTimeout(() => {
+                router.push('/ad')
+            }, 2000)
         })
     }
 
     return (
         <main className='ad inset w-full overflow-hidden relative'>
-            <div className="md:w-[816px] w-11/12 m-auto overflow-hidden text-white  relative z-[1] ">
+            <div className={`md:w-[816px] w-11/12 m-auto overflow-hidden text-white  relative z-[1] ${style.ad}`}>
 
                 <Back text="图片配置" >
                     {currStep > 0 && <span className='text-xl' onClick={handlePrev}>上一步</span>}
@@ -124,7 +135,7 @@ export default function Images() {
                     {
                         currStep === 0 && (
                             <>
-                                {imgUrls[0] ? <div className='relative w-full h-[200px]'>
+                                {imgUrls[0] ? <div className='relative w-full h-[200px] overflow-hidden'>
                                     <Button onClick={handleDelte} className="absolute top-3 right-3 z-10" size="small" type="primary" shape="circle" icon={<CloseOutlined />} />
                                     <Image className="w-full h-[200px]" src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${imgUrls[0]}`} alt="pc img"></Image>
                                 </div> :
@@ -148,7 +159,7 @@ export default function Images() {
                             <>
                                 {imgUrls[1] ? <div className='relative lg:h-full lg:w-[300px] w-full h-[122.36vw]'>
                                     <Button onClick={handleDelte} className="absolute top-3 right-3 z-10" size="small" type="primary" shape="circle" icon={<CloseOutlined />} />
-                                    <Image src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${imgUrls[1]}`} alt="pc img"></Image>
+                                    <Image src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${imgUrls[1]}`} alt="pc img" style={{ height: "100%", width: 'auto' }}></Image>
                                 </div> :
                                     <Dragger {...props} className={`lg:h-full lg:w-[300px] w-full h-[122.36vw] text-center bg-white max-lg:bg-[#FAFBFF] block border-none ${style.upload}`}>
 
