@@ -22,7 +22,7 @@ import { ConfigProvider } from 'antd';
 import { useRouter } from 'next/router';
 
 const getSiweMessageOptions: GetSiweMessageOptions = () => ({
-  statement: 'Sign in to the RainbowKit + SIWE example app',
+  statement: '登陆到一块广告牌',
 });
 
 const queryClient = new QueryClient();
@@ -55,7 +55,7 @@ export default function App({
               getSiweMessageOptions={getSiweMessageOptions}
             >
               <RainbowKitProvider modalSize="compact">
-                <Layout session={pageProps.session} pathname={pathname}>
+                <Layout pathname={pathname}>
                   <Component {...pageProps} />
                 </Layout>
               </RainbowKitProvider>
