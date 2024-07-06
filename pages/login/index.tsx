@@ -72,10 +72,9 @@ export default function Login() {
     const router = useRouter();
     const { callbackUrl } = router.query;
     useEffect(() => {
-        console.log(session, 'session')
         if (session) {
-            const redirectUrl = '/';
-            router.push(redirectUrl as string);
+            // const redirectUrl = '/';
+            router.push('/');
         }
     }, [session]);
 
