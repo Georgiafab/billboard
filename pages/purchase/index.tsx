@@ -22,13 +22,7 @@ export default function purchase() {
                             <div>
                                 <h3 >一块广告牌</h3>
                                 <div className={style.desc}>
-                                    <div className={`${style.descItems} max-lg:flex-col`}>
-                                        <span className={`${style.left} ml-0`}>购买人： </span>
-                                        <div className={`${style.right} max-lg:mt-[6px]`}>
-                                            <Image src="/images/avar.png" width={31} height={31} alt=''></Image>
-                                            <span className="text-xs"><SuffixText content="0x12121212121212121212"></SuffixText></span>
-                                        </div>
-                                    </div>
+
                                     <div className={style.descItems}>
                                         <span className={style.left}>展示开始日期： </span>
                                         <span className={style.right}>24/2/12</span>
@@ -37,7 +31,13 @@ export default function purchase() {
                                         <span className={style.left}>展示结束日期： </span>
                                         <span className={style.right}>24/2/12</span>
                                     </div>
-
+                                    <div className={`${style.descItems} max-lg:flex-col`}>
+                                        <span className={`${style.left} ml-0`}>购买人： </span>
+                                        <div className={`${style.right} max-lg:mt-[6px]`}>
+                                            <Image src="/images/avar.png" width={31} height={31} alt=''></Image>
+                                            <span className="text-xs"><SuffixText content="0x12121212121212121212"></SuffixText></span>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>

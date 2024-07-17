@@ -1,0 +1,943 @@
+[{
+    "inputs": [{
+        "internalType": "string",
+        "name": "tokenUri_",
+        "type": "string"
+    }],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+}, {
+    "inputs": [],
+    "name": "AlreadyKeeper",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "ContractHoldsShD",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "cooldown",
+        "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "cooldownMaximumDuration",
+        "type": "uint256"
+    }],
+    "name": "CooldownExceedsMaximumDuration",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "CreatorDoesNotControl",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "CreatorDoesNotControlShD",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "CreatorDoesNotControlShd",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "valueProvided",
+        "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "currentValue",
+        "type": "uint256"
+    }],
+    "name": "CurrentValueIncorrect",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "fundsAvailable",
+        "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "fundsRequired",
+        "type": "uint256"
+    }],
+    "name": "InsufficientFunds",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "priceProvided",
+        "type": "uint256"
+    }],
+    "name": "InvalidNewPrice",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "KeeperInSolvent",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "NotAllowedTransferToContract",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "correctAmount",
+        "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+    }],
+    "name": "NotEnoughDepositAmount",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "NotEnoughTimeForSetPrice",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "NotEnoughTimeForTrading",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "NotKeeper",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "NotOwner",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "NotPermitted",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "NotSupprted",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "NotUserKeepShd",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "PurchasingNotPermitted",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "ShdIsLocked",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "ShdIsNotLocked",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "TradeIsNotAllowed",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "TradeIsNotCooldown",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "WrongPriceInput",
+    "type": "error"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+    }, {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "approved",
+        "type": "bool"
+    }],
+    "name": "ApprovalForAll",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "previousPriceCooldown",
+        "type": "uint256"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "newPriceCooldown",
+        "type": "uint256"
+    }, {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "previousTradeCooldown",
+        "type": "uint256"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "newTradeCooldown",
+        "type": "uint256"
+    }],
+    "name": "CooldownUpdate",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "address",
+        "name": "firstKeeper",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "recieveTime",
+        "type": "uint256"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "shdId",
+        "type": "uint256"
+    }],
+    "name": "CreateShd",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "shdId",
+        "type": "uint256"
+    }, {
+        "indexed": true,
+        "internalType": "address",
+        "name": "depositor",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+    }],
+    "name": "Deposit",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "previousKeeperTaxNumerator",
+        "type": "uint256"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "newKeeperTaxNumerator",
+        "type": "uint256"
+    }],
+    "name": "FeesUpdate",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "previousPrice",
+        "type": "uint256"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "newPrice",
+        "type": "uint256"
+    }],
+    "name": "PriceUpdate",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "purchaseTime",
+        "type": "uint256"
+    }, {
+        "indexed": true,
+        "internalType": "address",
+        "name": "currentKeeper",
+        "type": "address"
+    }, {
+        "indexed": false,
+        "internalType": "address",
+        "name": "lastKeeper",
+        "type": "address"
+    }],
+    "name": "Purchase",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "address",
+        "name": "finalKeeper",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "reclaimPrice",
+        "type": "uint256"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "reclaimTime",
+        "type": "uint256"
+    }],
+    "name": "ReclaimShd",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "address",
+        "name": "formerKeeper",
+        "type": "address"
+    }],
+    "name": "Relinquishment",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "address",
+        "name": "keeper",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "address",
+        "name": "beneficiary",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+    }],
+    "name": "Settlement",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+    }, {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+    }],
+    "name": "Transfer",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+    }, {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "ids",
+        "type": "uint256[]"
+    }, {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "values",
+        "type": "uint256[]"
+    }],
+    "name": "TransferBatch",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+    }, {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+    }, {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+    }],
+    "name": "TransferSingle",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "internalType": "string",
+        "name": "value",
+        "type": "string"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+    }],
+    "name": "URI",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "shdId",
+        "type": "uint256"
+    }, {
+        "indexed": true,
+        "internalType": "address",
+        "name": "recipient_",
+        "type": "address"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount_",
+        "type": "uint256"
+    }],
+    "name": "Withdrawal",
+    "type": "event"
+}, {
+    "inputs": [],
+    "name": "INITIAL_PRICE",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "SHD_VALUE",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "_calculateDepositFees",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "_calculateRemainingDays",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "_calculateTradeFees",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "_calculateUsageFees",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }, {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "name": "balanceOf",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "pure",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+    }, {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+    }],
+    "name": "balanceOfBatch",
+    "outputs": [{
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "checkFundsOf",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "checkOwner",
+    "outputs": [{
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "createShd",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "deposit",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "feeDenominator",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "feeDenominatorValue",
+        "type": "uint256"
+    }],
+    "stateMutability": "pure",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }],
+    "name": "fundsOf",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "getCurrentPrice",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "currentPrice",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "getCurrentShdKeeper",
+    "outputs": [{
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }, {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }],
+    "name": "isApprovedForAll",
+    "outputs": [{
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "keeperUsageTime",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "keeperTaxPeriodSeconds",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "priceCooldown",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "purchase",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "reclaim",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }, {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }, {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+    }, {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+    }, {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+    }],
+    "name": "safeBatchTransferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }, {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }, {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }, {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+    }],
+    "name": "safeTransferFrom",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }, {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+    }],
+    "name": "setApprovalForAll",
+    "outputs": [],
+    "stateMutability": "pure",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "newUsageNumerator",
+        "type": "uint256"
+    }],
+    "name": "setFees",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "newPrice_",
+        "type": "uint256"
+    }],
+    "name": "setPrice",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "string",
+        "name": "newTokenURI",
+        "type": "string"
+    }],
+    "name": "setTokenURI",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "settle",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "shdId",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
+    }],
+    "name": "supportsInterface",
+    "outputs": [{
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+    }],
+    "stateMutability": "pure",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "tradeCooldown",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "tradeState",
+    "outputs": [{
+        "internalType": "enum Shd.TradeState",
+        "name": "",
+        "type": "uint8"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "tradingFeeNumerator",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "name": "uri",
+    "outputs": [{
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+    }],
+    "stateMutability": "pure",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "usageNumerator",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "amount_",
+        "type": "uint256"
+    }],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "withdrawAllForBeneficiary",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+}]

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import type { UploadProps, } from 'antd';
 import { message, Upload, Button, Input, Image } from 'antd';
 import { PlusIcon, Step1Icon, Step2Icon, Step3Icon, MStep1Icon, MStep2Icon, MStep3Icon, SuccessIcon } from '~/icons';
@@ -9,6 +9,7 @@ import NotifAlert from '@/components/NotifAlert';
 import { addAdvertise } from '@/services';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { useSignMessage } from 'wagmi'
 
 
 const STEPS = [
@@ -43,12 +44,16 @@ export function StepsIcon({ index, isMobile, ...props }: { index: number, isMobi
 }
 export default function Images() {
     const { data: session } = useSession();
+    const { signMessage, isSuccess, data: usersignature } = useSignMessage();
     const router = useRouter()
     const [currStep, setCurrStep] = useState<number>(0)
     const [note, setNote] = useState<string>('')
 
     const [imgUrls, setImgUrls] = useState<string[]>([])
-    const props: UploadProps = {
+
+
+    const props: UploadProps =
+    {
         name: 'image',
         multiple: false,
         action: `${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/image/`,
@@ -59,6 +64,7 @@ export default function Images() {
         beforeUpload: (file) => {
 
             if (file.size > 5 * (1024 ** 2)) {
+                message.error("上传的图片大小必须小于5M")
                 return false
             }
             return true
@@ -98,17 +104,24 @@ export default function Images() {
         setCurrStep(prev => prev - 1)
     }, [setCurrStep])
 
-    const handleDelte = useCallback(() => {
-        setImgUrls(prev => [...prev.splice(currStep, 1)])
-    }, [currStep])
-
-    const handleSubmit = () => {
-        addAdvertise({ useraddr: session?.address, usersignature: note, pcimage: imgUrls[0], mobimage: imgUrls[1] }).then((res: any) => {
-            setNotifShow(true)
-            setTimeout(() => {
-                router.push('/ad')
-            }, 2000)
+    const handleDelte = () => {
+        setImgUrls(prev => {
+            console.log(prev)
+            return [...prev.splice(currStep, 1)]
         })
+    }
+    useEffect(() => {
+        if (isSuccess) {
+            addAdvertise({ useraddr: session?.address, usersignature: usersignature, applymsg: note, pcimage: imgUrls[0], mobimage: imgUrls[1] }).then((res: any) => {
+                setNotifShow(true)
+                setTimeout(() => {
+                    router.push('/ad')
+                }, 2000)
+            })
+        }
+    }, [isSuccess])
+    const handleSubmit = () => {
+        signMessage({ message: `useraddr:${session?.address}\npcimage:${imgUrls[0]}\nmobimage:${imgUrls[1]}\napplymsg:${note}` })
     }
 
     return (

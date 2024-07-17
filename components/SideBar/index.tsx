@@ -1,12 +1,21 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import style from './index.module.scss';
 import { adIcon, homeIcon, introduceIcon, purchaseIcon, SlogenIcon } from '~/icons'
 import Link from 'next/link';
+import Avatar from '../Avatar';
+
+// import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
-import { Popover, Typography } from 'antd';
+import useDomAlready from '@/hooks/useDomAlready';
+import { useDisconnect } from 'wagmi'
+
+import { useEnsName } from 'wagmi'
+import Image from 'next/image';
+import { Button, Popover, Typography } from 'antd';
 import SuffixText from '../SuffixText';
+import sns from "@seedao/sns-js";
+
 
 const sidebarList = [
     {
@@ -32,18 +41,33 @@ const sidebarList = [
 ]
 
 
-export default function SideBar({ }) {
+export default function SideBar() {
+
+    const { documentMouned } = useDomAlready()
     const { pathname, push } = useRouter()
     const { data: session } = useSession();
+    const [name, setName] = useState<string>('')
     const rootPath = useMemo(() => {
         return '/' + pathname.split('/')[1]
     }, [pathname])
+    const ensname = useEnsName({
+        address: session?.address as `0x${string}`,
+    })
 
-
+    const { disconnect } = useDisconnect()
     const handleLogout = async () => {
         await signOut({ redirect: false });
+        disconnect()
         push('/login');
     };
+    const getName = useCallback(async (address: string) => {
+        const snsname: string = await sns.name(address)
+        setName(snsname || ensname.data || address)
+    }, [ensname])
+
+    useEffect(() => {
+        session?.address && getName(session.address)
+    }, [session, getName])
 
     return (
         <>
@@ -56,9 +80,9 @@ export default function SideBar({ }) {
 
                     <Image src="/images/logo.svg" alt="logo" width={40} height={36} />
 
-                    <div className='w-2/5 flex'>
-                        <img src={session?.user?.image || '/images/avar.png'} className="w-6 w-6 rounded-full mr-4" />
-                        <SuffixText className="text-base flex-1" content={session?.user?.name || ''} />
+                    <div className='w-2/5 flex items-center '>
+                        <Avatar address={session?.address!} className="!size-8 mr-1" />
+                        <SuffixText className="text-base flex-1" content={name} />
                     </div>
                 </div>
 
@@ -74,9 +98,6 @@ export default function SideBar({ }) {
                         )
                     })
                 }
-            </div>
-            <div className='absolute bottom-[110px] w-full text-center lg:hidden'>
-                <SlogenIcon className="inline-block" />
             </div>
 
             <>
@@ -101,8 +122,10 @@ export default function SideBar({ }) {
                         placement="right"
                         content={<><span onClick={handleLogout}>退出登陆</span></>}
                         arrow={false} overlayClassName="loginoutTip">
-                        <Image className={style.avar} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image>
+                        <Image className={`${style.avar} absolute -z-10 opacity-0`} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image>
+                        <Avatar address={session?.address!} className="!size-10" />
                     </Popover>
+
                 </div>
             </>
         </>

@@ -4,6 +4,7 @@ import { getAdvertise } from '../services';
 import { PrevIcon, NextIcon } from '../public/icons';
 import style from './index.module.scss';
 import SuffixText from '../components/SuffixText';
+import Avatar from "@/components/Avatar"
 
 import { IAdvertise } from '../types/response';
 import { useState } from 'react';
@@ -59,11 +60,11 @@ const Home = ({ data }: { data: IAdvertise[] }) => {
   return (
     <main className='home'>
 
-      <div className="2xl:max-w-[1400px] 2xl:m-auto lg:mx-8 lg:my-0 md:mx-0">
+      <div className="3xl:max-w-[1400px] 3xl:m-auto lg:mx-40  lg:my-0 md:mx-0">
         <h1 className=" lg:pb-[39px] text-xl lg:text-[32px] lg:pt-[44px] pl-[36px] py-[17px] lg:pl-0">历史广告牌</h1>
         {data.map((item: IAdvertise, index) => {
           return (<div className={`${style.billItem} lg:block hidden`} key={item.id}>
-            <Image width={'100%'} className={`bg-deep-black drop-shadow-lg w-full max-h-[498px] rounded-3xl object-contain`} src={process.env.NEXT_PUBLIC_API_BASE_URL + item.pcimage} alt={item.useraddr}
+            <Image width={'100%'} fallback="/images/image_err.png" className={`bg-deep-black drop-shadow-lg w-full max-h-[498px] rounded-3xl object-contain`} src={process.env.NEXT_PUBLIC_API_BASE_URL + item.pcimage} alt={item.useraddr}
               preview={{
                 onVisibleChange: () => previewChange(item, index),
                 imageRender: () => (
@@ -72,11 +73,12 @@ const Home = ({ data }: { data: IAdvertise[] }) => {
                       <PrevIcon > </PrevIcon>
                     </div>
                     <div className={style.desc} data-preview>
-                      <Image className={style.avar} preview={false} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image>
+                      <Avatar className={style.avar} address={item.useraddr} />
+                      {/* <Image className={style.avar} preview={false} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image> */}
                       <h3>{curItem.useraddr}</h3>
                       <div className={style.date}>{new Date(curItem.createdate).toLocaleDateString()}</div>
                     </div>
-                    <Image className=' h-[498px] max-h-[60vh] w-auto object-contain' src={process.env.NEXT_PUBLIC_API_BASE_URL + curItem.pcimage} alt='' preview={false}></Image>
+                    <Image className=' h-[498px] max-h-[60vh] w-auto object-contain' fallback="/images/image_err.png" src={process.env.NEXT_PUBLIC_API_BASE_URL + curItem.pcimage} alt='' preview={false}></Image>
                     <div className={`${style.billButton} ${curItemIndex < data.length - 1 ? 'flex' : 'hidden'}`} onClick={() => changeItem('next')}>
                       <NextIcon ></NextIcon>
                     </div>
@@ -86,8 +88,8 @@ const Home = ({ data }: { data: IAdvertise[] }) => {
               }}
             > </Image>
             <div className={`${style.desc}`}>
+              <Avatar className={style.avar} address={item.useraddr} />
 
-              <Image className={style.avar} preview={false} src="/images/avar.png" alt={'avar'}></Image>
               <h3>{item.useraddr}</h3>
               <div className={style.date}>{new Date(item.createdate).toLocaleDateString()}</div>
             </div>
@@ -97,7 +99,7 @@ const Home = ({ data }: { data: IAdvertise[] }) => {
 
 
         <div className='lg:hidden'>
-          <Carousel afterChange={onChange} className='w-10/12 m-auto '>
+          <Carousel afterChange={onChange} className='w-10/12 m-auto home-caroual'>
 
             {data.map((item: any) => {
               return (<div className={style.billItem} key={item.id}>
@@ -106,8 +108,7 @@ const Home = ({ data }: { data: IAdvertise[] }) => {
                   preview={false}
                 > </Image>
                 <div className={style.desc}>
-
-                  <Image className={style.avar} preview={false} src="/images/avar.png" alt={'avar'}></Image>
+                  <Avatar className={style.avar} address={item.useraddr} />
                   <h3><SuffixText content={item.useraddr}></SuffixText></h3>
                   <div className={style.date}>{new Date(item.createdate).toLocaleDateString()}</div>
                 </div>

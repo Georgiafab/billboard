@@ -10,14 +10,14 @@ type Props = {
 export default function Layout({ children, pathname }: Props) {
     const { data: session } = useSession();
     const router = useRouter()
-    useEffect(() => {
-        if (session) {
-            // const redirectUrl = '/';
-            router.push('/');
-        } else {
-            router.replace('/login');
-        }
-    }, [session]);
+    // useEffect(() => {
+    //     if (session) {
+    //         // const redirectUrl = '/';
+    //         router.push('/');
+    //     } else {
+    //         router.replace('/login');
+    //     }
+    // }, [router, session]);
     return (
         <>
             {pathname !== '/login' && <>

@@ -1,34 +1,33 @@
 import { connectorsForWallets } from "@rainbow-me/rainbowkit";
 import {
   metaMaskWallet,
-  rainbowWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { createConfig, http } from "wagmi";
-import { mainnet } from "wagmi/chains";
+import { mainnet, polygonAmoy, polygon } from "wagmi/chains";
 import { coinbaseWallet, metaMask, walletConnect } from "wagmi/connectors";
 
-const projectId = "2c01535b38b05886544b0c8c2b544d28";
-const appName = "RainbowKit demo";
+const appName = "一块广告牌";
 
 const connectors = connectorsForWallets(
   [
     {
       groupName: "Recommended",
-      wallets: [metaMaskWallet, walletConnectWallet, rainbowWallet],
+      wallets: [metaMaskWallet, walletConnectWallet],
     },
   ],
   {
-    projectId,
+    projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
     appName,
   }
 );
 
 export const config = createConfig({
   connectors,
-  chains: [mainnet],
+  chains: [process.env.NODE_ENV === "development" ? polygonAmoy : polygon],
   transports: {
-    [mainnet.id]: http(),
+    [polygon.id]: http(process.env.INFURA_URL),
+    [polygonAmoy.id]: http(process.env.INFURA_URL),
   },
   multiInjectedProviderDiscovery: false,
   ssr: true,

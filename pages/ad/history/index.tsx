@@ -1,13 +1,17 @@
 
 import { useMemo, useState } from 'react';
 import Back from '@/components/Back';
-import { Image } from 'antd';
+import { Button, Image, Table, Typography } from 'antd';
+import { useSessionStorageState } from 'ahooks';
+import type { TableProps } from 'antd';
 import { ArrawIcon } from '~/icons';
 import { GetServerSideProps } from 'next/types';
 import { getAdvertise } from '@/services';
-import { AUD_STATUS, IAdvertise } from '@/types/response';
+import { AUD_STATUS, IAdvertise, AUD_STATUS_TEXT, Tabs } from '@/types/response';
 import SuffixText from '@/components/SuffixText';
 import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
+import IndexMobile from './components/IndexMobile';
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     return {
         props: {
@@ -15,24 +19,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         },
     };
 };
-const Tabs = [{
-    text: "全部",
-    audstatus: AUD_STATUS.all
-},
-{
-    text: "待审核",
-    audstatus: AUD_STATUS.pending
-}, {
-    text: "审核失败",
-    audstatus: AUD_STATUS.fail
-}, {
-    text: '审核成功',
-    audstatus: AUD_STATUS.success
-}]
+
 const History = ({ data }: { data: IAdvertise[] }) => {
+    const { Paragraph } = Typography;
     const router = useRouter()
 
     const [currTab, setCurrTab] = useState<AUD_STATUS>(AUD_STATUS.all)
+    const [_, setStorageDetail] = useSessionStorageState<IAdvertise | {}>(
+        'sui-banner-history-detail',
+        { defaultValue: {} },
+    );
 
     const showList = useMemo(() => {
         if (currTab >= 0) {
@@ -40,61 +36,108 @@ const History = ({ data }: { data: IAdvertise[] }) => {
         }
         return data
     }, [currTab, data])
+
+    const handleDetail = (detail: IAdvertise) => {
+        setStorageDetail(detail)
+        router.push(`/ad/history/detail`)
+    }
+
+
+
+    const columns: TableProps<IAdvertise>['columns'] = [
+        {
+            title: '订单号',
+            dataIndex: 'id',
+            key: 'id',
+        },
+        {
+            title: '提交时间',
+            dataIndex: 'createdate',
+            key: 'createdate',
+            render: (_, { createdate }) => dayjs(createdate).format('YYYY-MM-DD')
+        },
+        {
+            title: '用户信息',
+            dataIndex: 'useraddr',
+            key: 'useraddr',
+            render: (_, { useraddr }) => {
+                return <SuffixText content={useraddr}>useraddr</SuffixText>
+            }
+        },
+        {
+            title: '申请留言',
+            dataIndex: 'useraddr',
+            key: 'useraddr',
+            render: (_, { useraddr }) => (
+                <div className="w-52">
+                    <Paragraph ellipsis={{ rows: 3 }}>
+                        最多支持两行字最多支持两行字最多支持两行字最多支持两行最多支持两行字最多支持两行字最多支持两行字最多支持两行最多支持两行字最多支持两行字最多支持两行字最多支持两行
+                    </Paragraph>
+                </div>
+            )
+        },
+        {
+            title: '审核留言',
+            dataIndex: 'useraddr',
+            key: 'useraddr',
+            render: (_, { useraddr }) => (
+                <div className="w-52">
+                    <Paragraph ellipsis={{ rows: 3 }}>
+                        最多支持两行字最多支持两行字最多支持两行字最多支持两行最多支持两行字最多支持两行字最多支持两行字最多支持两行最多支持两行字最多支持两行字最多支持两行字最多支持两行
+                    </Paragraph>
+                </div>
+            )
+        },
+        {
+            title: '审核状态',
+            dataIndex: 'audstatus',
+            key: 'audstatus',
+            render: (_: any, { audstatus }: { audstatus: AUD_STATUS }) => (
+                <span className={audstatus === AUD_STATUS.fail ?
+                    'text-red' : audstatus === AUD_STATUS.success ?
+                        'text-green' : 'text-black'}>
+                    {AUD_STATUS_TEXT[audstatus]}</span>
+            )
+        },
+        {
+            title: '操作',
+            key: 'action',
+            align: 'center',
+            render: (_: any, record: IAdvertise) => {
+                return (
+                    <div className="cursor-pointer w-[170px]" onClick={() => handleDetail(record)}>
+                        {record.audstatus === AUD_STATUS.pending ? <span className="text-purple hover:text-opacity-70" >去审核</span> :
+                            record.audstatus === AUD_STATUS.success ?
+                                <span className="text-purple hover:text-opacity-70" >去查看</span> : '/'}
+                    </div>
+                )
+            },
+        },
+    ];
     return (
         <main >
-            <div className="w-[1428px] max-2xl:w-11/12 m-auto relative z-10">
-                <Back text={<>历史申请记录<span>（262）</span></>} isNotifi={false}></Back>
+            <div className="2xl:max-w-[1400px] 2xl:m-auto lg:mx-40  lg:my-0 md:mx-0 relative z-10">
 
-                <div className='flex items-center my-8 max-md:flex-wrap max-md:my-4'>
-                    {Tabs.map((item, index) => (
-                        <p onClick={() => setCurrTab(item.audstatus)}
-                            className={`mr-4 max-md:mb-2 rounded-[47px] px-5 py-1 h-8 bg-white cursor-pointer border ${item.audstatus === currTab ? ' border-purple' : "border-white"}`}
-                            key={item.text}>{item.text}</p>
-                    ))}
+                {/* pc 端 */}
+                <div className='max-lg:hidden'>
+                    <Back text={<>历史申请记录<span className='text-black text-opacity-60 text-2xl'>（{data.length}）</span></>} isNotifi={false}></Back>
+
+                    <div className='flex items-center my-8 max-md:flex-wrap max-md:my-4'>
+                        {Tabs.map((item, index) => (
+                            <p onClick={() => setCurrTab(item.key)}
+                                className={`mr-4 max-md:mb-2 rounded-[47px] px-5 py-[6px] h-10 text-lg cursor-pointer ${item.key === currTab ? ' bg-purple text-white' : "bg-white text-black"}`}
+                                key={item.label}>{item.label}</p>
+                        ))}
+                    </div>
+                    <Table pagination={false} className="rounded-t-xl overflow-hidden " scroll={{ x: '1200px' }} rowClassName="bg-white px-20" dataSource={showList} columns={columns}></Table>
                 </div>
 
-                <div className='grid gap-2 grid-cols-4 max-2xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 text-sm' >
-                    {showList.map(item => {
-                        return <div className="rounded-xl  relative overflow-hidden cursor-pointer" key={item.id} onClick={() => router.push(`/ad/history/${item.id}`)}>
-                            <div className={`${item.audstatus === AUD_STATUS.pending ? 'bg-gray' : item.audstatus === AUD_STATUS.success ? 'bg-purple' : 'bg-orange'} pt-5 pb-8 px-5`}>
-                                <p className='flex items-center mb-[10px]'>
-                                    <span className='text-white text-opacity-60 w-14'>提交时间</span>
-                                    <span className='text-white ml-5'>{new Date(item.createdate).toLocaleDateString()}</span>
-                                </p>
-                                <p className='flex items-center mb-[10px]'>
-                                    <span className='text-white text-opacity-60 w-14'>订单编号</span>
-                                    <span className='text-white ml-5'>{item.id}</span>
-                                </p>
-                                <p className='flex items-center mb-[10px]'>
-                                    <span className='text-white text-opacity-60 w-14'>用户信息</span>
-                                    <span className='text-white ml-5'><SuffixText className="text-white" content={item.useraddr}></SuffixText></span>
-                                </p>
-                            </div>
-                            <div className='bg-white rounded-xl w-full relative  -top-5 border border-gray-light '>
-                                <div className='p-5'>
-                                    <p className='text-black text-opacity-60 mb-3'>手机端图片</p>
-                                    <Image src={process.env.NEXT_PUBLIC_API_BASE_URL + item.mobimage} alt={item.useraddr} className="max-h-[115px]"></Image>
 
-                                    <p className='text-black text-opacity-60 my-3'>电脑端图片</p>
-                                    <Image src={process.env.NEXT_PUBLIC_API_BASE_URL + item.pcimage} alt={item.useraddr} className="max-h-[115px]"></Image>
-                                </div>
+                {/* 移动端 */}
 
-
-                                <div className='flex items-center justify-between cursor-pointer py-4 px-5 border-t border-gray-light text-sm text-black text-opacity-60'>
-                                    <span>审核留言</span>
-                                    <ArrawIcon />
-                                </div>
-                                <div className='flex items-center justify-between cursor-pointer py-4 px-5 border-t border-gray-light text-sm text-black text-opacity-60'>
-                                    <span>审核留言</span>
-                                    <ArrawIcon />
-                                </div>
-                            </div>
-                        </div>
-                    })}
-
-
+                <div className='lg:hidden'>
+                    <IndexMobile data={showList} setCurrTab={setCurrTab} currTab={currTab} />
                 </div>
-
 
             </div>
         </main >

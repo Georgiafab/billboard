@@ -2,13 +2,15 @@ import { WalletButton, ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './index.module.scss';
 
 
 
 const LoginButton = ({ type }: { type: "metamask" | "WalletConnect" }) => {
     const { address, isConnected } = useAccount();
+    const [customConnect, setCustomConnect] = useState(false)
+
     return (
         <>{!isConnected ?
             <WalletButton.Custom wallet={type}>
@@ -17,7 +19,7 @@ const LoginButton = ({ type }: { type: "metamask" | "WalletConnect" }) => {
                         <button
                             type="button"
                             disabled={!ready}
-                            onClick={connect}
+                            onClick={() => { connect(); setCustomConnect(true) }}
                             className={`${style.loginButton} ${style[type]}  `}>
                             <img src={`/images/${type}.svg`} alt={type} />
                         </button>
@@ -37,6 +39,11 @@ const LoginButton = ({ type }: { type: "metamask" | "WalletConnect" }) => {
                     const authed =
                         (!authenticationStatus ||
                             authenticationStatus === 'authenticated');
+
+                    if (walletConnected && customConnect) {
+                        console.log(walletConnected, customConnect)
+                        openConnectModal()
+                    }
 
                     return (
                         <div
@@ -83,7 +90,7 @@ export default function Login() {
             {/* {session.address} */}
             <div className={style.loginBox}>
                 <p>欢迎来到“一块广告牌”</p>
-                <h1 data-link={process.env.NEXT_PUBLIC_NEXTAUTH_URL}>登陆</h1>
+                <h1 >登陆</h1>
                 <LoginButton type='metamask' />
                 <LoginButton type='WalletConnect' />
             </div>

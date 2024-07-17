@@ -21,7 +21,7 @@ module.exports = {
       purple_sub: "#E7E6FF",
       pink: "#ff49db",
       orange: "#E66448",
-      green: "#13ce66",
+      green: "#46C086",
       yellow: "#ffc82c",
       "gray-dark": "#273444",
       gray: "#9392A4",
