@@ -25,7 +25,6 @@
     "next": "^14.2.3",
     "next-auth": "^4.24.7",
     "react": "^18.3.0",
-    "react-dom": "^18.3.1",
     "sass": "^1.77.6",
     "siwe": "^2.3.2",
     "viem": "2.9.31",
@@ -33,6 +32,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
+    "@types/ethereum-blockies": "^0.1.2",
     "@types/node": "^18.19.3",
     "@types/react": "^18.3.0",
     "eslint": "^8.15.0",

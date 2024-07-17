@@ -53,9 +53,6 @@ importers:
       react:
         specifier: ^18.3.0
         version: 18.3.1
-      react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
       sass:
         specifier: ^1.77.6
         version: 1.77.6
@@ -72,6 +69,9 @@ importers:
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.4.2)
+      '@types/ethereum-blockies':
+        specifier: ^0.1.2
+        version: 0.1.2
       '@types/node':
         specifier: ^18.19.3
         version: 18.19.39
@@ -1765,6 +1765,9 @@ packages:
 
   '@types/dom-screen-wake-lock@1.0.3':
     resolution: {integrity: sha512-3Iten7X3Zgwvk6kh6/NRdwN7WbZ760YgFCsF5AxDifltUQzW1RaW+WRmcVtgwFzLjaNu64H+0MPJ13yRa8g3Dw==}
+
+  '@types/ethereum-blockies@0.1.2':
+    resolution: {integrity: sha512-jNYm7AK2zXorjV+B0mYWrzqKQ2+AY5vSJSVUU4/YrJnxLheBBwCEVTlCLNDZsWZ7mH6qHsAtLpwuQLlDs2+P0A==}
 
   '@types/http-proxy@1.17.14':
     resolution: {integrity: sha512-SSrD0c1OQzlFX7pGu1eXxSEjemej64aaNPRhhVYUGqXh0BtldAAx37MG8btcumvpgKyZp1F5Gn3JkktdxiFv6w==}
@@ -8152,6 +8155,8 @@ snapshots:
       '@types/ms': 0.7.34
 
   '@types/dom-screen-wake-lock@1.0.3': {}
+
+  '@types/ethereum-blockies@0.1.2': {}
 
   '@types/http-proxy@1.17.14':
     dependencies:

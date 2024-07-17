@@ -25,6 +25,7 @@ type IDetail = {
 const Detail = ({ csrfToken }: IDetail) => {
     const { signMessage, isSuccess, data: usersignature } = useSignMessage();
     const [status, setStatus] = useState<AUD_STATUS>()
+    // @ts-ignore
     const [detail, setDetail] = useState<IAdvertise>({})
     const { data: session } = useSession()
     const [storageDetail, setStorageDetail] = useSessionStorageState<IAdvertise | {}>(
