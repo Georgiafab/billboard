@@ -24,7 +24,7 @@ const connectors = connectorsForWallets(
 
 export const config = createConfig({
   connectors,
-  chains: [process.env.NODE_ENV === "development" ? polygonAmoy : polygon],
+  chains: [process.env.NODE_ENV === "development" ? polygonAmoy : polygonAmoy],
   transports: {
     [polygon.id]: http(process.env.INFURA_URL),
     [polygonAmoy.id]: http(process.env.INFURA_URL),
