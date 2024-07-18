@@ -1,9 +1,13 @@
 import { WalletButton, ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 import { useSession } from 'next-auth/react';
+import { LoadingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import style from './index.module.scss';
+import { message, Modal, Spin } from 'antd';
+import { login } from '@/services';
+import { useSwitchChain, useChainId } from 'wagmi'
 
 
 
@@ -33,6 +37,7 @@ const LoginButton = ({ type }: { type: "metamask" | "WalletConnect" }) => {
                     openConnectModal,
                     authenticationStatus,
                     mounted,
+                    ...all
                 }) => {
                     const ready = mounted && authenticationStatus !== 'loading';
                     const walletConnected = ready && account && chain
@@ -41,7 +46,7 @@ const LoginButton = ({ type }: { type: "metamask" | "WalletConnect" }) => {
                             authenticationStatus === 'authenticated');
 
                     if (walletConnected && customConnect) {
-                        console.log(walletConnected, customConnect)
+
                         openConnectModal()
                     }
 
@@ -76,12 +81,40 @@ const LoginButton = ({ type }: { type: "metamask" | "WalletConnect" }) => {
 }
 export default function Login() {
     const { data: session } = useSession();
+    const [loading, setLoading] = useState(false)
     const router = useRouter();
     const { callbackUrl } = router.query;
+    const { chains, switchChainAsync } = useSwitchChain()
+    const { chainId, isConnected } = useAccount();
+    const allowChainId = useChainId()
+    useEffect(() => {
+        if (isConnected && chainId !== allowChainId) {
+            Modal.error({
+                title: '错误的网络',
+                content: `您似乎没有切换到支持的网络上`,
+                okText: '切换网络',
+                onOk() {
+                    switchChainAsync({ chainId: allowChainId }).then(res => {
+                        message.success(`已成功切换到${res.name}!`)
+                    }).catch(error => {
+                        message.error(error.shortMessage)
+                    })
+                },
+            });
+
+        }
+    }, [allowChainId, chainId, isConnected, switchChainAsync])
+
+
     useEffect(() => {
         if (session) {
-            // const redirectUrl = '/';
-            router.push('/');
+            setLoading(true)
+            const { user: { address: useraddr, message, signature } } = session
+            login({ useraddr, message, signature }).then(res => {
+                // router.push('/');
+            })
+
+
         }
     }, [session]);
 
@@ -91,8 +124,12 @@ export default function Login() {
             <div className={style.loginBox}>
                 <p>欢迎来到“一块广告牌”</p>
                 <h1 >登陆</h1>
-                <LoginButton type='metamask' />
-                <LoginButton type='WalletConnect' />
+                <Spin spinning={loading} indicator={<LoadingOutlined spin />} >
+                    <LoginButton type='metamask' />
+                </Spin>
+                <Spin spinning={loading} indicator={<LoadingOutlined spin />} >
+                    <LoginButton type='WalletConnect' />
+                </Spin>
             </div>
         </div>
     )

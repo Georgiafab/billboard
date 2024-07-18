@@ -14,7 +14,7 @@ type Props = {
     currTab: AUD_STATUS
 }
 
-const DetailMobile = ({ data, setCurrTab, currTab }: Props) => {
+const DetailMobile = ({ data = [], setCurrTab, currTab }: Props) => {
     const [currItemIndex, setCurItemIndex] = useState<number>(0)
     const [currItem, setCurrItem] = useState<IAdvertise>(data[currItemIndex])
     const [reason, setReason] = useState('')

@@ -7,9 +7,10 @@ import style from './image.module.scss';
 import Back from '@/components/Back';
 import NotifAlert from '@/components/NotifAlert';
 import { addAdvertise } from '@/services';
-import { useSession } from 'next-auth/react';
+import { getCsrfToken, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useSignMessage } from 'wagmi'
+import { CtxOrReq } from 'next-auth/client/_utils';
 
 
 const STEPS = [
@@ -42,7 +43,7 @@ export function StepsIcon({ index, isMobile, ...props }: { index: number, isMobi
 
     return <IconComponent {...props} />;
 }
-export default function Images() {
+export default function Images({ csrfToken }: { csrfToken: string }) {
     const { data: session } = useSession();
     const { signMessage, isSuccess, data: usersignature } = useSignMessage();
     const router = useRouter()
@@ -112,11 +113,16 @@ export default function Images() {
     }
     useEffect(() => {
         if (isSuccess) {
-            addAdvertise({ useraddr: session?.address, usersignature: usersignature, applymsg: note, pcimage: imgUrls[0], mobimage: imgUrls[1] }).then((res: any) => {
+            console.log(csrfToken)
+            addAdvertise({ useraddr: session?.address, usersignature: usersignature, applymsg: note, pcimage: imgUrls[0], mobimage: imgUrls[1] },
+                {
+                    headers: { 'X-Csrftoken': csrfToken }
+                }
+            ).then((res: any) => {
                 setNotifShow(true)
-                setTimeout(() => {
-                    router.push('/ad')
-                }, 2000)
+                // setTimeout(() => {
+                //     router.push('/ad')
+                // }, 2000)
             })
         }
     }, [isSuccess])
@@ -214,4 +220,11 @@ export default function Images() {
     )
 
 
+}
+export async function getServerSideProps(context: CtxOrReq | undefined) {
+    return {
+        props: {
+            csrfToken: await getCsrfToken(context),
+        },
+    }
 }

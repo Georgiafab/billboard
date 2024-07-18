@@ -1,20 +1,26 @@
 import axios, { AxiosResponse } from "axios";
-// import { message as Message } from "antd";
+// import { getCookie } from "./utils";
+import https from "https";
+
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  // baseURL: "/api/proxy/",
+  // baseURL: "text-api",
   timeout: 10000,
   headers: {
     "Content-Type": "multipart/form-data",
   },
+  httpsAgent: new https.Agent({
+    rejectUnauthorized: false, // 忽略自签名证书
+  }),
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
     // const token =
-    //   typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    //   typeof window !== "undefined" ? getCookie("next-auth.csrf-token") : null;
+    // console.log(token, "next-auth.csrf-token");
     // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
+    //   // config.headers["X-Csrftoken"] = token;
     // }
     return config;
   },

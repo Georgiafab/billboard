@@ -11,7 +11,6 @@ import { auditAdvertise } from '@/services';
 import { useSignMessage } from 'wagmi'
 
 
-// This is the recommended way for Next.js 9.3 or newer
 export async function getServerSideProps(context: CtxOrReq | undefined) {
     return {
         props: {
