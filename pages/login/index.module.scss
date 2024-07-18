@@ -120,5 +120,6 @@
 
     .loginButton {
         width: 100%;
+        min-width: calc(100vw - 64px);
     }
 }

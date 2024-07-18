@@ -82,11 +82,13 @@ export function getAuthOptions(req: IncomingMessage): NextAuthOptions {
   return {
     callbacks: {
       async session({ session, token }) {
-        session.user.address = token.sub as string;
-
-        // 将签名和信息存储到 session 中
-        session.user.message = token.message;
-        session.user.signature = token.signature;
+        // session.user.address = token.sub as string;
+        session.address = token.sub;
+        session.user = {
+          address: token.sub as string,
+          message: token.message,
+          signature: token.signature,
+        };
 
         return session;
       },

@@ -124,7 +124,7 @@ export default function Login() {
             <div className={style.loginBox}>
                 <p>欢迎来到“一块广告牌”</p>
                 <h1 >登陆</h1>
-                <Spin spinning={loading} indicator={<LoadingOutlined spin />} >
+                <Spin spinning={loading} className='w-full' indicator={<LoadingOutlined spin />} >
                     <LoginButton type='metamask' />
                 </Spin>
                 <Spin spinning={loading} indicator={<LoadingOutlined spin />} >
