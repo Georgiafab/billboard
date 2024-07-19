@@ -2,7 +2,11 @@ import { AxiosRequestConfig } from "axios";
 import axios from "../libs/axios";
 
 export const login = async (data: any) => {
-  const response = await axios.post("/v1/login", data);
+  const response = await axios.post("/v1/login/", data);
+  return response.data;
+};
+export const getAuditAdvertise = async () => {
+  const response = await axios.get("/v1/audit/");
   return response.data;
 };
 

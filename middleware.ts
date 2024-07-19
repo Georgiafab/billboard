@@ -15,11 +15,14 @@ export async function middleware(req: NextRequest) {
   ) {
     return response;
   }
-
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+    cookieName: "sessionid",
+  });
 
   // If there is no token, redirect to the /login page
-  // console.log(token, "token");
+  console.log(token, "token");
   if (!token) {
     const loginUrl = new URL("/login", req.url);
     loginUrl.searchParams.set("callbackUrl", req.url);

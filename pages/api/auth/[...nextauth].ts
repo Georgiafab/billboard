@@ -108,6 +108,26 @@ export function getAuthOptions(req: IncomingMessage): NextAuthOptions {
         return baseUrl;
       },
     },
+    cookies: {
+      sessionToken: {
+        name: `sessionid`,
+        options: {
+          httpOnly: true,
+          sameSite: "lax",
+          path: "/",
+          secure: process.env.NODE_ENV === "production",
+        },
+      },
+      csrfToken: {
+        name: `csrftoken`,
+        options: {
+          httpOnly: false,
+          sameSite: "lax",
+          path: "/",
+          secure: process.env.NODE_ENV === "production",
+        },
+      },
+    },
     providers,
     secret: process.env.NEXTAUTH_SECRET,
     session: { strategy: "jwt" },

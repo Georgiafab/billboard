@@ -771,6 +771,10 @@ video {
   margin-bottom: 2rem;
 }
 
+.ml-0 {
+  margin-left: 0px;
+}
+
 .block {
   display: block;
 }
@@ -1710,6 +1714,14 @@ video {
     margin-bottom: 17px;
   }
 
+  .max-lg\:mr-\[17px\] {
+    margin-right: 17px;
+  }
+
+  .max-lg\:mt-\[6px\] {
+    margin-top: 6px;
+  }
+
   .max-lg\:flex {
     display: flex;
   }
@@ -1736,6 +1748,10 @@ video {
 
   .max-lg\:w-11\/12 {
     width: 91.666667%;
+  }
+
+  .max-lg\:min-w-\[40vw\] {
+    min-width: 40vw;
   }
 
   .max-lg\:grid-cols-2 {
@@ -1766,6 +1782,10 @@ video {
     background-color: rgb(255 254 250 / var(--tw-bg-opacity));
   }
 
+  .max-lg\:bg-mh {
+    background-image: linear-gradient(180deg, rgba(252, 253, 252, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%);
+  }
+
   .max-lg\:from-\[\#E9EBFF\] {
     --tw-gradient-from: #E9EBFF var(--tw-gradient-from-position);
     --tw-gradient-to: rgb(233 235 255 / 0) var(--tw-gradient-to-position);
@@ -1794,8 +1814,25 @@ video {
     line-height: 1rem;
   }
 
+  .max-lg\:text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
   .max-lg\:text-opacity-45 {
     --tw-text-opacity: 0.45;
+  }
+
+  .max-lg\:shadow-2xl {
+    --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+
+  .max-lg\:backdrop-blur-md {
+    --tw-backdrop-blur: blur(12px);
+    -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+            backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
   }
 }
 
@@ -1893,6 +1930,14 @@ video {
 }
 
 @media (min-width: 1024px) {
+  .lg\:absolute {
+    position: absolute;
+  }
+
+  .lg\:top-\[60px\] {
+    top: 60px;
+  }
+
   .lg\:my-\[30px\] {
     margin-top: 30px;
     margin-bottom: 30px;
@@ -2003,6 +2048,10 @@ video {
 
   .lg\:pt-\[60px\] {
     padding-top: 60px;
+  }
+
+  .lg\:text-center {
+    text-align: center;
   }
 
   .lg\:text-\[32px\] {

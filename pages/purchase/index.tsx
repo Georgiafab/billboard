@@ -3,8 +3,12 @@ import Image from 'next/image';
 import { Button } from 'antd';
 import style from './index.module.scss';
 import SuffixText from '@/components/SuffixText';
+import type { GetServerSideProps } from 'next';
+import { getAuditAdvertise } from '@/services';
+import { IAdvertise } from '@/types/response';
 
-export default function purchase() {
+export default function purchase({ data }: { data: IAdvertise }) {
+    console.log(data, 'datadatadata')
     return (
 
         <main>
@@ -57,3 +61,11 @@ export default function purchase() {
         </main>
     )
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+    return {
+        props: {
+            data: await getAuditAdvertise(),
+        },
+    };
+};

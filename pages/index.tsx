@@ -8,6 +8,7 @@ import Avatar from "@/components/Avatar"
 
 import { IAdvertise } from '../types/response';
 import { useState } from 'react';
+import dayjs from 'dayjs';
 
 
 
@@ -76,7 +77,7 @@ const Home = ({ data }: { data: IAdvertise[] }) => {
                       <Avatar className={style.avar} address={item.useraddr} />
                       {/* <Image className={style.avar} preview={false} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image> */}
                       <h3>{curItem.useraddr}</h3>
-                      <div className={style.date}>{new Date(curItem.createdate).toLocaleDateString()}</div>
+                      <div className={style.date}>{dayjs(curItem.createdate).format('YYYY-MM-DD')}</div>
                     </div>
                     <Image className=' h-[498px] max-h-[60vh] w-auto object-contain' fallback="/images/image_err.png" src={process.env.NEXT_PUBLIC_API_BASE_URL + curItem.pcimage} alt='' preview={false}></Image>
                     <div className={`${style.billButton} ${curItemIndex < data.length - 1 ? 'flex' : 'hidden'}`} onClick={() => changeItem('next')}>
@@ -91,7 +92,7 @@ const Home = ({ data }: { data: IAdvertise[] }) => {
               <Avatar className={style.avar} address={item.useraddr} />
 
               <h3>{item.useraddr}</h3>
-              <div className={style.date}>{new Date(item.createdate).toLocaleDateString()}</div>
+              <div className={style.date}>{dayjs(item.createdate).format('YYYY-MM-DD')}</div>
             </div>
           </div>)
         })}
@@ -110,7 +111,7 @@ const Home = ({ data }: { data: IAdvertise[] }) => {
                 <div className={style.desc}>
                   <Avatar className={style.avar} address={item.useraddr} />
                   <h3><SuffixText content={item.useraddr}></SuffixText></h3>
-                  <div className={style.date}>{new Date(item.createdate).toLocaleDateString()}</div>
+                  <div className={style.date}>{dayjs(item.createdate).format('YYYY-MM-DD')}</div>
                 </div>
               </div>)
             })}
