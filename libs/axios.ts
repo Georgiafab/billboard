@@ -8,7 +8,10 @@ const axiosInstance = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "multipart/form-data",
+
+    // "X-Csrftoken": "6LzQwYoCQeOuvDs1zkvGhAtNpCJbijGq",
   },
+  withCredentials: true,
   httpsAgent: new https.Agent({
     rejectUnauthorized: false, // 忽略自签名证书
   }),

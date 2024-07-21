@@ -39,3 +39,17 @@ export const Tabs = [
     key: AUD_STATUS.success,
   },
 ];
+enum TradeState {
+  UNLOCK,
+  LOCK,
+}
+
+export interface IShdDetails {
+  id: number;
+  price: bigint;
+  keeper: string;
+  keeperReceiveTime: number;
+  tradeTime: number;
+  setPriceTime: number;
+  tradeState: TradeState;
+}

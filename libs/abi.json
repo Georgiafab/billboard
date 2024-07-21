@@ -3,40 +3,20 @@
         "internalType": "string",
         "name": "tokenUri_",
         "type": "string"
+    }, {
+        "internalType": "address",
+        "name": "initialOwner",
+        "type": "address"
     }],
     "stateMutability": "nonpayable",
     "type": "constructor"
 }, {
     "inputs": [],
-    "name": "AlreadyKeeper",
+    "name": "BeyondUsePeriod",
     "type": "error"
 }, {
     "inputs": [],
     "name": "ContractHoldsShD",
-    "type": "error"
-}, {
-    "inputs": [{
-        "internalType": "uint256",
-        "name": "cooldown",
-        "type": "uint256"
-    }, {
-        "internalType": "uint256",
-        "name": "cooldownMaximumDuration",
-        "type": "uint256"
-    }],
-    "name": "CooldownExceedsMaximumDuration",
-    "type": "error"
-}, {
-    "inputs": [],
-    "name": "CreatorDoesNotControl",
-    "type": "error"
-}, {
-    "inputs": [],
-    "name": "CreatorDoesNotControlShD",
-    "type": "error"
-}, {
-    "inputs": [],
-    "name": "CreatorDoesNotControlShd",
     "type": "error"
 }, {
     "inputs": [{
@@ -49,6 +29,86 @@
         "type": "uint256"
     }],
     "name": "CurrentValueIncorrect",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+    }, {
+        "internalType": "uint256",
+        "name": "balance",
+        "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "needed",
+        "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+    }],
+    "name": "ERC1155InsufficientBalance",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "approver",
+        "type": "address"
+    }],
+    "name": "ERC1155InvalidApprover",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "idsLength",
+        "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "valuesLength",
+        "type": "uint256"
+    }],
+    "name": "ERC1155InvalidArrayLength",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+    }],
+    "name": "ERC1155InvalidOperator",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+    }],
+    "name": "ERC1155InvalidReceiver",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+    }],
+    "name": "ERC1155InvalidSender",
+    "type": "error"
+}, {
+    "inputs": [{
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+    }, {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+    }],
+    "name": "ERC1155MissingApprovalForAll",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "HaveNotReclaimed",
     "type": "error"
 }, {
     "inputs": [{
@@ -65,7 +125,11 @@
 }, {
     "inputs": [{
         "internalType": "uint256",
-        "name": "priceProvided",
+        "name": "previousPrice",
+        "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "newPrice",
         "type": "uint256"
     }],
     "name": "InvalidNewPrice",
@@ -79,6 +143,18 @@
     "name": "NotAllowedTransferToContract",
     "type": "error"
 }, {
+    "inputs": [],
+    "name": "NotArrivedReclaimTime",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "NotEnoughDepositFees",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "NotEnoughFunds",
+    "type": "error"
+}, {
     "inputs": [{
         "internalType": "uint256",
         "name": "correctAmount",
@@ -88,18 +164,18 @@
         "name": "amount",
         "type": "uint256"
     }],
-    "name": "NotEnoughDepositAmount",
+    "name": "NotEnoughMinimiumDepositFees",
     "type": "error"
 }, {
-    "inputs": [],
-    "name": "NotEnoughTimeForSetPrice",
-    "type": "error"
-}, {
-    "inputs": [],
-    "name": "NotEnoughTimeForTrading",
-    "type": "error"
-}, {
-    "inputs": [],
+    "inputs": [{
+        "internalType": "address",
+        "name": "wrongKeeper",
+        "type": "address"
+    }, {
+        "internalType": "address",
+        "name": "correctKeeper",
+        "type": "address"
+    }],
     "name": "NotKeeper",
     "type": "error"
 }, {
@@ -108,11 +184,7 @@
     "type": "error"
 }, {
     "inputs": [],
-    "name": "NotPermitted",
-    "type": "error"
-}, {
-    "inputs": [],
-    "name": "NotSupprted",
+    "name": "NotSupported",
     "type": "error"
 }, {
     "inputs": [],
@@ -120,7 +192,7 @@
     "type": "error"
 }, {
     "inputs": [],
-    "name": "PurchasingNotPermitted",
+    "name": "PriceSettingIsNotCooldown",
     "type": "error"
 }, {
     "inputs": [],
@@ -137,6 +209,10 @@
 }, {
     "inputs": [],
     "name": "TradeIsNotCooldown",
+    "type": "error"
+}, {
+    "inputs": [],
+    "name": "WithdrawIsNotAllowed",
     "type": "error"
 }, {
     "inputs": [],
@@ -245,6 +321,21 @@
 }, {
     "anonymous": false,
     "inputs": [{
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "shdId",
+        "type": "uint256"
+    }, {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "InitializedTime",
+        "type": "uint256"
+    }],
+    "name": "InitializeShd",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
         "indexed": false,
         "internalType": "uint256",
         "name": "previousPrice",
@@ -281,6 +372,21 @@
         "type": "address"
     }],
     "name": "Purchase",
+    "type": "event"
+}, {
+    "anonymous": false,
+    "inputs": [{
+        "indexed": false,
+        "internalType": "address",
+        "name": "Sender",
+        "type": "address"
+    }, {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "Value",
+        "type": "uint256"
+    }],
+    "name": "Received",
     "type": "event"
 }, {
     "anonymous": false,
@@ -353,6 +459,11 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "value",
+        "type": "uint256"
+    }, {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "transferPrice",
         "type": "uint256"
     }],
     "name": "Transfer",
@@ -475,7 +586,7 @@
 }, {
     "inputs": [{
         "internalType": "uint256",
-        "name": "_shdId",
+        "name": "price",
         "type": "uint256"
     }],
     "name": "_calculateDepositFees",
@@ -492,7 +603,21 @@
         "name": "_shdId",
         "type": "uint256"
     }],
-    "name": "_calculateRemainingDays",
+    "name": "_calculateShdKeeperUsePeriod",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "_calculateTotalUsageFees",
     "outputs": [{
         "internalType": "uint256",
         "name": "",
@@ -562,10 +687,14 @@
         "name": "",
         "type": "uint256[]"
     }],
-    "stateMutability": "view",
+    "stateMutability": "pure",
     "type": "function"
 }, {
-    "inputs": [],
+    "inputs": [{
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+    }],
     "name": "checkFundsOf",
     "outputs": [{
         "internalType": "uint256",
@@ -580,11 +709,25 @@
         "name": "_shdId",
         "type": "uint256"
     }],
-    "name": "checkOwner",
+    "name": "checkShdKeeper",
     "outputs": [{
         "internalType": "address",
         "name": "",
         "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "checkShdKeeperUsageTime",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
     }],
     "stateMutability": "view",
     "type": "function"
@@ -603,16 +746,6 @@
     "name": "deposit",
     "outputs": [],
     "stateMutability": "payable",
-    "type": "function"
-}, {
-    "inputs": [],
-    "name": "feeDenominator",
-    "outputs": [{
-        "internalType": "uint256",
-        "name": "feeDenominatorValue",
-        "type": "uint256"
-    }],
-    "stateMutability": "pure",
     "type": "function"
 }, {
     "inputs": [{
@@ -651,8 +784,81 @@
     "name": "getCurrentShdKeeper",
     "outputs": [{
         "internalType": "address",
-        "name": "_owner",
+        "name": "",
         "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "getOwner",
+    "outputs": [{
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "getShdDetails",
+    "outputs": [{
+        "components": [{
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+        }, {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+        }, {
+            "internalType": "address",
+            "name": "keeper",
+            "type": "address"
+        }, {
+            "internalType": "uint256",
+            "name": "keeperReceiveTime",
+            "type": "uint256"
+        }, {
+            "internalType": "uint256",
+            "name": "tradeTime",
+            "type": "uint256"
+        }, {
+            "internalType": "uint256",
+            "name": "setPriceTime",
+            "type": "uint256"
+        }, {
+            "internalType": "enum Shd.TradeState",
+            "name": "tradeState",
+            "type": "uint8"
+        }],
+        "internalType": "struct Shd.ShdDetails",
+        "name": "",
+        "type": "tuple"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "getTradeTime",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [],
+    "name": "getUri",
+    "outputs": [{
+        "internalType": "string",
+        "name": "",
+        "type": "string"
     }],
     "stateMutability": "view",
     "type": "function"
@@ -672,7 +878,7 @@
         "name": "",
         "type": "bool"
     }],
-    "stateMutability": "view",
+    "stateMutability": "pure",
     "type": "function"
 }, {
     "inputs": [{
@@ -752,7 +958,7 @@
     }],
     "name": "safeBatchTransferFrom",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "pure",
     "type": "function"
 }, {
     "inputs": [{
@@ -778,7 +984,7 @@
     }],
     "name": "safeTransferFrom",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "pure",
     "type": "function"
 }, {
     "inputs": [{
@@ -860,7 +1066,7 @@
         "name": "",
         "type": "bool"
     }],
-    "stateMutability": "pure",
+    "stateMutability": "view",
     "type": "function"
 }, {
     "inputs": [],
@@ -904,7 +1110,7 @@
         "name": "",
         "type": "string"
     }],
-    "stateMutability": "pure",
+    "stateMutability": "view",
     "type": "function"
 }, {
     "inputs": [],
@@ -940,4 +1146,7 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+}, {
+    "stateMutability": "payable",
+    "type": "receive"
 }]

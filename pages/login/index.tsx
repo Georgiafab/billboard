@@ -104,13 +104,6 @@ export default function Login() {
 
         }
     }, [allowChainId, chainId, isConnected, switchChainAsync])
-    function restoreWhitespaceAndNewlines(input: string) {
-        // 替换自定义符号 \n 回换行符
-        let result = input.replace(/\\n/g, '\n');
-        // 替换自定义符号 \s 回空格
-        result = result.replace(/\\s/g, ' ');
-        return result;
-    }
 
     useEffect(() => {
         if (session) {
@@ -119,13 +112,11 @@ export default function Login() {
             const { user } = session
 
             const message = btoa(user.message!)
-
-            console.log(message)
-            const demessage = atob(message)
-            console.log(demessage)
-
             login({ useraddr: user.address, message, signature: user.signature }).then(res => {
-                // router.push('/');
+                const setCookieValue = res.headers['set-cookie'];
+                // const setCookieValue = res.headers?.get?.("set-cookie")
+                // let allCookies = document.cookie
+                console.log(setCookieValue, document.cookie)
             })
 
 
@@ -147,4 +138,4 @@ export default function Login() {
             </div>
         </div>
     )
-}
+}   

@@ -14,7 +14,8 @@
 }
 
 .purchaseList {
-    max-width: 816px;
+    width: 816px;
+
     margin: auto;
 }
 
@@ -31,6 +32,8 @@
         background-color: #fff;
         filter: drop-shadow(0px 4px 108.6px rgba(0, 0, 0, 0.25));
         border-radius: 24px;
+        max-height: 392px;
+        object-fit: contain;
     }
 
     h3 {
@@ -101,7 +104,7 @@
         width: max-content;
         display: flex;
         margin: 0 auto;
-
+        align-items: center;
 
         img {
             width: 43vw;

@@ -18,7 +18,6 @@ export async function middleware(req: NextRequest) {
   const token = await getToken({
     req,
     secret: process.env.NEXTAUTH_SECRET,
-    cookieName: "sessionid",
   });
 
   // If there is no token, redirect to the /login page
