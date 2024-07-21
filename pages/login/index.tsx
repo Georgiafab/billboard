@@ -133,7 +133,7 @@ export default function Login() {
         <div className={style.logins}>
             {/* {session.address} */}
             <div className={style.loginBox}>
-                <p>欢迎来到“一块广告牌”</p>
+                <p data-a={process.env.NEXT_PUBLIC_API_BASE_URL}>欢迎来到“一块广告牌”</p>
                 <h1 >登陆</h1>
                 <Spin spinning={loading} className='w-full' indicator={<LoadingOutlined spin />} >
                     <LoginButton type='metamask' />
