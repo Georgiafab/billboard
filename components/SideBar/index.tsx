@@ -4,7 +4,6 @@ import { adIcon, homeIcon, introduceIcon, purchaseIcon, SlogenIcon } from '~/ico
 import Link from 'next/link';
 import Avatar from '../Avatar';
 
-// import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
 import useDomAlready from '@/hooks/useDomAlready';
