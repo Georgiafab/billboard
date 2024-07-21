@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useSessionStorageState, useMount, useUnmount } from 'ahooks';
+import { useSessionStorageState, useMount, useUnmount, useLocalStorageState } from 'ahooks';
 import { Image, Button } from 'antd';
 import dayjs from 'dayjs';
 import SuffixText from '@/components/SuffixText';
 import Back from '@/components/Back'
-import { IAdvertise, AUD_STATUS_TEXT, AUD_STATUS } from '@/types/response';
+import { IAdvertise, AUD_STATUS_TEXT, AUD_STATUS, UserInfo } from '@/types/response';
 import { getCsrfToken, useSession } from "next-auth/react"
 import { CtxOrReq } from 'next-auth/client/_utils';
 import { auditAdvertise } from '@/services';
@@ -27,13 +27,19 @@ const Detail = ({ csrfToken }: IDetail) => {
     // @ts-ignore
     const [detail, setDetail] = useState<IAdvertise>({})
     const { data: session } = useSession()
-    const [storageDetail, setStorageDetail] = useSessionStorageState<IAdvertise | {}>(
+    const [storageDetail] = useSessionStorageState<IAdvertise | {}>(
         'sui-banner-history-detail',
         { defaultValue: {} },
     );
+    const [info] = useLocalStorageState<UserInfo | {}>('user-info', {
+        defaultValue: { auditor: false },
+    });
     const [reason, setReason] = useState('')
     useEffect(() => {
-        storageDetail && setDetail(storageDetail as IAdvertise)
+        if (storageDetail) {
+            setDetail(storageDetail as IAdvertise);
+            (storageDetail as IAdvertise).audmsg && setReason((storageDetail as IAdvertise).audmsg)
+        }
     }, [])
     useEffect(() => {
         if (isSuccess) {
@@ -65,7 +71,7 @@ const Detail = ({ csrfToken }: IDetail) => {
                 <Back className="z-10" isNotifi={false} text={<>订单号{detail.id}<span className='text-base text-black text-opacity-60'>（{AUD_STATUS_TEXT[detail.audstatus]}）</span></>}></Back>
 
                 <div className="rounded-xl bg-white overflow-hidden mt-8"  >
-                    <div className={`${detail.audstatus === AUD_STATUS.pending ? 'bg-[#2C2B50]' : detail.audstatus === AUD_STATUS.fail ? 'bg-orange' : 'bg-green'} p-5 flex items-center justify-between `}>
+                    <div className={`${detail.audstatus === AUD_STATUS.pending ? 'bg-[#2C2B50]' : detail.audstatus === AUD_STATUS.fail ? 'bg-orange' : 'bg-green'} p-5 flex items-center justify-between  flex-wrap`}>
                         <div className=''>
                             <span className='text-white text-opacity-60 w-14'>订单号</span>
                             <span className='text-white ml-5'>{detail.id}</span>
@@ -103,19 +109,19 @@ const Detail = ({ csrfToken }: IDetail) => {
                             </div>
                             <div className='border-t border-t-gray-light p-5 pr-9'>
                                 <p className='py-4'>申请留言</p>
-                                <textarea value={''} disabled className={`w-full h-[112px] p-[22px] bg-[#F4F4F4] rounded-xl`} style={{ resize: "none" }}></textarea>
+                                <textarea value={detail.applymsg} disabled className={`w-full h-[112px] p-[22px] bg-[#F4F4F4] rounded-xl`} style={{ resize: "none" }}></textarea>
                             </div>
                         </div>
 
                         <div className='pl-5 pr-5 pb-5 flex-1 flex flex-col justify-between'>
                             <p className='py-4'>审核留言</p>
-                            <textarea value={reason} disabled={detail.audstatus !== AUD_STATUS.pending} onInput={e => setReason(e.currentTarget.value)}
+                            <textarea value={reason} disabled={detail.audstatus !== AUD_STATUS.pending || !(info as UserInfo).auditor} onInput={e => setReason(e.currentTarget.value)}
                                 placeholder='审核不通过必须写明原因' className={`flex-1 mb-4 text-sm max-w-[394px] w-full min-w-[300px] h-[112px] p-[22px] bg-[#F4F4F4] rounded-xl`} style={{ resize: "none" }}></textarea>
                             <div className='flex items-center gap-4'>
                                 {(detail.audstatus === AUD_STATUS.success || detail.audstatus === AUD_STATUS.pending) &&
-                                    <Button onClick={() => handleAudit(AUD_STATUS.success)} disabled={detail.audstatus !== AUD_STATUS.pending} type="primary" className='text-sm flex-1 rounded-lg bg-green hover:!bg-green hover:opacity-70 disabled:bg-green disabled:opacity-70 disabled:text-w'>同意</Button>}
+                                    <Button onClick={() => handleAudit(AUD_STATUS.success)} disabled={detail.audstatus !== AUD_STATUS.pending || !(info as UserInfo).auditor} type="primary" className='text-sm flex-1 rounded-lg bg-green hover:!bg-green hover:opacity-70 disabled:bg-green disabled:opacity-70 disabled:text-w'>同意</Button>}
                                 {(detail.audstatus === AUD_STATUS.fail || detail.audstatus === AUD_STATUS.pending) &&
-                                    <Button onClick={() => handleAudit(AUD_STATUS.fail)} disabled={detail.audstatus !== AUD_STATUS.pending} type="primary" className='text-sm flex-1 rounded-lg' danger>不同意</Button>}
+                                    <Button onClick={() => handleAudit(AUD_STATUS.fail)} disabled={detail.audstatus !== AUD_STATUS.pending || !(info as UserInfo).auditor} type="primary" className='text-sm flex-1 rounded-lg' danger>不同意</Button>}
                             </div>
                         </div>
                     </div>

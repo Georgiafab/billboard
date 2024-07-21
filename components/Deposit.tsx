@@ -39,6 +39,7 @@ const Deposit = ({ totalUsageFee, errorCb, depositOpen, setDepositOpen }: IDepos
         <Modal
             footer={null}
             className="max-w-md"
+            onCancel={() => setDepositOpen(false)}
             centered
             open={depositOpen}
         >

@@ -89,6 +89,7 @@ const Buy = ({ setOpen, open, price }: IbuyProps) => {
     return <>
         <Modal
             footer={null}
+            onCancel={() => setOpen(false)}
             className="max-w-md"
             centered
             open={open}
@@ -100,6 +101,7 @@ const Buy = ({ setOpen, open, price }: IbuyProps) => {
 
         <Modal
             footer={null}
+            onCancel={() => setPriceOpen(false)}
             className="max-w-md"
             centered
             open={priceOpen}
@@ -117,7 +119,7 @@ const Buy = ({ setOpen, open, price }: IbuyProps) => {
                 <div className="h-4 bg-gray-200 rounded-full mb-2.5"></div>
                 <div className="h-4 bg-gray-200 rounded-full"></div>
             </div>}
-            <Button loading={isPending} type="primary" className='w-full mt-10 max-md:mt-8 text-lg max-md:text-md' onClick={submitPrice}>提交</Button>
+            <Button loading={isPending} type="primary" className='w-full mt-10 max-md:mt-8 text-sm' onClick={submitPrice}>提交</Button>
         </Modal>
 
         <Deposit depositOpen={depositOpen} setDepositOpen={setDepositOpen}

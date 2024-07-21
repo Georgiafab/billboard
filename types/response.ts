@@ -6,6 +6,8 @@ export interface IAdvertise {
   audstatus: AUD_STATUS;
   auddate: string;
   useraddr: string;
+  audmsg: string;
+  applymsg: string;
 }
 
 export enum AUD_STATUS {
@@ -52,4 +54,10 @@ export interface IShdDetails {
   tradeTime: number;
   setPriceTime: number;
   tradeState: TradeState;
+}
+
+export interface UserInfo {
+  id: number;
+  username: string;
+  auditor: boolean;
 }

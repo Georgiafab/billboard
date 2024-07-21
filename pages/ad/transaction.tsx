@@ -60,9 +60,10 @@ export default function Transaction() {
             }, ...{ [t]: true }
         })
         keypadRef.current?.setOpen(true)
+        console.log(cprice, 'cpricecprice')
         t === "withdraw" ? setWithdraw(myFund) : setPrice(cprice)
         setCurr(t)
-    }, [])
+    }, [cprice, myFund])
 
     const keypadOpen = (isOpen: boolean) => {
         setCurr(null)

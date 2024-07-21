@@ -8,6 +8,7 @@ import style from './index.module.scss';
 import { message, Modal, Spin } from 'antd';
 import { login } from '@/services';
 import { useSwitchChain, useChainId } from 'wagmi'
+import { useLocalStorageState } from 'ahooks';
 
 
 
@@ -87,6 +88,9 @@ export default function Login() {
     const { chains, switchChainAsync } = useSwitchChain()
     const { chainId, isConnected } = useAccount();
     const allowChainId = useChainId()
+    const [info, setInfo] = useLocalStorageState('user-info', {
+        defaultValue: {},
+    });
     useEffect(() => {
         if (isConnected && chainId !== allowChainId) {
             Modal.error({
@@ -116,7 +120,9 @@ export default function Login() {
                 const setCookieValue = res.headers['set-cookie'];
                 // const setCookieValue = res.headers?.get?.("set-cookie")
                 // let allCookies = document.cookie
+                setInfo(res)
                 console.log(setCookieValue, document.cookie)
+
             })
 
 

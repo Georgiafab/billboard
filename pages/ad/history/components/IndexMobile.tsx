@@ -1,12 +1,13 @@
 import { Button, Carousel, Image } from 'antd'
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
-import { AUD_STATUS, IAdvertise, AUD_STATUS_TEXT, Tabs } from '@/types/response';
+import { AUD_STATUS, IAdvertise, AUD_STATUS_TEXT, Tabs, UserInfo } from '@/types/response';
 import SuffixText from '@/components/SuffixText';
 import { ArrawIcon } from '@/public/icons';
 import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps, CollapseProps } from 'antd';
 import { Dropdown, Space, Collapse } from 'antd';
 import dayjs from 'dayjs';
+import { useLocalStorageState } from 'ahooks';
 
 type Props = {
     data: IAdvertise[],
@@ -33,6 +34,10 @@ const DetailMobile = ({ data = [], setCurrTab, currTab }: Props) => {
     const menuClick: MenuProps['onClick'] = ({ key }) => {
         setCurrTab(Number(key))
     };
+
+    const [info] = useLocalStorageState<UserInfo | {}>('user-info', {
+        defaultValue: { auditor: false },
+    });
 
 
 
@@ -108,10 +113,10 @@ const DetailMobile = ({ data = [], setCurrTab, currTab }: Props) => {
                 <p className='pb-1 text-sm'>审核留言</p>
                 <textarea value={reason} disabled={currItem.audstatus !== AUD_STATUS.pending} onInput={e => setReason(e.currentTarget.value)}
                     placeholder='审核不通过必须写明原因' className={`flex-1 mb-1 text-sm w-full h-[45px] p-3 bg-[#F4F4F4] rounded-xl`} style={{ resize: "none" }}></textarea>
-                <div className='flex items-center gap-4 '>
+                {(info as UserInfo).auditor && <div className='flex items-center gap-4 '>
                     {(currItem.audstatus === AUD_STATUS.success || currItem.audstatus === AUD_STATUS.pending) && <Button disabled={currItem.audstatus !== AUD_STATUS.pending} type="primary" className='text-sm flex-1 rounded-lg bg-green hover:!bg-green hover:opacity-70 disabled:bg-green  disabled:opacity-70 disabled:text-white h-[40px]'>同意</Button>}
                     {(currItem.audstatus === AUD_STATUS.fail || currItem.audstatus === AUD_STATUS.pending) && <Button disabled={currItem.audstatus !== AUD_STATUS.pending} type="primary" className='text-sm flex-1 rounded-lg h-[40px]' danger>不同意</Button>}
-                </div>
+                </div>}
             </div>}
         </>
     )

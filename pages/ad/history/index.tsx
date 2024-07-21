@@ -1,26 +1,50 @@
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Back from '@/components/Back';
 import { Button, Image, Table, Typography } from 'antd';
-import { useSessionStorageState } from 'ahooks';
+import { useSessionStorageState, useLocalStorageState } from 'ahooks';
 import type { TableProps } from 'antd';
 import { ArrawIcon } from '~/icons';
-import { GetServerSideProps } from 'next/types';
-import { getAdvertise } from '@/services';
-import { AUD_STATUS, IAdvertise, AUD_STATUS_TEXT, Tabs } from '@/types/response';
+import { GetServerSideProps, GetStaticProps } from 'next/types';
+import { getAuditAdvertise } from '@/services';
+import { AUD_STATUS, IAdvertise, AUD_STATUS_TEXT, Tabs, UserInfo } from '@/types/response';
 import SuffixText from '@/components/SuffixText';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import IndexMobile from './components/IndexMobile';
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+import { useRequest } from 'ahooks';
+// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+//     return {
+//         props: {
+//             data: await getAuditAdvertise(),
+//         },
+//     };
+// };
+
+export const getStaticProps = (async (context) => {
     return {
         props: {
-            data: await getAdvertise(),
+            data: await getAuditAdvertise(),
         },
     };
-};
+}) satisfies GetStaticProps<{
+    data: IAdvertise[]
+}>
 
-const History = ({ data }: { data: IAdvertise[] }) => {
+const History = () => {
+    const [data, setData] = useState<IAdvertise[]>([])
+
+
+    const { loading, run } = useRequest(getAuditAdvertise, {
+        manual: false,
+        onSuccess: (result, params) => {
+            setData(result)
+        }
+    })
+
+    const [info] = useLocalStorageState<UserInfo | {}>('user-info', {
+        defaultValue: { auditor: false },
+    });
     const { Paragraph } = Typography;
     const router = useRouter()
 
@@ -29,7 +53,6 @@ const History = ({ data }: { data: IAdvertise[] }) => {
         'sui-banner-history-detail',
         { defaultValue: {} },
     );
-
     const showList = useMemo(() => {
         if (currTab >= 0) {
             return data.filter(item => item.audstatus === currTab)
@@ -68,10 +91,10 @@ const History = ({ data }: { data: IAdvertise[] }) => {
             title: '申请留言',
             dataIndex: 'useraddr',
             key: 'useraddr',
-            render: (_, { useraddr }) => (
+            render: (_, { applymsg }) => (
                 <div className="w-52">
                     <Paragraph ellipsis={{ rows: 3 }}>
-                        最多支持两行字最多支持两行字最多支持两行字最多支持两行最多支持两行字最多支持两行字最多支持两行字最多支持两行最多支持两行字最多支持两行字最多支持两行字最多支持两行
+                        {applymsg}
                     </Paragraph>
                 </div>
             )
@@ -80,10 +103,10 @@ const History = ({ data }: { data: IAdvertise[] }) => {
             title: '审核留言',
             dataIndex: 'useraddr',
             key: 'useraddr',
-            render: (_, { useraddr }) => (
+            render: (_, { audmsg }) => (
                 <div className="w-52">
                     <Paragraph ellipsis={{ rows: 3 }}>
-                        最多支持两行字最多支持两行字最多支持两行字最多支持两行最多支持两行字最多支持两行字最多支持两行字最多支持两行最多支持两行字最多支持两行字最多支持两行字最多支持两行
+                        {audmsg}
                     </Paragraph>
                 </div>
             )
@@ -106,9 +129,11 @@ const History = ({ data }: { data: IAdvertise[] }) => {
             render: (_: any, record: IAdvertise) => {
                 return (
                     <div className="cursor-pointer w-[170px]" onClick={() => handleDetail(record)}>
-                        {record.audstatus === AUD_STATUS.pending ? <span className="text-purple hover:text-opacity-70" >去审核</span> :
-                            record.audstatus === AUD_STATUS.success ?
-                                <span className="text-purple hover:text-opacity-70" >去查看</span> : '/'}
+                        {(info as UserInfo)?.auditor ?
+                            (record.audstatus === AUD_STATUS.pending) ? <span className="text-purple hover:text-opacity-70" >去审核</span> :
+                                record.audstatus === AUD_STATUS.success ?
+                                    <span className="text-purple hover:text-opacity-70" >去查看</span> : '/'
+                            : <span className="text-purple hover:text-opacity-70" >去查看</span>}
                     </div>
                 )
             },
@@ -129,7 +154,7 @@ const History = ({ data }: { data: IAdvertise[] }) => {
                                 key={item.label}>{item.label}</p>
                         ))}
                     </div>
-                    <Table pagination={false} className="rounded-t-xl overflow-hidden " scroll={{ x: '1200px' }} rowClassName="bg-white px-20" dataSource={showList} columns={columns}></Table>
+                    <Table loading={loading} className="rounded-t-xl overflow-hidden " scroll={{ x: '1200px' }} rowClassName="bg-white px-20" dataSource={showList} columns={columns}></Table>
                 </div>
 
 
