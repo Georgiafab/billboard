@@ -177,7 +177,7 @@ export default function Purchase() {
 
                                         <div className={style.descItems}>
                                             <span className={style.left}>展示开始日期： </span>
-                                            <span className={style.right}>{dayjs((details?.result as IShdDetails)?.keeperReceiveTime.toString()).format('YY/MM/DD')}</span>
+                                            <span className={style.right}>{dayjs((details?.result as IShdDetails)?.keeperReceiveTime?.toString()).format('YY/MM/DD')}</span>
                                         </div>
                                         <div className={style.descItems}>
                                             <span className={style.left}>展示结束日期： </span>
