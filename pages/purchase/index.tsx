@@ -177,11 +177,11 @@ export default function Purchase() {
 
                                         <div className={style.descItems}>
                                             <span className={style.left}>展示开始日期： </span>
-                                            <span className={style.right}>{dayjs((details?.result as IShdDetails)?.keeperReceiveTime?.toString()).format('YY/MM/DD')}</span>
+                                            <span className={style.right}>{(details?.result as IShdDetails)?.keeperReceiveTime ? dayjs((details?.result as IShdDetails)?.keeperReceiveTime?.toString()).format('YY/MM/DD') : '--'}</span>
                                         </div>
                                         <div className={style.descItems}>
                                             <span className={style.left}>展示结束日期： </span>
-                                            <span className={style.right}>{dayjs(usageTime?.result?.toString()).format('YY/MM/DD')}</span>
+                                            <span className={style.right}>{usageTime?.result ? dayjs(usageTime?.result?.toString()).format('YY/MM/DD') : '--'}</span>
                                         </div>
                                         <div className={`${style.descItems} max-lg:flex-col`}>
                                             <span className={`${style.left} ml-0`}>购买人： </span>
