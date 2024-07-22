@@ -22,7 +22,7 @@ const Detail = () => {
         { defaultValue: {} },
     );
     const [info] = useLocalStorageState<UserInfo | {}>('user-info', {
-        defaultValue: { auditor: true },
+        defaultValue: {},
     });
     const [reason, setReason] = useState('')
     useEffect(() => {

@@ -36,7 +36,7 @@ const DetailMobile = ({ data = [], setCurrTab, currTab }: Props) => {
     };
 
     const [info] = useLocalStorageState<UserInfo | {}>('user-info', {
-        defaultValue: { auditor: false },
+        defaultValue: {},
     });
 
 
