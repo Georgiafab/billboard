@@ -164,27 +164,27 @@ export default function Purchase() {
                 <div className={style.purchaseList}>
                     {isSuccess ?
                         <> <div className={style.purItem}>
-                            <picture className='w-full'>
+                            <picture className='lg:w-full'>
                                 <source media="(max-width: 1024px)" srcSet={`${process.env.NEXT_PUBLIC_API_BASE_URL}${billboard?.mobimage}`} />
                                 <img className="w-full" src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${billboard?.pcimage}`} alt='' />
                             </picture>
 
 
-                            <div className='max-lg:flex flex-col justify-between max-lg:min-w-[40vw]'>
+                            <div className='max-lg:flex flex-col justify-between max-lg:min-w-[40vw] max-lg:flex-1'>
                                 <div>
                                     <h3 >一块广告牌</h3>
                                     <div className={style.desc}>
 
                                         <div className={style.descItems}>
                                             <span className={style.left}>展示开始日期： </span>
-                                            <span className={style.right}>{(details?.result as IShdDetails)?.keeperReceiveTime ? dayjs((details?.result as IShdDetails)?.keeperReceiveTime?.toString()).format('YY/MM/DD') : '--'}</span>
+                                            {/* <span className={style.right}>{(details?.result as IShdDetails)?.keeperReceiveTime ? dayjs((details?.result as IShdDetails)?.keeperReceiveTime?.toString()).format('YY/MM/DD') : '--'}</span> */}
                                         </div>
                                         <div className={style.descItems}>
                                             <span className={style.left}>展示结束日期： </span>
-                                            <span className={style.right}>{usageTime?.result ? dayjs(usageTime?.result?.toString()).format('YY/MM/DD') : '--'}</span>
+                                            {/* <span className={style.right}>{usageTime?.result ? dayjs(usageTime?.result?.toString()).format('YY/MM/DD') : '--'}</span> */}
                                         </div>
                                         <div className={`${style.descItems} max-lg:flex-col`}>
-                                            <span className={`${style.left} ml-0`}>购买人： </span> yu
+                                            <span className={`${style.left} ml-0`}>购买人： </span>
                                             <div className={`${style.right} max-lg:mt-[6px]`}>
                                                 <Avatar address={(details?.result as IShdDetails)?.keeper} className="!size-8" />
                                                 <span className="text-xs"><SuffixText content={(details?.result as IShdDetails)?.keeper}></SuffixText></span>

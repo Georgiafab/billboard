@@ -60,7 +60,6 @@ export default function Transaction() {
             }, ...{ [t]: true }
         })
         keypadRef.current?.setOpen(true)
-        console.log(cprice, 'cpricecprice')
         t === "withdraw" ? setWithdraw(myFund) : setPrice(cprice)
         setCurr(t)
     }, [cprice, myFund])
@@ -113,7 +112,7 @@ export default function Transaction() {
 
     return (
         <main className={`bg-gradient-to-b from-[#F9E8D9] to-[#FFFBF7] max-lg:bg-[#FFFEFA] ${style.transaction}`}>
-            <Keypad ref={keypadRef} setInputValue={setVal} onChange={keypadOpen} />
+            <Keypad ref={keypadRef} setInputValue={setVal} onChange={keypadOpen} onOk={curr === "withdraw" ? handleWithDraw : changePrice} />
             <div className="lg:w-[816px] w-11/12 m-auto overflow-hidden z-10 relative">
                 <Back text="交易配置" isNotifi={false}></Back>
 

@@ -11,6 +11,7 @@ import { getCsrfToken, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useSignMessage } from 'wagmi'
 import { CtxOrReq } from 'next-auth/client/_utils';
+import { error } from 'console';
 
 
 const STEPS = [
@@ -45,7 +46,7 @@ export function StepsIcon({ index, isMobile, ...props }: { index: number, isMobi
 }
 export default function Images({ csrfToken }: { csrfToken: string }) {
     const { data: session } = useSession();
-    const { signMessage, isSuccess, data: usersignature } = useSignMessage();
+    const { signMessageAsync } = useSignMessage();
     const router = useRouter()
     const [currStep, setCurrStep] = useState<number>(0)
     const [note, setNote] = useState<string>('')
@@ -111,23 +112,21 @@ export default function Images({ csrfToken }: { csrfToken: string }) {
             return [...prev.splice(currStep, 1)]
         })
     }
-    useEffect(() => {
-        if (isSuccess) {
+    const handleSubmit = () => {
+        signMessageAsync({ message: `useraddr:${session?.address}\npcimage:${imgUrls[0]}\nmobimage:${imgUrls[1]}\napplymsg:${note}` }).then(res => {
             console.log(csrfToken)
-            addAdvertise({ useraddr: session?.address, usersignature: usersignature, applymsg: note, pcimage: imgUrls[0], mobimage: imgUrls[1] },
-                {
-                    headers: { 'X-Csrftoken': csrfToken }
-                }
+            addAdvertise({ useraddr: session?.address, usersignature: res, applymsg: note, pcimage: imgUrls[0], mobimage: imgUrls[1] }
             ).then((res: any) => {
                 setNotifShow(true)
-                // setTimeout(() => {
-                //     router.push('/ad')
-                // }, 2000)
+                setTimeout(() => {
+                    router.push('/ad')
+                }, 2000)
+            }).catch(error => {
+                message.error(error.toString())
             })
-        }
-    }, [isSuccess])
-    const handleSubmit = () => {
-        signMessage({ message: `useraddr:${session?.address}\npcimage:${imgUrls[0]}\nmobimage:${imgUrls[1]}\napplymsg:${note}` })
+        }).catch(error => {
+            message.error(error.shortMessgae)
+        })
     }
 
     return (

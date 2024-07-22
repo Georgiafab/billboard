@@ -33,7 +33,8 @@ export const getStaticProps = (async (context) => {
 
 const History = () => {
     const [data, setData] = useState<IAdvertise[]>([])
-
+    // const data = []
+    // const setData = () => { }
 
     const { loading, run } = useRequest(getAuditAdvertise, {
         manual: false,
@@ -43,7 +44,7 @@ const History = () => {
     })
 
     const [info] = useLocalStorageState<UserInfo | {}>('user-info', {
-        defaultValue: { auditor: false },
+        defaultValue: {},
     });
     const { Paragraph } = Typography;
     const router = useRouter()
@@ -141,20 +142,21 @@ const History = () => {
     ];
     return (
         <main >
-            <div className="2xl:max-w-[1400px] 2xl:m-auto lg:mx-40  lg:my-0 md:mx-0 relative z-10">
+            {<div className="2xl:max-w-[1400px] 2xl:m-auto lg:mx-40  lg:my-0 md:mx-0 relative z-10">
 
                 {/* pc 端 */}
                 <div className='max-lg:hidden'>
-                    <Back text={<>历史申请记录<span className='text-black text-opacity-60 text-2xl'>（{data.length}）</span></>} isNotifi={false}></Back>
+                    {data.length ? <>
+                        <Back text={<>历史申请记录<span className='text-black text-opacity-60 text-2xl'>（{data.length}）</span></>} isNotifi={false}></Back>
 
-                    <div className='flex items-center my-8 max-md:flex-wrap max-md:my-4'>
-                        {Tabs.map((item, index) => (
-                            <p onClick={() => setCurrTab(item.key)}
-                                className={`mr-4 max-md:mb-2 rounded-[47px] px-5 py-[6px] h-10 text-lg cursor-pointer ${item.key === currTab ? ' bg-purple text-white' : "bg-white text-black"}`}
-                                key={item.label}>{item.label}</p>
-                        ))}
-                    </div>
-                    <Table loading={loading} className="rounded-t-xl overflow-hidden " scroll={{ x: '1200px' }} rowClassName="bg-white px-20" dataSource={showList} columns={columns}></Table>
+                        <div className='flex items-center my-8 max-md:flex-wrap max-md:my-4'>
+                            {Tabs.map((item, index) => (
+                                <p onClick={() => setCurrTab(item.key)}
+                                    className={`mr-4 max-md:mb-2 rounded-[47px] px-5 py-[6px] h-10 text-lg cursor-pointer ${item.key === currTab ? ' bg-purple text-white' : "bg-white text-black"}`}
+                                    key={item.label}>{item.label}</p>
+                            ))}
+                        </div>
+                        <Table loading={loading} className="rounded-t-xl overflow-hidden " scroll={{ x: '1200px' }} rowClassName="bg-white px-20" dataSource={showList} columns={columns}></Table></> : <p className="h-screen max-w-[203] m-auto flex items-center justify-center ">暂无申请记录，快去首页购买广告进行配置吧</p>}
                 </div>
 
 
@@ -164,7 +166,7 @@ const History = () => {
                     <IndexMobile data={showList} setCurrTab={setCurrTab} currTab={currTab} />
                 </div>
 
-            </div>
+            </div>}
         </main >
     )
 }

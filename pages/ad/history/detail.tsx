@@ -1,28 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useSessionStorageState, useMount, useUnmount, useLocalStorageState } from 'ahooks';
-import { Image, Button } from 'antd';
+import { Image, Button, message } from 'antd';
 import dayjs from 'dayjs';
 import SuffixText from '@/components/SuffixText';
 import Back from '@/components/Back'
 import { IAdvertise, AUD_STATUS_TEXT, AUD_STATUS, UserInfo } from '@/types/response';
 import { getCsrfToken, useSession } from "next-auth/react"
-import { CtxOrReq } from 'next-auth/client/_utils';
+// import { CtxOrReq } from 'next-auth/client/_utils';
 import { auditAdvertise } from '@/services';
 import { useSignMessage } from 'wagmi'
 
 
-export async function getServerSideProps(context: CtxOrReq | undefined) {
-    return {
-        props: {
-            csrfToken: await getCsrfToken(context),
-        },
-    }
-}
-type IDetail = {
-    csrfToken: string
-}
-const Detail = ({ csrfToken }: IDetail) => {
-    const { signMessage, isSuccess, data: usersignature } = useSignMessage();
+const Detail = () => {
+    const { signMessageAsync, isSuccess, data: usersignature } = useSignMessage();
     const [status, setStatus] = useState<AUD_STATUS>()
     // @ts-ignore
     const [detail, setDetail] = useState<IAdvertise>({})
@@ -32,7 +22,7 @@ const Detail = ({ csrfToken }: IDetail) => {
         { defaultValue: {} },
     );
     const [info] = useLocalStorageState<UserInfo | {}>('user-info', {
-        defaultValue: { auditor: false },
+        defaultValue: { auditor: true },
     });
     const [reason, setReason] = useState('')
     useEffect(() => {
@@ -41,29 +31,26 @@ const Detail = ({ csrfToken }: IDetail) => {
             (storageDetail as IAdvertise).audmsg && setReason((storageDetail as IAdvertise).audmsg)
         }
     }, [])
-    useEffect(() => {
-        if (isSuccess) {
+
+    const handleAudit = (status: AUD_STATUS) => {
+        setStatus(status)
+        signMessageAsync({ message: `id:${detail.id}\npcimage:${detail.pcimage}\nmobimage:${detail.mobimage}\naudstatus:${status}\naudmsg:${reason}` }).then(res => {
+            console.log(res, 'audsignature')
             auditAdvertise({
                 id: detail.id, data: {
                     useraddr: session?.address,
                     pcimage: detail.pcimage,
                     mobimage: detail.mobimage,
                     audstatus: status,
-                    audsignature: '',
+                    audsignature: res,
                     audmsg: reason
-                }, config: {
-                    headers: {
-                        'X-Csrftoken': csrfToken
-                    }
                 }
             }).then(res => {
                 console.log(res)
             })
-        }
-    }, [isSuccess])
-    const handleAudit = (status: AUD_STATUS) => {
-        setStatus(status)
-        signMessage({ message: `id:${detail.id}\npcimage:${detail.pcimage}\nmobimage:${detail.mobimage}\naudstatus:${status}\naudmsg:${reason}` })
+        }).catch(error => {
+            message.error(error.shortMessage)
+        })
     }
     return (
         <main>

@@ -17,10 +17,7 @@ export const getAdvertise = async () => {
   return response.data;
 };
 
-export const addAdvertise = async (
-  data: any,
-  config: AxiosRequestConfig = {}
-) => {
+export const addAdvertise = async (data: any) => {
   const response = await axios.post("/v1/advertise", data);
   return response.data;
 };
@@ -28,11 +25,9 @@ export const addAdvertise = async (
 export const auditAdvertise = async ({
   data,
   id,
-  config,
 }: {
   data: any;
   id: number;
-  config: AxiosRequestConfig;
 }) => {
   const response = await axios.patch("/v1/advertise/" + id, data);
   return response.data;

@@ -55,9 +55,9 @@ const DetailMobile = ({ data = [], setCurrTab, currTab }: Props) => {
             </div>
             <Carousel afterChange={onChange} dots={false} infinite={false} className='w-10/12 m-auto ad-history-carousel'>
                 {data.map((item: IAdvertise) => {
-                    return (<div className="rounded-xl relative overflow-hidden cursor-pointer" key={item.id} >
-                        <div className={`${item.audstatus === AUD_STATUS.pending ? 'bg-[#2C2B50]' : item.audstatus === AUD_STATUS.success ? 'bg-green' : 'bg-orange'} pt-5 pb-8 px-5`}>
-                            <p className='flex items-center mb-[10px]'>
+                    return (<div className="rounded-xl relative overflow-hidden cursor-pointer px-2" key={item.id} >
+                        <div className={` rounded-t-xl ${item.audstatus === AUD_STATUS.pending ? 'bg-[#2C2B50]' : item.audstatus === AUD_STATUS.success ? 'bg-green' : 'bg-orange'} pt-5 pb-8 px-5`}>
+                            <p className='flex items-center mb-[10px] '>
                                 <span className='text-white text-opacity-60 w-16'>提交时间</span>
                                 <span className='text-white ml-5'>{dayjs(item.createdate).format('YYYY-MM-DD')}</span>
                             </p>
@@ -93,7 +93,7 @@ const DetailMobile = ({ data = [], setCurrTab, currTab }: Props) => {
                                     style: {
                                     },
                                     children: <div className='text-sm text-black text-opacity-60 bg-[#F6F6F6] rounded-lg py-2 px-3'>留言留言留言留言留言留言留言留言留言</div>,
-                                }]} bordered={false} ghost expandIconPosition="end" defaultActiveKey={['1']} />
+                                }]} bordered={false} ghost expandIconPosition="end" />
 
                             </div>
 
@@ -109,9 +109,9 @@ const DetailMobile = ({ data = [], setCurrTab, currTab }: Props) => {
             </Carousel>
 
 
-            {currItem && <div className='fixed bottom-[76px] w-full min-h-[138px] rounded-t-xl bg-white z-20 shadow-md py-3 px-5'>
+            {currItem && <div className='fixed bottom-[76px] w-full rounded-t-xl bg-white z-20 shadow-md py-3 px-5'>
                 <p className='pb-1 text-sm'>审核留言</p>
-                <textarea value={reason} disabled={currItem.audstatus !== AUD_STATUS.pending} onInput={e => setReason(e.currentTarget.value)}
+                <textarea value={reason} disabled={currItem.audstatus !== AUD_STATUS.pending || !(info as UserInfo).auditor} onInput={e => setReason(e.currentTarget.value)}
                     placeholder='审核不通过必须写明原因' className={`flex-1 mb-1 text-sm w-full h-[45px] p-3 bg-[#F4F4F4] rounded-xl`} style={{ resize: "none" }}></textarea>
                 {(info as UserInfo).auditor && <div className='flex items-center gap-4 '>
                     {(currItem.audstatus === AUD_STATUS.success || currItem.audstatus === AUD_STATUS.pending) && <Button disabled={currItem.audstatus !== AUD_STATUS.pending} type="primary" className='text-sm flex-1 rounded-lg bg-green hover:!bg-green hover:opacity-70 disabled:bg-green  disabled:opacity-70 disabled:text-white h-[40px]'>同意</Button>}
