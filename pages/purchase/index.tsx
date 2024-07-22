@@ -177,11 +177,11 @@ export default function Purchase() {
 
                                         <div className={style.descItems}>
                                             <span className={style.left}>展示开始日期： </span>
-                                            {/* <span className={style.right}>{(details?.result as IShdDetails)?.keeperReceiveTime ? dayjs((details?.result as IShdDetails)?.keeperReceiveTime?.toString()).format('YY/MM/DD') : '--'}</span> */}
+                                            <span className={style.right}>{(details?.result as IShdDetails)?.keeperReceiveTime ? dayjs((details?.result as IShdDetails)?.keeperReceiveTime?.toString()).format('YY/MM/DD') : '--'}</span>
                                         </div>
                                         <div className={style.descItems}>
                                             <span className={style.left}>展示结束日期： </span>
-                                            {/* <span className={style.right}>{usageTime?.result ? dayjs(usageTime?.result?.toString()).format('YY/MM/DD') : '--'}</span> */}
+                                            <span className={style.right}>{usageTime?.result ? dayjs(usageTime?.result?.toString()).format('YY/MM/DD') : '--'}</span>
                                         </div>
                                         <div className={`${style.descItems} max-lg:flex-col`}>
                                             <span className={`${style.left} ml-0`}>购买人： </span>
@@ -196,7 +196,7 @@ export default function Purchase() {
                                 <div>
                                     <div className={style.amount}>
                                         <p className='max-lg:mr-[17px]'>金额</p>
-                                        <span className='max-lg:text-base'>See {formatEther((details?.result as IShdDetails)?.price)}</span>
+                                        <span className='max-lg:text-base'>See {formatEther((details?.result as IShdDetails)?.price || BigInt(0))}</span>
                                     </div>
                                     <Button block className={style.button} type="primary" onClick={() => setOpenBuy(true)} >购买</Button>
                                 </div>
@@ -204,7 +204,7 @@ export default function Purchase() {
 
 
                         </div>
-                            <Buy open={openBuy} setOpen={setOpenBuy} price={formatEther((details?.result as IShdDetails)?.price)}></Buy>
+                            <Buy open={openBuy} setOpen={setOpenBuy} price={formatEther((details?.result as IShdDetails)?.price || BigInt(0))}></Buy>
                         </>
                         : <Loading />
 
