@@ -184,7 +184,7 @@ export default function Purchase() {
                                             <span className={style.right}>{usageTime?.result ? dayjs(usageTime?.result?.toString()).format('YY/MM/DD') : '--'}</span>
                                         </div>
                                         <div className={`${style.descItems} max-lg:flex-col`}>
-                                            <span className={`${style.left} ml-0`}>购买人： </span>
+                                            <span className={`${style.left} ml-0`}>购买人： </span> yu
                                             <div className={`${style.right} max-lg:mt-[6px]`}>
                                                 <Avatar address={(details?.result as IShdDetails)?.keeper} className="!size-8" />
                                                 <span className="text-xs"><SuffixText content={(details?.result as IShdDetails)?.keeper}></SuffixText></span>
