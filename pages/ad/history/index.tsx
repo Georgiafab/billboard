@@ -33,13 +33,15 @@ export const getStaticProps = (async (context) => {
 
 const History = () => {
     const [data, setData] = useState<IAdvertise[]>([])
-    // const data = []
-    // const setData = () => { }
-
-    const { loading, run } = useRequest(getAuditAdvertise, {
+    const [total, setTotal] = useState<number>(0)
+    function getAuditPage(page: number): Promise<{ results: IAdvertise[], count: number }> {
+        return getAuditAdvertise({ page, size: 10 })
+    }
+    const { loading, run } = useRequest(getAuditPage, {
         manual: false,
         onSuccess: (result, params) => {
-            setData(result)
+            setData(result.results)
+            setTotal(result.count)
         }
     })
 
@@ -156,7 +158,7 @@ const History = () => {
                                     key={item.label}>{item.label}</p>
                             ))}
                         </div>
-                        <Table loading={loading} className="rounded-t-xl overflow-hidden " scroll={{ x: '1200px' }} rowClassName="bg-white px-20" dataSource={showList} columns={columns}></Table></> : <p className="h-screen max-w-[203] m-auto flex items-center justify-center ">暂无申请记录，快去首页购买广告进行配置吧</p>}
+                        <Table pagination={{ total, onChange: run }} loading={loading} className="rounded-t-xl overflow-hidden " scroll={{ x: '1200px' }} rowClassName="bg-white px-20" dataSource={showList} columns={columns}></Table></> : <p className="h-screen max-w-[203] m-auto flex items-center justify-center ">暂无申请记录，快去首页购买广告进行配置吧</p>}
                 </div>
 
 

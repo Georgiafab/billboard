@@ -144,8 +144,9 @@ main.ad {
   display: none !important;
 }
 
-.ant-image-preview-mask {
-  background-color: rgba(0, 0, 0, 0.95) !important;
+.home .ant-image-preview-mask {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(8px);
 }
 
 .ant-table-cell {

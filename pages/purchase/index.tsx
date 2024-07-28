@@ -145,32 +145,32 @@ export default function Purchase() {
 
     const [details, usageTime] = data || []
 
-    const [billboard, setBillboard] = useState<IAdvertise>()
-    const init = async () => {
+    // const [billboard, setBillboard] = useState<IAdvertise>()
+    // const init = async () => {
 
-        await getAuditAdvertise().then(res => {
-            setBillboard(res[0])
-        })
-    }
-    useEffect(() => {
-        init()
-    }, [])
+    //     await getAuditAdvertise().then(res => {
+    //         setBillboard(res[0])
+    //     })
+    // }
+    // useEffect(() => {
+    //     init()
+    // }, [])
 
     return (
 
         <main>
-            <div className={`${style.container} flex-col`}>
-                <h1 className="lg:text-[32px] lg:absolute lg:top-[60px] lg:text-center w-full top-0 sticky text-xl h-14 flex items-center justify-center max-lg:backdrop-blur-md max-lg:bg-mh max-lg:shadow-2xl">购买广告</h1>
-                <div className={style.purchaseList}>
+            <div className={`${style.container} flex-col lg:justify-center`}>
+                <h1 className="lg:text-[32px] lg:static lg:text-center w-full top-0 sticky text-xl h-14 flex items-center justify-center max-lg:backdrop-blur-md max-lg:bg-mh max-lg:shadow-2xl">购买广告</h1>
+                <div className={`${style.purchaseList}`}>
                     {isSuccess ?
                         <> <div className={style.purItem}>
-                            <picture className='lg:w-full'>
-                                <source media="(max-width: 1024px)" srcSet={`${process.env.NEXT_PUBLIC_API_BASE_URL}${billboard?.mobimage}`} />
-                                <img className="w-full" src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${billboard?.pcimage}`} alt='' />
+                            <picture className='lg:w-full max-lg:mr-5'>
+                                <source media="(max-width: 1024px)" srcSet="/images/ad_m.png" />
+                                <img className="w-full" src="/images/ad_pc.png" alt='' />
                             </picture>
 
 
-                            <div className='max-lg:flex flex-col justify-between max-lg:min-w-[40vw] max-lg:flex-1'>
+                            <div className='max-lg:flex flex-col justify-between max-lg:min-w-[40vw] max-lg:flex-1 '>
                                 <div>
                                     <h3 >一块广告牌</h3>
                                     <div className={style.desc}>
@@ -185,7 +185,7 @@ export default function Purchase() {
                                         </div>
                                         <div className={`${style.descItems} max-lg:flex-col`}>
                                             <span className={`${style.left} ml-0`}>购买人： </span>
-                                            <div className={`${style.right} max-lg:mt-[6px]`}>
+                                            <div className={`${style.right} max-lg:mt-[6px] max-w-[40vw]`}>
                                                 <Avatar address={(details?.result as IShdDetails)?.keeper} className="!size-8" />
                                                 <span className="text-xs"><SuffixText content={(details?.result as IShdDetails)?.keeper}></SuffixText></span>
                                             </div>

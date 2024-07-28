@@ -9,20 +9,26 @@ import Avatar from "@/components/Avatar"
 import { IAdvertise } from '../types/response';
 import { useState } from 'react';
 import dayjs from 'dayjs';
+import { useReadContract } from 'wagmi';
+import { contractMsg } from '@/wagmi';
+import { formatEther } from 'viem';
 
 
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const result = await getAdvertise()
+
   return {
     props: {
-      data: await getAdvertise(),
+      data: result.results,
+      page: result.count
     },
   };
 };
 
 
 
-const Home = ({ data }: { data: IAdvertise[] }) => {
+const Home = ({ data, page }: { data: IAdvertise[], page: number }) => {
 
   const onChange = (currentSlide: number) => {
     console.log(currentSlide);
@@ -58,26 +64,39 @@ const Home = ({ data }: { data: IAdvertise[] }) => {
     setCurItemIndex(index)
   }
 
+  const { data: price } = useReadContract({
+    ...contractMsg,
+    functionName: 'getCurrentPrice',
+    args: ['0']
+  })
+
   return (
     <main className='home'>
 
-      <div className="3xl:max-w-[1400px] 3xl:m-auto lg:mx-40  lg:my-0 md:mx-0">
+      <div className="3xl:max-w-[1400px] 3xl:m-auto lg:mx-40  lg:my-0 md:mx-0 ">
         <h1 className=" lg:pb-[39px] text-xl lg:text-[32px] lg:pt-[44px] pl-[36px] py-[17px] lg:pl-0">历史广告牌</h1>
         {data.map((item: IAdvertise, index) => {
           return (<div className={`${style.billItem} lg:block hidden`} key={item.id}>
             <Image width={'100%'} fallback="/images/image_err.png" className={`bg-deep-black drop-shadow-lg w-full max-h-[498px] rounded-3xl object-contain`} src={process.env.NEXT_PUBLIC_API_BASE_URL + item.pcimage} alt={item.useraddr}
               preview={{
+                getContainer: false,
                 onVisibleChange: () => previewChange(item, index),
                 imageRender: () => (
                   <div className={style.previewBox}>
                     <div className={`${style.billButton} ${style.buttonTop} ${curItemIndex > 0 ? 'flex' : 'hidden'}`} onClick={() => changeItem('prev')}>
                       <PrevIcon > </PrevIcon>
                     </div>
-                    <div className={style.desc} data-preview>
-                      <Avatar className={style.avar} address={item.useraddr} />
-                      {/* <Image className={style.avar} preview={false} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image> */}
-                      <h3>{curItem.useraddr}</h3>
-                      <div className={style.date}>{dayjs(curItem.createdate).format('YYYY-MM-DD')}</div>
+                    <div className={`${style.desc} justify-between`} data-preview>
+                      <div className='flex items-center'>
+                        <Avatar className={style.avar} address={item.useraddr} />
+                        {/* <Image className={style.avar} preview={false} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image> */}
+                        <h3>{curItem.useraddr}</h3>
+                        <div className={`font-light ${style.date}`}>{dayjs(curItem.createdate).format('YYYY-MM-DD')}</div>
+                      </div>
+                      <div>
+                        <span className="text-[28px]">{price ? formatEther(price as bigint) : 0}</span>
+                        <span className='text-2xl font-light ml-1'>See</span>
+                      </div>
                     </div>
                     <Image className=' h-[498px] max-h-[60vh] w-auto object-contain' fallback="/images/image_err.png" src={process.env.NEXT_PUBLIC_API_BASE_URL + curItem.pcimage} alt='' preview={false}></Image>
                     <div className={`${style.billButton} ${curItemIndex < data.length - 1 ? 'flex' : 'hidden'}`} onClick={() => changeItem('next')}>
@@ -88,11 +107,17 @@ const Home = ({ data }: { data: IAdvertise[] }) => {
                 toolbarRender: () => null,
               }}
             > </Image>
-            <div className={`${style.desc}`}>
-              <Avatar className={style.avar} address={item.useraddr} />
-
-              <h3>{item.useraddr}</h3>
-              <div className={style.date}>{dayjs(item.createdate).format('YYYY-MM-DD')}</div>
+            <div className={`${style.desc} justify-between`} data-preview>
+              <div className='flex items-center'>
+                <Avatar className={style.avar} address={item.useraddr} />
+                {/* <Image className={style.avar} preview={false} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image> */}
+                <h3>{curItem.useraddr}</h3>
+                <div className={`font-normal ${style.date}`}>{dayjs(curItem.createdate).format('YYYY-MM-DD')}</div>
+              </div>
+              <div>
+                <span className="text-[28px]">{price ? formatEther(price as bigint) : 0}</span>
+                <span className='text-2xl font-normal ml-1'>See</span>
+              </div>
             </div>
           </div>)
         })}

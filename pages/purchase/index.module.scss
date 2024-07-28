@@ -16,7 +16,7 @@
 .purchaseList {
     width: 816px;
 
-    margin: auto;
+    margin: 20px auto 0;
 }
 
 /* 配置 */
@@ -107,8 +107,9 @@
         align-items: center;
 
         img {
-            width: 43vw;
-            margin-right: 20px;
+            max-width: 43vw;
+            // margin-right: 20px;
+            object-fit: cover;
         }
 
         h3 {

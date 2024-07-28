@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 // import { getCookie } from "./utils";
 import https from "https";
 
@@ -8,23 +8,15 @@ const axiosInstance = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "multipart/form-data",
-
-    // "X-Csrftoken": "6LzQwYoCQeOuvDs1zkvGhAtNpCJbijGq",
   },
   withCredentials: true,
   httpsAgent: new https.Agent({
-    rejectUnauthorized: false, // 忽略自签名证书
+    rejectUnauthorized: false,
   }),
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    // const token =
-    //   typeof window !== "undefined" ? getCookie("next-auth.csrf-token") : null;
-    // console.log(token, "next-auth.csrf-token");
-    // if (token) {
-    //   // config.headers["X-Csrftoken"] = token;
-    // }
     return config;
   },
   (error) => Promise.reject(error)
@@ -53,5 +45,19 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+const get = (url: string, params?: object, config?: AxiosRequestConfig) => {
+  return axiosInstance.get(url, { params, ...config });
+};
+
+const post = (url: string, data?: object, config?: AxiosRequestConfig) => {
+  return axiosInstance.post(url, data, { ...config });
+};
+
+const patch = (url: string, data?: object, config?: AxiosRequestConfig) => {
+  return axiosInstance.patch(url, data, { ...config });
+};
+
+export { get, post, patch };
 
 export default axiosInstance;
