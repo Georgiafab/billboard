@@ -5,9 +5,8 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import style from './index.module.scss';
-import { message, Modal, Spin } from 'antd';
+import { Spin } from 'antd';
 import { login } from '@/services';
-import { useSwitchChain, useChainId } from 'wagmi'
 import { useLocalStorageState } from 'ahooks';
 
 
@@ -85,29 +84,10 @@ export default function Login() {
     const [loading, setLoading] = useState(false)
     const router = useRouter();
     const { callbackUrl } = router.query;
-    const { chains, switchChainAsync } = useSwitchChain()
-    const { chainId, isConnected } = useAccount();
-    const allowChainId = useChainId()
+
     const [info, setInfo] = useLocalStorageState('user-info', {
         defaultValue: {},
     });
-    useEffect(() => {
-        if (isConnected && chainId !== allowChainId) {
-            Modal.error({
-                title: '错误的网络',
-                content: `您似乎没有切换到支持的网络上`,
-                okText: '切换网络',
-                onOk() {
-                    switchChainAsync({ chainId: allowChainId }).then(res => {
-                        message.success(`已成功切换到${res.name}!`)
-                    }).catch(error => {
-                        message.error(error.shortMessage)
-                    })
-                },
-            });
-
-        }
-    }, [allowChainId, chainId, isConnected, switchChainAsync])
 
     useEffect(() => {
         if (session) {

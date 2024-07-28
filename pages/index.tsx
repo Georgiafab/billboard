@@ -107,7 +107,7 @@ const Home = ({ data, page }: { data: IAdvertise[], page: number }) => {
                 toolbarRender: () => null,
               }}
             > </Image>
-            <div className={`${style.desc} justify-between`} data-preview>
+            <div className={`${style.desc} justify-between`} >
               <div className='flex items-center'>
                 <Avatar className={style.avar} address={item.useraddr} />
                 {/* <Image className={style.avar} preview={false} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image> */}

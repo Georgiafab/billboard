@@ -2,7 +2,7 @@ import { post, get, patch } from "../libs/axios";
 
 export const login = async (data: any) => {
   const response = await post("/v1/login/", data, {
-    withCredentials: true,
+    withCredentials: false,
   });
   return response;
 };
