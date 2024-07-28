@@ -165,7 +165,7 @@ const History = () => {
                 {/* 移动端 */}
 
                 <div className='lg:hidden'>
-                    <IndexMobile data={showList} setCurrTab={setCurrTab} currTab={currTab} />
+                    <IndexMobile data={showList} setCurrTab={setCurrTab} currTab={currTab} pageChange={run} total={total} />
                 </div>
 
             </div>}

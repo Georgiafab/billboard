@@ -8,14 +8,17 @@ import type { MenuProps, CollapseProps } from 'antd';
 import { Dropdown, Space, Collapse } from 'antd';
 import dayjs from 'dayjs';
 import { useLocalStorageState } from 'ahooks';
+import { Pagination } from 'antd';
 
 type Props = {
     data: IAdvertise[],
     setCurrTab: Dispatch<SetStateAction<AUD_STATUS>>,
-    currTab: AUD_STATUS
+    currTab: AUD_STATUS,
+    total: number
+    pageChange: (page: number) => void,
 }
 
-const DetailMobile = ({ data = [], setCurrTab, currTab }: Props) => {
+const DetailMobile = ({ data = [], setCurrTab, currTab, total, pageChange }: Props) => {
     const [currItemIndex, setCurItemIndex] = useState<number>(0)
     const [currItem, setCurrItem] = useState<IAdvertise>(data[currItemIndex])
     const [reason, setReason] = useState('')
@@ -92,7 +95,7 @@ const DetailMobile = ({ data = [], setCurrTab, currTab }: Props) => {
                                     label: '申请留言',
                                     style: {
                                     },
-                                    children: <div className='text-sm text-black text-opacity-60 bg-[#F6F6F6] rounded-lg py-2 px-3'>留言留言留言留言留言留言留言留言留言</div>,
+                                    children: <div className='text-sm text-black text-opacity-60 bg-[#F6F6F6] rounded-lg py-2 px-3'>{item.applymsg}</div>,
                                 }]} bordered={false} ghost expandIconPosition="end" />
 
                             </div>
@@ -107,7 +110,7 @@ const DetailMobile = ({ data = [], setCurrTab, currTab }: Props) => {
 
 
             </Carousel>
-
+            <Pagination onChange={pageChange} total={total} simple align="end" hideOnSinglePage={true} />
 
             {currItem && <div className='fixed bottom-[76px] w-full rounded-t-xl bg-white z-20 shadow-md py-3 px-5'>
                 <p className='pb-1 text-sm'>审核留言</p>

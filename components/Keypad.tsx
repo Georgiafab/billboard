@@ -73,7 +73,7 @@ const Keypad = React.forwardRef<IRef, IProps>(({ setInputValue, onChange, onOk }
                         <button className='row-span-1 border-t border-gray-light border-opacity-50 hover:bg-purple_sub' onClick={() => handlePress('delete')}>
                             <DeleteIcon className="size-6 inline-block" />
                         </button>
-                        <button className='row-span-3 bg-purple text-white ' onClick={onOk}>转账</button>
+                        <button className='row-span-3 bg-purple text-white ' onClick={onOk}>提交</button>
                     </div>
                 </div>
             </div>

@@ -27,10 +27,12 @@ export default function Ad() {
         }
     }
     return (
-        <main className='ad lg:flex items-center justify-center max-lg:bg-[#F8F7F6]'>
-            <h1 className='lg:hidden text-center w-full mb-5 pt-12 text-xl'>广告配置</h1>
-            <div className="2xl:max-w-[1338px] xl:max-w-screen-lg lg:max-w-screen-md flex xl:h-[700px] lg:h-[500px] max-lg:flex-col max-lg:w-full max-lg:h-auto">
-                <div className="mr-6 flex flex-col justify-between w-[500px] text-[#726DF9] rounded-xl pt-8 pb-8 pr-6 pl-6 bg-gradient-to-b from-[#fff] from-0% lg:via-[#F7F7FF] via-15.08% to-[#D4D2FF] to-98.93% max-lg:w-full max-lg:mb-5 max-lg:from-[#E9EBFF] max-lg:to-[#E0E4FF]">
+        <main className='ad lg:flex lg:flex-col items-center justify-center max-lg:bg-[#F8F7F6]'>
+            <h1 className='lg:hidden text-center w-full mb-5 text-xl top-0  sticky h-14 max-lg:backdrop-blur-md max-lg:bg-mh max-lg:shadow-2xl max-lg:mb-5 flex items-center justify-center'>广告配置</h1>
+            {/* <h1 className="lg:text-[32px] lg:static lg:text-center w-full top-0 sticky text-xl h-14 flex items-center justify-center max-lg:backdrop-blur-md max-lg:bg-mh max-lg:shadow-2xl max-lg:mb-5">广告配置</h1> */}
+
+            <div className="2xl:max-w-[1338px] xl:max-w-screen-lg lg:max-w-screen-md flex xl:h-[700px] lg:h-[500px] max-lg:flex-col max-lg:w-full max-lg:h-auto max-lg:px-[15px]">
+                <div className="mr-6 flex flex-col justify-between w-[500px] text-[#726DF9] rounded-xl pt-8 pb-8 pr-6 pl-6 bg-gradient-to-b from-[#fff] from-0% lg:via-[#F7F7FF] via-15.08% to-[#D4D2FF] to-98.93% max-lg:w-full max-lg:mb-5 max-lg:from-[#E9EBFF] max-lg:to-[#E0E4FF] max-lg:rounded">
                     <div className='max-lg:flex justify-between'>
                         <div className='xl:mb-[70px] lg:mb-[30px]'>
                             <h3 className="text-lg  md:text-2xl mb-3 font-semibold">图片配置</h3>
@@ -42,7 +44,7 @@ export default function Ad() {
                     <Link href="/ad/image"><Button block type="primary" className="h-14 rounded-lg flex-shrink-0 max-lg:h-10">去配置</Button></Link>
                 </div>
 
-                <div className={`mr-6 flex flex-col justify-between  w-[500px] text-[#E99430] rounded-xl pt-8 pb-8 pr-6 pl-6 bg-gradient-to-b from-[#FFFBF7] from-0% to-[#F9E8D9] to-100% ${style.transItem} max-lg:w-full max-lg:mb-5 `}>
+                <div className={`mr-6 flex flex-col justify-between  w-[500px] text-[#E99430] rounded-xl pt-8 pb-8 pr-6 pl-6 bg-gradient-to-b from-[#FFFBF7] from-0% to-[#F9E8D9] to-100% ${style.transItem} max-lg:w-full max-lg:mb-5 max-lg:rounded`}>
                     <div className='max-lg:flex justify-between'>
                         <div className=''>
                             <h3 className="text-lg  md:text-2xl mb-3 font-semibold">交易设置</h3>
@@ -64,7 +66,7 @@ export default function Ad() {
                     <p className='max-lg:text-sm'>暂无申请记录，<br className='max-lg:hidden' />
                         快去首页购买广告进行配置吧</p>
                 </NotifAlert>
-                <div onClick={handleLook} className="flex bg-white h-12 justify-between py-[13px] px-6 lg:hidden">
+                <div onClick={handleLook} className="flex bg-white h-12 justify-between py-[13px] px-6 lg:hidden max-lg:rounded">
 
                     <span className="text-sm font-semibold">历史申请记录</span>
 

@@ -97,12 +97,8 @@ export default function Login() {
 
             const message = btoa(user.message!)
             login({ useraddr: user.address, message, signature: user.signature }).then(res => {
-                const setCookieValue = res.headers['set-cookie'];
-                // const setCookieValue = res.headers?.get?.("set-cookie")
-                // let allCookies = document.cookie
                 setInfo(res)
-                console.log(setCookieValue, document.cookie)
-
+                router.push('/')
             })
 
 

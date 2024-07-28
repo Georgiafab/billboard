@@ -74,10 +74,20 @@ export default function Transaction() {
         }
 
     }
+
+    const cancelEdit = () => {
+        keypadRef.current?.setOpen(false)
+        setSetEdit({
+            price: false,
+            withdraw: false
+        })
+    }
     const [depositOpen, setDepositOpen] = useState(false)
     const { writeContractAsync, isPending } = useWriteContract()
     const changePrice = () => {
+
         if (price) {
+            cancelEdit()
             if (totalUsageFee?.result as bigint > 0) {
                 setDepositOpen(true)
             } else {
@@ -98,6 +108,7 @@ export default function Transaction() {
 
 
     const handleWithDraw = () => {
+        cancelEdit()
         writeContractAsync({
             ...contractMsg,
             functionName: "withdraw",
@@ -118,7 +129,7 @@ export default function Transaction() {
 
                 <div className='w-full bg-white rounded-xl overflow-hidden px-8 py-4 mt-8 drop-shadow-md max-lg:border-gray-light max-md:py-3 max-md:px-5'>
                     <div className='w-full flex justify-between border-b-gray-light border-b pb-4'>
-                        <p >设置售出价</p>
+                        <p>设置售出价</p>
                         {!setEdit.price && <Button type='link' className='text-sm text-black text-opacity-70 p-0 h-auto' onClick={() => handleEdit('price')}>编辑</Button>}
                     </div>
 
