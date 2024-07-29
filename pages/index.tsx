@@ -111,8 +111,8 @@ const Home = () => {
               <div className='flex items-center'>
                 <Avatar className={style.avar} address={item.useraddr} />
                 {/* <Image className={style.avar} preview={false} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image> */}
-                <h3>{curItem?.useraddr}</h3>
-                <div className={`font-normal ${style.date}`}>{dayjs(curItem?.createdate).format('YYYY-MM-DD')}</div>
+                <h3>{item.useraddr}</h3>
+                <div className={`font-normal ${style.date}`}>{dayjs(item.createdate).format('YYYY-MM-DD')}</div>
               </div>
               <div>
                 <span className="text-[28px]">{price ? formatEther(price as bigint) : 0}</span>

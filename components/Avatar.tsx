@@ -14,7 +14,11 @@ const Avatar = React.forwardRef(({ address, className }: { address: string, clas
     })
     const { documentMouned } = useDomAlready()
     const imgSrc = useMemo(() => {
-        return address && documentMouned ? blockies.create({ seed: address.toLowerCase() }).toDataURL() : '';
+        if (address && documentMouned) {
+            return blockies.create({ seed: address.toLowerCase() }).toDataURL()
+        } else {
+            return ""
+        }
     }, [address, documentMouned])
 
     return <Image preview={false} className={`rounded-full ${className}`} src={result.data || imgSrc || '/icons/avatarerr.svg'} alt={'avar'}></Image>

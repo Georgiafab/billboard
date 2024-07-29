@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Skeleton, Space, Modal, Input, message } from 'antd';
 import style from './index.module.scss';
 import SuffixText from '@/components/SuffixText';
@@ -83,7 +83,9 @@ const Buy = ({ setOpen, open, price }: IbuyProps) => {
 
     const [depositOpen, setDepositOpen] = useState(false)
 
+    const needDeposit = useMemo(() => {
 
+    }, [])
 
 
 
@@ -130,6 +132,7 @@ const Buy = ({ setOpen, open, price }: IbuyProps) => {
 }
 
 export default function Purchase() {
+    const { data: session } = useSession();
     const [openBuy, setOpenBuy] = useState(false)
     const { isPending, data, isSuccess } = useReadContracts({
         contracts: [{
@@ -199,7 +202,7 @@ export default function Purchase() {
                                         <p className='max-lg:mr-[17px]'>金额</p>
                                         <span className='max-lg:text-base'>See {formatEther((details?.result as IShdDetails)?.price || BigInt(0))}</span>
                                     </div>
-                                    <Button block className={style.button} type="primary" onClick={() => setOpenBuy(true)} >购买</Button>
+                                    <Button block disabled={(details?.result as IShdDetails)?.keeper === session?.address} className={style.button} type="primary" onClick={() => setOpenBuy(true)} >购买</Button>
                                 </div>
                             </div>
 
