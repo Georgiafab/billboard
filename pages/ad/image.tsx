@@ -96,7 +96,6 @@ export default function Images({ csrfToken }: { csrfToken: string }) {
     const [notifShow, setNotifShow] = useState(false)
 
 
-
     const handleNext = useCallback(() => {
         setCurrStep(prev => prev + 1)
     }, [setCurrStep])
@@ -113,8 +112,8 @@ export default function Images({ csrfToken }: { csrfToken: string }) {
         })
     }
     const handleSubmit = () => {
+        // console.log(document.)
         signMessageAsync({ message: `useraddr:${session?.address}\npcimage:${imgUrls[0]}\nmobimage:${imgUrls[1]}\napplymsg:${note}` }).then(res => {
-            console.log(csrfToken)
             addAdvertise({ useraddr: session?.address, usersignature: res, applymsg: note, pcimage: imgUrls[0], mobimage: imgUrls[1] }
             ).then((res: any) => {
                 setNotifShow(true)
@@ -219,11 +218,4 @@ export default function Images({ csrfToken }: { csrfToken: string }) {
     )
 
 
-}
-export async function getServerSideProps(context: CtxOrReq | undefined) {
-    return {
-        props: {
-            csrfToken: await getCsrfToken(context),
-        },
-    }
 }

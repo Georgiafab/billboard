@@ -99,6 +99,7 @@ export default function Login() {
             login({ useraddr: user.address, message, signature: user.signature }).then(res => {
                 setInfo(res)
                 router.push('/')
+
             })
 
 

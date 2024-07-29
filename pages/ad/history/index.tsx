@@ -5,7 +5,6 @@ import { Button, Image, Table, Typography } from 'antd';
 import { useSessionStorageState, useLocalStorageState } from 'ahooks';
 import type { TableProps } from 'antd';
 import { ArrawIcon } from '~/icons';
-import { GetServerSideProps, GetStaticProps } from 'next/types';
 import { getAuditAdvertise } from '@/services';
 import { AUD_STATUS, IAdvertise, AUD_STATUS_TEXT, Tabs, UserInfo } from '@/types/response';
 import SuffixText from '@/components/SuffixText';
@@ -13,29 +12,21 @@ import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import IndexMobile from './components/IndexMobile';
 import { useRequest } from 'ahooks';
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-//     return {
-//         props: {
-//             data: await getAuditAdvertise(),
-//         },
-//     };
-// };
-
-export const getStaticProps = (async (context) => {
-    return {
-        props: {
-            data: await getAuditAdvertise(),
-        },
-    };
-}) satisfies GetStaticProps<{
-    data: IAdvertise[]
-}>
+type GetAudParamsType = {
+    page: number,
+    size: number,
+    audstatus?: number
+}
 
 const History = () => {
     const [data, setData] = useState<IAdvertise[]>([])
     const [total, setTotal] = useState<number>(0)
     function getAuditPage(page: number): Promise<{ results: IAdvertise[], count: number }> {
-        return getAuditAdvertise({ page, size: 10 })
+        const params: GetAudParamsType = { page, size: 10 }
+        if (currTab !== AUD_STATUS.all) {
+            params.audstatus = currTab
+        }
+        return getAuditAdvertise(params)
     }
     const { loading, run } = useRequest(getAuditPage, {
         manual: false,

@@ -1,5 +1,4 @@
 import { Image, Carousel, Pagination } from 'antd';
-import type { GetServerSideProps } from 'next';
 import { getAdvertise } from '../services';
 import { PrevIcon, NextIcon } from '../public/icons';
 import style from './index.module.scss';
@@ -14,18 +13,6 @@ import { contractMsg } from '@/wagmi';
 import { formatEther } from 'viem';
 import { useRequest } from 'ahooks';
 
-
-
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const result = await getAdvertise()
-
-  return {
-    props: {
-      data: result.results,
-      page: result.count
-    },
-  };
-};
 
 
 
