@@ -17,7 +17,6 @@ interface IbuyProps {
     price: string
 }
 const Buy = ({ setOpen, open, price }: IbuyProps) => {
-
     const { writeContractAsync, isPending } = useWriteContract()
     const { data: session } = useSession();
 
@@ -26,6 +25,7 @@ const Buy = ({ setOpen, open, price }: IbuyProps) => {
             ...contractMsg,
             functionName: "purchase",
             args: ["0"],
+            account: session?.address as `0x${string}`,
             value: parseEther(price), // 将金额转换为 Wei
         }).then(() => {
             setOpen(false)
@@ -70,7 +70,8 @@ const Buy = ({ setOpen, open, price }: IbuyProps) => {
             writeContractAsync({
                 ...contractMsg,
                 functionName: "setPrice",
-                args: ["0", selPrice]
+                args: ["0", selPrice],
+                account: session?.address as `0x${string}`,
             }).then(() => {
                 setPriceOpen(false)
             }).catch(error => {

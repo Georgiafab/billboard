@@ -97,7 +97,7 @@ export default function Login() {
 
             const message = btoa(user.message!)
             login({ useraddr: user.address, message, signature: user.signature }).then(res => {
-                setInfo(res)
+                setInfo(res.data)
                 router.push('/')
 
             })

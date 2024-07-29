@@ -14,6 +14,8 @@ import Image from 'next/image';
 import { Button, Popover, Typography } from 'antd';
 import SuffixText from '../SuffixText';
 import sns from "@seedao/sns-js";
+import { UserInfo } from '@/types/response';
+import { useLocalStorageState } from 'ahooks';
 
 
 const sidebarList = [
@@ -42,9 +44,9 @@ const sidebarList = [
 
 export default function SideBar() {
 
-    const { documentMouned } = useDomAlready()
     const { pathname, push } = useRouter()
     const { data: session } = useSession();
+
     const [name, setName] = useState<string>('')
     const rootPath = useMemo(() => {
         return '/' + pathname.split('/')[1]
@@ -80,7 +82,7 @@ export default function SideBar() {
                     <Image src="/images/logo.svg" alt="logo" width={40} height={36} />
 
                     <div className='w-2/5 flex items-center '>
-                        <Avatar address={session?.address!} className="!size-8 mr-1" />
+                        {session?.address && <Avatar address={session?.address} className="!size-8 mr-1" />}
                         <SuffixText className="text-base flex-1" content={name} />
                     </div>
                 </div>

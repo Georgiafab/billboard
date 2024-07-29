@@ -5,6 +5,7 @@ import { useState } from "react"
 import { formatEther, parseEther } from "viem"
 import NotifAlert from "./NotifAlert"
 import { useWriteContract } from "wagmi"
+import { useSession } from "next-auth/react"
 interface IDeposit {
     totalUsageFee: string,
     errorCb?: () => void,
@@ -13,6 +14,7 @@ interface IDeposit {
 
 }
 const Deposit = ({ totalUsageFee, errorCb, depositOpen, setDepositOpen }: IDeposit) => {
+    const { data: session } = useSession();
     const { writeContractAsync, isPending } = useWriteContract()
     // const [depositOpen, setDepositOpen] = useState(false)
     const [deposit, setdeposit] = useState(totalUsageFee || '')
@@ -22,6 +24,7 @@ const Deposit = ({ totalUsageFee, errorCb, depositOpen, setDepositOpen }: IDepos
             ...contractMsg,
             functionName: "deposit",
             args: ["0"],
+            account: session?.address as `0x${string}`,
             value: parseEther(deposit)
         }).then(res => {
             setNotifShow(true)

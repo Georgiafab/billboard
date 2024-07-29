@@ -94,6 +94,7 @@ export default function Transaction() {
                 writeContractAsync({
                     ...contractMsg,
                     functionName: "setPrice",
+                    account: session?.address as `0x${string}`,
                     args: ["0", parseEther(price)]
                 }).then(() => {
                     message.success("修改价格成功!")
