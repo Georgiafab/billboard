@@ -59,6 +59,10 @@ const History = () => {
         router.push(`/ad/history/detail`)
     }
 
+    const haneldChangeTab = (key: AUD_STATUS) => {
+        setCurrTab(key)
+        run(key)
+    }
 
 
     const columns: TableProps<IAdvertise>['columns'] = [
@@ -144,7 +148,7 @@ const History = () => {
 
                         <div className='flex items-center my-8 max-md:flex-wrap max-md:my-4'>
                             {Tabs.map((item, index) => (
-                                <p onClick={() => setCurrTab(item.key)}
+                                <p onClick={() => haneldChangeTab(item.key)}
                                     className={`mr-4 max-md:mb-2 rounded-[47px] px-5 py-[6px] h-10 text-lg cursor-pointer ${item.key === currTab ? ' bg-purple text-white' : "bg-white text-black"}`}
                                     key={item.label}>{item.label}</p>
                             ))}
@@ -156,7 +160,7 @@ const History = () => {
                 {/* 移动端 */}
 
                 <div className='lg:hidden'>
-                    <IndexMobile data={showList} setCurrTab={setCurrTab} currTab={currTab} pageChange={run} total={total} />
+                    <IndexMobile data={showList} setCurrTab={haneldChangeTab} currTab={currTab} pageChange={run} total={total} />
                 </div>
 
             </div>}

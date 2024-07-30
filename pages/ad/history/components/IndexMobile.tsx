@@ -12,7 +12,7 @@ import { Pagination } from 'antd';
 
 type Props = {
     data: IAdvertise[],
-    setCurrTab: Dispatch<SetStateAction<AUD_STATUS>>,
+    setCurrTab: (key: AUD_STATUS) => void,
     currTab: AUD_STATUS,
     total: number
     pageChange: (page: number) => void,
