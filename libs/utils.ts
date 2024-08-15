@@ -15,3 +15,8 @@ export function getCookie(name: string) {
   // 如果未找到，则返回null
   return null;
 }
+
+export function getMouth(timestamp: string) {
+  var date = new Date(timestamp);
+  return date.toDateString().split(" ")[1];
+}

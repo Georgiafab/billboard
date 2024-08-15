@@ -113,6 +113,7 @@ export default function Transaction() {
         writeContractAsync({
             ...contractMsg,
             functionName: "withdraw",
+            account: session?.address as `0x${string}`,
             args: ["0", session?.address, parseEther(withdraw)]
         }).then(() => {
             message.success("提现成功!")

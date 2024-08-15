@@ -18,6 +18,7 @@ import DeleteIcon from "./delete.svg";
 import DownIcon from "./down.svg";
 import SuccessIcon from "./success.svg";
 import AvatarErrIcon from "./avatarerr.svg";
+import CloseIcon from "./close.svg";
 
 export {
   adIcon,
@@ -40,4 +41,5 @@ export {
   DownIcon,
   SuccessIcon,
   AvatarErrIcon,
+  CloseIcon,
 };

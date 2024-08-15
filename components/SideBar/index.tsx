@@ -66,10 +66,17 @@ export default function SideBar() {
         setName(snsname || ensname.data || address)
     }, [ensname])
 
+    const [info] = useLocalStorageState<{}>('user-info', {
+        defaultValue: {},
+    });
+
     useEffect(() => {
         session?.address && getName(session.address)
     }, [session, getName])
 
+    const TipCotent = <div className='text-left'>
+        {/* {info?.auditor && <p className='hover:bg-[#F7F2FB] rounded pl-2' onClick={() => push("/ad/history")}>去审核</p>} */}
+        <p className='hover:bg-[#F7F2FB] rounded pl-2' onClick={handleLogout}>退出登陆</p></div>
     return (
         <>
             {pathname == '/' && <Popover
@@ -121,7 +128,7 @@ export default function SideBar() {
                     </div>
                     <Popover
                         placement="right"
-                        content={<><span onClick={handleLogout}>退出登陆</span></>}
+                        content={TipCotent}
                         arrow={false} overlayClassName="loginoutTip">
                         <Image className={`${style.avar} absolute -z-10 opacity-0`} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image>
                         <Avatar address={session?.address!} className="!size-10" />
