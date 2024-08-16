@@ -101,8 +101,8 @@
     }
 
     .purItem {
-        width: max-content;
-        display: flex;
+        // width: max-content;
+        // display: flex;
         margin: 0 auto;
         align-items: center;
 
@@ -138,7 +138,7 @@
     }
 
     .button {
-        height: 32px;
+        // height: 32px;
         margin-bottom: 8px;
         border-radius: 4px;
     }
@@ -160,6 +160,10 @@
 
     .descItems {
         font-size: 12px;
+
+        .left {
+            width: 84px;
+        }
     }
 
     .amount {
@@ -172,5 +176,6 @@
 
     .button {
         font-size: 12px;
+        height: 32px;
     }
 }

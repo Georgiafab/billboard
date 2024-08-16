@@ -10,7 +10,7 @@ import { AUD_STATUS, IAdvertise, AUD_STATUS_TEXT, Tabs, UserInfo } from '@/types
 import SuffixText from '@/components/SuffixText';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
-import IndexMobile from './components/IndexMobile';
+import IndexMobile from './components/IndexMobie';
 import { useRequest } from 'ahooks';
 type GetAudParamsType = {
     page: number,
@@ -160,13 +160,14 @@ const History = () => {
                 {/* 移动端 */}
 
                 <div className='lg:hidden'>
-                    <IndexMobile data={showList} setCurrTab={haneldChangeTab} currTab={currTab} pageChange={run} total={total} />
+                    <IndexMobile data={showList} pageChange={run} total={total} />
                 </div>
 
             </div>}
         </main >
     )
 }
+
 
 export default History
 /* 审核留言 */

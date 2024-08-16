@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button } from 'antd';
 import Link from 'next/link';
 import style from './index.module.scss';
@@ -6,8 +6,10 @@ import { getAuditAdvertise } from '@/services';
 import { useRequest } from 'ahooks';
 import { useRouter } from 'next/router';
 import NotifAlert from '@/components/NotifAlert';
+import UnUse, { IRef as IUseRef } from '@/components/UnUse';
 
 export default function Ad() {
+    const unUseRef = useRef<IUseRef>(null)
     const router = useRouter()
     const [audLen, setAudLen] = useState<number>(0)
     const [notifShow, setNotifShow] = useState(false)
@@ -26,6 +28,14 @@ export default function Ad() {
             setNotifShow(true)
         }
     }
+
+    const handleSettle = () => {
+        const isCanUse = unUseRef.current?.handleCheckCanUse()
+        if (!isCanUse) {
+            return
+        }
+        router.push('/ad/image')
+    }
     return (
         <main className='ad lg:flex lg:flex-col items-center justify-center max-lg:bg-[#F8F7F6]'>
             <h1 className='lg:hidden text-center w-full mb-5 text-xl top-0  sticky h-14 max-lg:backdrop-blur-md max-lg:bg-mh max-lg:shadow-2xl max-lg:mb-5 flex items-center justify-center'>广告配置</h1>
@@ -40,8 +50,7 @@ export default function Ad() {
                         </div>
                         <img src="/images/adimgset.svg" alt="set" className='xl:my-[70px] lg:my-[30px] max-lg:mb-[17px] max-lg:w-[33vw]' />
                     </div>
-
-                    <Link href="/ad/image"><Button block type="primary" className="h-14 rounded-lg flex-shrink-0 max-lg:h-10">去配置</Button></Link>
+                    <Button block type="primary" className="h-14 rounded-lg flex-shrink-0 max-lg:h-10" onClick={handleSettle}>去配置</Button>
                 </div>
 
                 <div className={`mr-6 flex flex-col justify-between  w-[500px] text-[#E99430] rounded-xl pt-8 pb-8 pr-6 pl-6 bg-gradient-to-b from-[#FFFBF7] from-0% to-[#F9E8D9] to-100% ${style.transItem} max-lg:w-full max-lg:mb-5 max-lg:rounded`}>
@@ -77,6 +86,7 @@ export default function Ad() {
                         : <span className='text-black text-opacity-50 text-sm'>{`${audLen}审核通过`} </span>}
                 </div>
             </div>
+            <UnUse ref={unUseRef}></UnUse>
         </main >
     )
 }

@@ -6,7 +6,7 @@ import { formatEther, parseEther } from "viem"
 import NotifAlert from "./NotifAlert"
 import { useWriteContract } from "wagmi"
 import { useSession } from "next-auth/react"
-import Steps from "./steps"
+import Steps from "./Steps"
 import { useRouter } from 'next/router';
 interface IDeposit {
     totalUsageFee: string,

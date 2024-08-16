@@ -66,16 +66,14 @@ export default function SideBar() {
         setName(snsname || ensname.data || address)
     }, [ensname])
 
-    const [info] = useLocalStorageState<{}>('user-info', {
-        defaultValue: {},
-    });
+    const [info] = useLocalStorageState<UserInfo>('user-info');
 
     useEffect(() => {
         session?.address && getName(session.address)
     }, [session, getName])
 
     const TipCotent = <div className='text-left'>
-        {/* {info?.auditor && <p className='hover:bg-[#F7F2FB] rounded pl-2' onClick={() => push("/ad/history")}>去审核</p>} */}
+        {info?.auditor && <p className='hover:bg-[#F7F2FB] rounded pl-2' onClick={() => push("/ad/history")}>去审核</p>}
         <p className='hover:bg-[#F7F2FB] rounded pl-2' onClick={handleLogout}>退出登陆</p></div>
     return (
         <>

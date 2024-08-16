@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import { useReadContracts, useWriteContract } from 'wagmi'
 import { formatEther, parseEther } from 'viem';
 import Deposit from '@/components/Deposit';
+import UnUse, { IRef as IUseRef } from '@/components/UnUse';
 type EditType = 'price' | 'withdraw'
 export default function Transaction() {
     const { data: session } = useSession();
@@ -42,6 +43,9 @@ export default function Transaction() {
     const myFund = useMemo(() => funds?.result ? formatEther(funds?.result as bigint) : '0', [funds])
     const totalFee = useMemo(() => totalUsageFee?.result ? formatEther(totalUsageFee?.result as bigint) : '0', [totalUsageFee])
     const keypadRef = useRef<IRef>(null)
+
+    const unUseRef = useRef<IUseRef>(null)
+
     const [setEdit, setSetEdit] = useState<Record<EditType, boolean>>({
         price: false,
         withdraw: false
@@ -53,6 +57,10 @@ export default function Transaction() {
     const setVal = useMemo(() => curr === 'price' ? setPrice : setWithdraw, [curr])
 
     const handleEdit = useCallback((t: EditType) => {
+        const isCanUse = unUseRef.current?.handleCheckCanUse()
+        if (!isCanUse) {
+            return
+        }
         setSetEdit({
             ...{
                 price: false,
@@ -109,6 +117,10 @@ export default function Transaction() {
 
 
     const handleWithDraw = () => {
+        const isCanWithDraw = unUseRef.current?.handleCheckCanWithdow()
+        if (!isCanWithDraw) {
+            return
+        }
         cancelEdit()
         writeContractAsync({
             ...contractMsg,
@@ -121,6 +133,11 @@ export default function Transaction() {
             message.error(error.message)
         })
     }
+
+
+
+
+
 
 
     return (
@@ -170,6 +187,8 @@ export default function Transaction() {
             </div>
             <Deposit depositOpen={depositOpen} setDepositOpen={setDepositOpen}
                 totalUsageFee={totalFee}></Deposit>
+
+            <UnUse ref={unUseRef}></UnUse>
         </main>
     )
 }

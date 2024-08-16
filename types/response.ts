@@ -9,6 +9,12 @@ export interface IAdvertise {
   audmsg: string;
   applymsg: string;
 }
+export type ILinks = {
+  next: string;
+  previous: string;
+};
+
+export type IListRes = { results: IAdvertise[]; count: number; links: ILinks };
 
 export enum AUD_STATUS {
   all = -1,

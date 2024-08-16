@@ -9,6 +9,7 @@ import { getCsrfToken, useSession } from "next-auth/react"
 // import { CtxOrReq } from 'next-auth/client/_utils';
 import { auditAdvertise } from '@/services';
 import { useSignMessage } from 'wagmi'
+import DetailMobile from './components/DetailMobile';
 
 
 const Detail = () => {
@@ -115,6 +116,9 @@ const Detail = () => {
                 </div>
             </div>
 
+            {/* 移动端 */}
+
+            {/* <DetailMobile ></DetailMobile> */}
         </main >
     )
 }

@@ -15,22 +15,24 @@ import Deposit from '@/components/Deposit';
 import * as echarts from 'echarts';
 import { ethers } from 'ethers';
 import { CloseIcon } from '@/public/icons';
-import Steps from '@/components/steps';
+import Steps from '@/components/Steps';
 import { getMouth } from '@/libs/utils';
+import { useMount, useUnmount } from 'ahooks';
 // import { Line } from '@ant-design/charts';
 interface IbuyProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>,
     open: boolean,
-    price: string
+    price: string,
+    depositOpen: boolean,
+    setDepositOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const modalClassNames = {
     content: 'max-w-[88%] h-[322px] max-md:mx-[6%] md:min-w-[540px] md:min-h-[346px] !py-0',
 }
-const Buy = ({ setOpen, open, price }: IbuyProps) => {
+const Buy = ({ setOpen, open, price, depositOpen, setDepositOpen }: IbuyProps) => {
     const { writeContractAsync, isPending } = useWriteContract()
     const { data: session } = useSession();
-
     const comfirmBuy = () => {
         writeContractAsync({
             ...contractMsg,
@@ -92,7 +94,7 @@ const Buy = ({ setOpen, open, price }: IbuyProps) => {
 
     }
 
-    const [depositOpen, setDepositOpen] = useState(false)
+
 
     const needDeposit = useMemo(() => {
 
@@ -152,6 +154,7 @@ const Buy = ({ setOpen, open, price }: IbuyProps) => {
 export default function Purchase() {
     const { data: session } = useSession();
     const [openBuy, setOpenBuy] = useState(false)
+    const [depositOpen, setDepositOpen] = useState(false)
     const { isPending, data, isSuccess } = useReadContracts({
         contracts: [{
             ...contractMsg,
@@ -177,67 +180,82 @@ export default function Purchase() {
     // useEffect(() => {
     //     init()
     // }, [])
+    const isShdOwner = useMemo(() => (details?.result as IShdDetails)?.keeper === session?.address, [details?.result, session?.address])
 
+    const buyButton = <>
+        {
+            isShdOwner ?
+                <Button block className={style.button} type="primary" onClick={() => setDepositOpen(true)} >去质押</Button> :
+                <Button block className={style.button} type="primary" onClick={() => setOpenBuy(true)} >购买</Button>
+        }</>
+
+    const priceItem = <p className="text-purple text-2xl max-sm:text-lg"> {formatEther((details?.result as IShdDetails)?.price || BigInt(0))} <span className='text-sm max-lg:text-sm'>See</span></p>
     return (
 
         <main>
-            <h1 className="lg:text-[32px] lg:static lg:text-center w-full top-0 sticky text-xl h-14 flex items-center justify-center max-lg:backdrop-blur-md max-lg:bg-mh max-lg:shadow-2xl">购买广告</h1>
-            <div className={`max-w-[1400px] max-2xl:mx-36 flex-col lg:justify-center m-auto`}>
+            <h1 className="lg:text-[32px] lg:static lg:text-center lg:pb-10 lg:pt-[50px] w-full z-30 top-0 sticky text-xl h-14 flex items-center justify-center max-lg:backdrop-blur-md max-lg:bg-mh max-lg:shadow-2xl">购买广告</h1>
+            <div className={`max-w-[1400px] max-2xl:mx-36 max-lg:mx-[5%] max-sm:mx-[15px] flex-col lg:justify-center m-auto pb-44 lg:pb-52  max-lg:mt-5 `}>
 
                 {/* <div className="max-w-[1400px]"> */}
                 {isSuccess ?
-                    <> <div className={`${style.purItem} flex bg-white rounded-lg p-5`}>
-                        <picture className='max-lg:mr-5'>
-                            <source media="(max-width: 1024px)" srcSet="/images/ad_m.png" />
-                            <img className="w-full" src="/images/ad_pc.png" alt='' />
-                        </picture>
+                    <> <div className={`${style.purItem} bg-white rounded-lg p-5 max-sm:p-3 `}>
+                        <div className='flex'>
+
+                            <picture className='max-lg:mr-4 max-sm:flex-shrink-0'>
+                                <source media="(max-width: 1024px)" srcSet="/images/ad_m.png" />
+                                <img className="w-full" src="/images/ad_pc.png" alt='' />
+                            </picture>
 
 
-                        <div className='ml-6'>
-                            <div className='flex items-center justify-between'>
-                                <h3 className='text-2xl font-semibold'>一块广告牌</h3>
-                                <p className="text-purple text-2xl"> {formatEther((details?.result as IShdDetails)?.price || BigInt(0))} <span className='text-sm'>See</span></p>
-                            </div>
-                            <div className={style.desc}>
-
-                                <div className={style.descItems}>
-                                    <span className={style.left}>展示开始日期： </span>
-                                    <span className={style.right}>{(details?.result as IShdDetails)?.keeperReceiveTime ? dayjs((details?.result as IShdDetails)?.keeperReceiveTime?.toString()).format('YY /MM/DD') : '--'}</span>
+                            <div className='ml-6 max-sm:ml-0 relative lg:min-w-[300px] lg:flex-shrink-0'>
+                                <div className='flex items-center justify-between'>
+                                    <h3 className='text-2xl font-semibold max-lg:text-lg max-lg:!mt-0 max-lg:!mb-3'>一块广告牌</h3>
+                                    <div className='max-lg:hidden'>{priceItem}</div>
                                 </div>
-                                <div className={style.descItems}>
-                                    <span className={style.left}>展示结束日期： </span>
-                                    <span className={style.right}>{usageTime?.result ? dayjs(usageTime?.result?.toString()).format('YY/MM/DD') : '--'}</span>
-                                </div>
-                                <div className={`${style.descItems} max-lg:flex-col`}>
-                                    <span className={`${style.left} ml-0`}>购买人： </span>
-                                    <div className={`${style.right} max-lg:mt-[6px] max-w-[40vw]`}>
-                                        <Avatar address={(details?.result as IShdDetails)?.keeper} className="!size-6" />
-                                        <span className="text-xs"><SuffixText content={(details?.result as IShdDetails)?.keeper}></SuffixText></span>
+                                <div className={style.desc}>
+
+                                    <div className={style.descItems}>
+                                        <span className={style.left}>展示开始日期： </span>
+                                        <span className={style.right}>{(details?.result as IShdDetails)?.keeperReceiveTime ? dayjs((details?.result as IShdDetails)?.keeperReceiveTime?.toString()).format('YY /MM/DD') : '--'}</span>
                                     </div>
+                                    <div className={style.descItems}>
+                                        <span className={style.left}>展示结束日期： </span>
+                                        <span className={style.right}>{usageTime?.result ? dayjs(usageTime?.result?.toString()).format('YY/MM/DD') : '--'}</span>
+                                    </div>
+                                    <div className={`${style.descItems} max-lg:flex-col`}>
+                                        <span className={`${style.left} ml-0`}>购买人： </span>
+                                        <div className={`${style.right} max-lg:mt-[6px] max-w-[40vw]`}>
+                                            <Avatar address={(details?.result as IShdDetails)?.keeper} className="!size-6" />
+                                            <span className="text-xs"><SuffixText content={(details?.result as IShdDetails)?.keeper}></SuffixText></span>
+                                        </div>
+                                    </div>
+
                                 </div>
 
+                                <div className="lg:hidden absolute bottom-0 left-0">{priceItem}</div>
+                                <div className='max-lg:hidden'>{buyButton}</div>
                             </div>
-                            {/* <div className={style.amount}>
-                                    <p className='max-lg:mr-[17px]'>金额</p>
-                                    
-                                </div> */}
-                            <Button block disabled={(details?.result as IShdDetails)?.keeper === session?.address} className={style.button} type="primary" onClick={() => setOpenBuy(true)} >购买</Button>
                         </div>
+
+                        <div className='lg:hidden'>{buyButton}</div>
                     </div>
 
 
                         {/* </div> */}
-                        <Buy open={openBuy} setOpen={setOpenBuy} price={formatEther((details?.result as IShdDetails)?.price || BigInt(0))}></Buy>
+                        <Buy depositOpen={depositOpen} setDepositOpen={setDepositOpen}
+                            open={openBuy} setOpen={setOpenBuy}
+                            price={formatEther((details?.result as IShdDetails)?.price || BigInt(0))}>
+                        </Buy>
                     </>
                     : <Loading />
 
                 }
                 <div className='bg-white rounded-lg p-5 w-full mt-5'>
-                    <h3 className='text-xl font-semibold text-black text-center pt-2 pb-6'>历史价格 (see)</h3>
+                    <h3 className='text-xl font-semibold text-black text-center pt-2 pb-6 max-md:pb-3 max-md:text-sm'>历史价格 (see)</h3>
                     <PricesChart></PricesChart>
                 </div>
 
-            </div >
+            </div  >
         </main >
     )
 }
@@ -268,13 +286,24 @@ const Loading = () => {
 }
 
 // 定义价格更新事件的类型
-interface PriceUpdateEvent {
-    previousPrice: ethers.BigNumber;
-    newPrice: ethers.BigNumber;
+interface IChartData {
+    prices: ethers.BigNumber[];
+    dates: ethers.BigNumber[];
 }
 const PricesChart: React.FC = () => {
     const [loading, setLoading] = useState(true)
+    const [data, setDate] = useState<IChartData>()
     const chartRef = useRef(null);
+    const chartInstance = useRef<echarts.ECharts>()
+
+    useUnmount(() => {
+        chartInstance.current?.dispose()
+    });
+    useMount(() => {
+        window.onresize = function () {
+            chartInstance.current?.resize();
+        }
+    })
     // const publicClient = usePublicClient(); // 使用 usePublicClient 获取 provider
 
     // 获取过去的 PriceUpdate 事件
@@ -282,17 +311,33 @@ const PricesChart: React.FC = () => {
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const contract = new ethers.Contract(contractMsg.address, contractMsg.abi, provider);
         const events = await contract.queryFilter('CreateShd', 0, 'latest');
-        const prices: number[] = []
-        const dates: number[] = []
+        const prices: ethers.BigNumber[] = []
+        const dates: ethers.BigNumber[] = []
         events.forEach((event => {
             prices.push(event.args?.newPrice)
             dates.push(event.args?.priceUpdateTime && getMouth(event.args.priceUpdateTime))
         }));
+        setDate({ prices, dates })
         return { prices, dates }
     };
 
-    const drawChart = (prices: number[], dates: number[]) => {
-        let chartInstance = echarts.init(chartRef.current);
+    const drawChart = (prices: ethers.BigNumber[], dates: ethers.BigNumber[]) => {
+        let grid = {
+            x: 100,
+            y: 40,
+            x2: 60,
+            y2: 50
+        }, symbolSize = 12
+        if (document.body.clientWidth < 1080) {
+            grid = {
+                x: 40,
+                y: 10,
+                x2: 10,
+                y2: 40
+            }
+            symbolSize = 8
+        }
+        chartInstance.current = echarts.init(chartRef.current);
         const option = {
             // title: {
             //     text: '历史价格 (see)',
@@ -361,21 +406,28 @@ const PricesChart: React.FC = () => {
             },
             series: [
                 {
+                    symbol: 'circle',
+                    symbolSize: symbolSize,
+                    showSymbol: false,
+                    itemStyle: {
+                        normal: {
+                            color: 'rgba(102, 102, 255,1)',
+                            borderColor: 'rgba(255, 255, 255, 1)',
+                            borderWidth: 2
+                        }
+                    },
                     name: 'Price',
                     type: 'line',
                     data: [820, 932, 901, 934, 1290, 1330],
                     // data: prices,
-                    // smooth: true,
                     lineStyle: {
                         color: 'rgba(102, 102, 255, 0.8)'
                     },
-                    itemStyle: {
-                        color: 'rgba(102, 102, 255, 0.8)'
-                    }
                 }
-            ]
+            ],
+            grid: grid,
         };
-        chartInstance.setOption(option);
+        chartInstance.current.setOption(option);
     }
     useEffect(() => {
         fetchPastEvents().then(({ prices, dates }) => {
@@ -389,7 +441,7 @@ const PricesChart: React.FC = () => {
                 {/* <div className="h-4 bg-gray-200 animate-pulse rounded w-1/3 mb-2"></div> */}
                 <div className="h-80 bg-gray-200 animate-pulse rounded-lg"></div>
             </div>
-            <div ref={chartRef} style={{ height: "400px", width: '100%' }}></div>
+            <div ref={chartRef} className="w-full h-[253px] lg:h-[400px]"></div>
         </>)
 };
 
