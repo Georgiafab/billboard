@@ -19,11 +19,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Home = () => {
 
-  const onChange = (currentSlide: number) => {
-    if (currentSlide >= data.length - 1 && data.length < total) {
-      run(currPage + 1)
-    }
-  };
+
   const [curItemIndex, setCurItemIndex] = useState<number>(0)
   const [data, setData] = useState<IAdvertise[]>([])
   const [links, setLinks] = useState<ILinks>()
@@ -31,7 +27,7 @@ const Home = () => {
 
   const [total, setTotal] = useState<number>(0)
   const [currPage, setCurrPage] = useState<number>(1)
-  function getAdPage(page: number) {
+  function getAdPage(page: number): Promise<IListRes> {
     return getAdvertise({ page, size: 10 })
   }
   const { loading, run } = useRequest(getAdPage, {
@@ -43,7 +39,12 @@ const Home = () => {
       setLinks(result.links)
     }
   })
-
+  // Carousel change 
+  const onChange = (currentSlide: number) => {
+    if (currentSlide >= data.length - 1 && data.length < total) {
+      run(currPage + 1)
+    }
+  };
   const changeItem = (type: 'prev' | 'next') => {
     if (type === 'prev') {
       setCurItemIndex(prev => {
@@ -103,7 +104,7 @@ const Home = () => {
                       </div>
                       <div className={`${style.desc} justify-between`} data-preview>
                         <div className='flex items-center'>
-                          <Avatar className={style.avar} address={item.useraddr} />
+                          <Avatar className={style.avar} address={curItem?.useraddr} />
                           {/* <Image className={style.avar} preview={false} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image> */}
                           <h3>{curItem?.useraddr}</h3>
                           <div className={`font-light ${style.date}`}>{dayjs(curItem?.createdate).format('YYYY-MM-DD')}</div>
@@ -124,7 +125,7 @@ const Home = () => {
               > </Image>
               <div className={`${style.desc} justify-between`} >
                 <div className='flex items-center'>
-                  <Avatar className={style.avar} address={item.useraddr} />
+                  {item.useraddr && <Avatar className={style.avar} address={item.useraddr} />}
                   {/* <Image className={style.avar} preview={false} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image> */}
                   <h3>{item.useraddr}</h3>
                   <div className={`font-normal ${style.date}`}>{dayjs(item.createdate).format('YYYY-MM-DD')}</div>
@@ -139,7 +140,7 @@ const Home = () => {
             </div>)
           })}
 
-            <Pagination onChange={run} total={total} align="end" hideOnSinglePage={true} />
+            {/* <Pagination onChange={run} total={total} align="end" hideOnSinglePage={true} /> */}
           </div>
         </InfiniteScroll>
 
@@ -188,7 +189,7 @@ const Home = () => {
             })}
 
           </Carousel>
-          <Pagination onChange={run} total={total} simple align="end" hideOnSinglePage={true} />
+          {/* <Pagination onChange={run} total={total} simple align="end" hideOnSinglePage={true} /> */}
         </div>
 
 

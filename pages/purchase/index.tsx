@@ -199,7 +199,7 @@ export default function Purchase() {
                 {/* <div className="max-w-[1400px]"> */}
                 {isSuccess ?
                     <> <div className={`${style.purItem} bg-white rounded-lg p-5 max-sm:p-3 `}>
-                        <div className='flex'>
+                        <div className='flex lg:items-center'>
 
                             <picture className='max-lg:mr-4 max-sm:flex-shrink-0'>
                                 <source media="(max-width: 1024px)" srcSet="/images/ad_m.png" />
@@ -207,7 +207,7 @@ export default function Purchase() {
                             </picture>
 
 
-                            <div className='ml-6 max-sm:ml-0 relative lg:min-w-[300px] lg:flex-shrink-0'>
+                            <div className='ml-6 max-sm:ml-0 relative max-w-[434px] max-xl:w-[300px] lg:flex-shrink-0'>
                                 <div className='flex items-center justify-between'>
                                     <h3 className='text-2xl font-semibold max-lg:text-lg max-lg:!mt-0 max-lg:!mb-3'>一块广告牌</h3>
                                     <div className='max-lg:hidden'>{priceItem}</div>

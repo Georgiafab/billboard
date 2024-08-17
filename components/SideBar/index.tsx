@@ -129,7 +129,7 @@ export default function SideBar() {
                         content={TipCotent}
                         arrow={false} overlayClassName="loginoutTip">
                         <Image className={`${style.avar} absolute -z-10 opacity-0`} src="/images/avar.png" height={40} width={40} alt={'avar'}></Image>
-                        <Avatar address={session?.address!} className="!size-10" />
+                        {session?.address && <Avatar address={session?.address} className="!size-10" />}
                     </Popover>
 
                 </div>

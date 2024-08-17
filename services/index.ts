@@ -13,7 +13,7 @@ export const getAuditAdvertise = async (params?: any) => {
 
 export const getAdvertise = async (params?: any) => {
   const response = await get("/v1/advertise/", params, {
-    withCredentials: false,
+    // withCredentials: false,
   });
   return response.data;
 };

@@ -6,7 +6,7 @@ import { useSessionStorageState, useLocalStorageState } from 'ahooks';
 import type { TableProps } from 'antd';
 import { ArrawIcon } from '~/icons';
 import { getAuditAdvertise } from '@/services';
-import { AUD_STATUS, IAdvertise, AUD_STATUS_TEXT, Tabs, UserInfo } from '@/types/response';
+import { AUD_STATUS, IAdvertise, AUD_STATUS_TEXT, Tabs, UserInfo, IListRes } from '@/types/response';
 import SuffixText from '@/components/SuffixText';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
@@ -21,8 +21,10 @@ type GetAudParamsType = {
 const History = () => {
     const [data, setData] = useState<IAdvertise[]>([])
     const [total, setTotal] = useState<number>(0)
-    function getAuditPage(page: number): Promise<{ results: IAdvertise[], count: number }> {
-        const params: GetAudParamsType = { page, size: 10 }
+    const [page, setPage] = useState<number>(1)
+    const PageSize = 10
+    function getAuditPage(page: number): Promise<IListRes> {
+        const params: GetAudParamsType = { page, size: PageSize }
         if (currTab !== AUD_STATUS.all) {
             params.audstatus = currTab
         }
@@ -31,14 +33,13 @@ const History = () => {
     const { loading, run } = useRequest(getAuditPage, {
         manual: false,
         onSuccess: (result, params) => {
+            setPage(params[0] || 1)
             setData(result.results)
             setTotal(result.count)
         }
     })
 
-    const [info] = useLocalStorageState<UserInfo | {}>('user-info', {
-        defaultValue: {},
-    });
+    const [info] = useLocalStorageState<UserInfo>('user-info');
     const { Paragraph } = Typography;
     const router = useRouter()
 
@@ -54,8 +55,8 @@ const History = () => {
         return data
     }, [currTab, data])
 
-    const handleDetail = (detail: IAdvertise) => {
-        setStorageDetail(detail)
+    const handleDetail = (detail: IAdvertise, index: number) => {
+        setStorageDetail({ ...detail, index: page * PageSize + index })
         router.push(`/ad/history/detail`)
     }
 
@@ -120,23 +121,29 @@ const History = () => {
                     {AUD_STATUS_TEXT[audstatus]}</span>
             )
         },
-        {
-            title: '操作',
-            key: 'action',
-            align: 'center',
-            render: (_: any, record: IAdvertise) => {
-                return (
-                    <div className="cursor-pointer w-[170px]" onClick={() => handleDetail(record)}>
-                        {(info as UserInfo)?.auditor ?
-                            (record.audstatus === AUD_STATUS.pending) ? <span className="text-purple hover:text-opacity-70" >去审核</span> :
-                                record.audstatus === AUD_STATUS.success ?
-                                    <span className="text-purple hover:text-opacity-70" >去查看</span> : '/'
-                            : <span className="text-purple hover:text-opacity-70" >去查看</span>}
-                    </div>
-                )
-            },
-        },
     ];
+
+    if (info?.auditor) {
+        columns.push(
+            {
+                title: '操作',
+                key: 'action',
+                align: 'center',
+                render: (_: any, record: IAdvertise, index: number) => {
+                    return (
+                        <div className="cursor-pointer w-[170px]" onClick={() => handleDetail(record, index)}>
+                            {
+                                record.audstatus === AUD_STATUS.pending ?
+                                    <span className="text-purple hover:text-opacity-70" >去审核</span> :
+                                    <span className="text-black hover:text-opacity-70" >去查看</span>
+                            }
+                        </div>
+                    )
+                },
+            },
+        )
+    }
+
     return (
         <main >
             {<div className="2xl:max-w-[1400px] 2xl:m-auto lg:mx-40  lg:my-0 md:mx-0 relative z-10">
@@ -160,7 +167,7 @@ const History = () => {
                 {/* 移动端 */}
 
                 <div className='lg:hidden'>
-                    <IndexMobile data={showList} pageChange={run} total={total} />
+                    <IndexMobile data={showList} pageChange={run} total={total} handleDetail={handleDetail} />
                 </div>
 
             </div>}

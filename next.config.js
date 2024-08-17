@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const path = require("path");
+const fs = require("fs");
 const nextConfig = {
-  reactStrictMode: true,
+  debug: true,
+  // reactStrictMode: true,
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push({
       test: /\.svg$/,
@@ -33,6 +35,12 @@ const nextConfig = {
     ];
   },
   transpilePackages: ["@ant-design/icons"],
+  // devServer: {
+  //   https: {
+  //     key: fs.readFileSync(path.join(__dirname, "key.pem")),
+  //     cert: fs.readFileSync(path.join(__dirname, "cert.pem")),
+  //   },
+  // },
 };
 
 module.exports = nextConfig;

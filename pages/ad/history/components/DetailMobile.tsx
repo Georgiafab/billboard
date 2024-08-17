@@ -24,6 +24,10 @@ const DetailMobile = ({ data = [], setCurrTab, currTab, total, pageChange }: Pro
     const [reason, setReason] = useState('')
     const onChange = useCallback((currentSlide: number) => {
         setCurItemIndex(currentSlide)
+        // if (currentSlide >= data.length - 1 && data.length < total) {
+        //     // run(currPage + 1)
+        // }
+
     }, [])
     useEffect(() => {
         setCurItemIndex(0)
@@ -57,7 +61,7 @@ const DetailMobile = ({ data = [], setCurrTab, currTab, total, pageChange }: Pro
                 </Dropdown>
             </div>
             <Carousel afterChange={onChange} dots={false} infinite={false} className='w-10/12 m-auto ad-history-carousel'>
-                {data.map((item: IAdvertise) => {
+                {data?.map((item: IAdvertise) => {
                     return (<div className="rounded-xl relative overflow-hidden cursor-pointer px-2" key={item.id} >
                         <div className={` rounded-t-xl ${item.audstatus === AUD_STATUS.pending ? 'bg-[#2C2B50]' : item.audstatus === AUD_STATUS.success ? 'bg-green' : 'bg-orange'} pt-5 pb-8 px-5`}>
                             <p className='flex items-center mb-[10px] '>

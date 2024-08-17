@@ -8,6 +8,7 @@ export interface IAdvertise {
   useraddr: string;
   audmsg: string;
   applymsg: string;
+  index?: number;
 }
 export type ILinks = {
   next: string;
