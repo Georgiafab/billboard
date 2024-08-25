@@ -207,7 +207,7 @@ export default function Purchase() {
                             </picture>
 
 
-                            <div className='ml-6 max-sm:ml-0 relative max-w-[434px] max-xl:w-[300px] lg:flex-shrink-0'>
+                            <div className='ml-6 max-sm:ml-0 relative max-w-[434px] max-xl:w-[300px] lg:flex-shrink-0 lg:self-start'>
                                 <div className='flex items-center justify-between'>
                                     <h3 className='text-2xl font-semibold max-lg:text-lg max-lg:!mt-0 max-lg:!mb-3'>一块广告牌</h3>
                                     <div className='max-lg:hidden'>{priceItem}</div>
@@ -287,8 +287,8 @@ const Loading = () => {
 
 // 定义价格更新事件的类型
 interface IChartData {
-    prices: ethers.BigNumber[];
-    dates: ethers.BigNumber[];
+    prices: string[];
+    dates: string[];
 }
 const PricesChart: React.FC = () => {
     const [loading, setLoading] = useState(true)
@@ -310,18 +310,22 @@ const PricesChart: React.FC = () => {
     const fetchPastEvents = async () => {
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const contract = new ethers.Contract(contractMsg.address, contractMsg.abi, provider);
-        const events = await contract.queryFilter('CreateShd', 0, 'latest');
-        const prices: ethers.BigNumber[] = []
-        const dates: ethers.BigNumber[] = []
+        const events = await contract.queryFilter('PriceUpdate', 0, 'latest');
+        const prices: string[] = []
+        const dates: string[] = []
+        console.log(events)
         events.forEach((event => {
-            prices.push(event.args?.newPrice)
-            dates.push(event.args?.priceUpdateTime && getMouth(event.args.priceUpdateTime))
+
+            prices.push(event.args?.newPrice ? formatEther(event.args?.newPrice) : '0')
+            // console.log(parseInt(event.args?.priceUpdateTime))
+            dates.push(event.args?.priceUpdateTime ? getMouth(parseInt(event.args.priceUpdateTime)) : '--')
         }));
         setDate({ prices, dates })
         return { prices, dates }
     };
 
-    const drawChart = (prices: ethers.BigNumber[], dates: ethers.BigNumber[]) => {
+    const drawChart = (prices: string[], dates: string[]) => {
+        console.log(prices, dates)
         let grid = {
             x: 100,
             y: 40,
@@ -332,7 +336,7 @@ const PricesChart: React.FC = () => {
             grid = {
                 x: 40,
                 y: 10,
-                x2: 10,
+                x2: 20,
                 y2: 40
             }
             symbolSize = 8
@@ -379,10 +383,18 @@ const PricesChart: React.FC = () => {
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                // data: dates,
+                // data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                data: dates,
                 axisTick: {
                     show: false, // 去掉标尺
+                },
+                axisLabel: {//x轴文字的配置
+                    show: true,
+                    textStyle: {
+                        color: "#000",
+                        fontSize: "14px",
+                    },
+                    margin: 20
                 },
                 axisLine: {
                     lineStyle: {
@@ -402,7 +414,15 @@ const PricesChart: React.FC = () => {
                     lineStyle: {
                         color: '#f5f5f5'
                     }
-                }
+                },
+                axisLabel: {//x轴文字的配置
+                    show: true,
+                    margin: 20,
+                    textStyle: {
+                        color: "#000",
+                        fontSize: "14px"
+                    }
+                },
             },
             series: [
                 {
@@ -418,8 +438,8 @@ const PricesChart: React.FC = () => {
                     },
                     name: 'Price',
                     type: 'line',
-                    data: [820, 932, 901, 934, 1290, 1330],
-                    // data: prices,
+                    // data: [820, 932, 901, 934, 1290, 1330],
+                    data: prices,
                     lineStyle: {
                         color: 'rgba(102, 102, 255, 0.8)'
                     },

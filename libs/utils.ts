@@ -16,7 +16,8 @@ export function getCookie(name: string) {
   return null;
 }
 
-export function getMouth(timestamp: string) {
+export function getMouth(timestamp: number | string) {
   var date = new Date(timestamp);
-  return date.toDateString().split(" ")[1];
+  const dataStr = date.toDateString().split(" ");
+  return dataStr[1] + " " + dataStr[2];
 }

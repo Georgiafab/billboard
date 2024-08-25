@@ -18,14 +18,6 @@ const nextConfig = {
     includePaths: [path.join(__dirname, ""), path.join(__dirname, "public")],
   },
   async rewrites() {
-    // return {
-    //   fallback: [
-    //     {
-    //       source: "/:path*",
-    //       destination: "http://35.77.218.53:9101/:path*",
-    //     },
-    //   ],
-    // };
     return [
       // request proxy
       {

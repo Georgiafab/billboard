@@ -87,7 +87,7 @@ const Home = () => {
           next={() => run(currPage + 1)}
           hasMore={!!links?.next}
           loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-          endMessage={<Divider plain>It is all, nothing more</Divider>}
+          endMessage={<Divider plain>暂时没有更多了</Divider>}
           scrollableTarget="home"
           className="max-lg:hidden"
         >

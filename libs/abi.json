@@ -665,7 +665,7 @@
     "type": "event"
 }, {
     "inputs": [],
-    "name": "MAXIMUN_SHID",
+    "name": "MAXIMUN_SHD_ID",
     "outputs": [{
         "internalType": "uint256",
         "name": "",
@@ -835,6 +835,20 @@
     "type": "function"
 }, {
     "inputs": [{
+        "internalType": "uint256",
+        "name": "_shdId",
+        "type": "uint256"
+    }],
+    "name": "checkUsePermissionForShd",
+    "outputs": [{
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+    }],
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "inputs": [{
         "internalType": "address",
         "name": "account",
         "type": "address"
@@ -858,10 +872,14 @@
         "internalType": "uint256",
         "name": "_shdId",
         "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "fees_",
+        "type": "uint256"
     }],
     "name": "deposit",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
 }, {
     "inputs": [{
@@ -1114,7 +1132,7 @@
     }],
     "name": "purchase",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
 }, {
     "inputs": [{
@@ -1128,7 +1146,7 @@
     }],
     "name": "reclaim",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
 }, {
     "inputs": [{
@@ -1215,10 +1233,14 @@
         "internalType": "uint256",
         "name": "newPrice_",
         "type": "uint256"
+    }, {
+        "internalType": "uint256",
+        "name": "fees_",
+        "type": "uint256"
     }],
     "name": "setPrice",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
 }, {
     "inputs": [{

@@ -36,23 +36,29 @@ const UnUse = React.forwardRef<IRef, Props>(({ }, ref) => {
             ...contractMsg,
             functionName: 'checkShdKeeperUsageTime',
             args: ['0']
+        }, {
+            ...contractMsg,
+            functionName: 'checkUsePermissionForShd',
+            args: ['0'],
         }]
 
     })
 
-    const [keeper, usageTime] = data || []
+    const [keeper, usageTime, checkCanUse] = data || []
     const checkIsShdOwner = useMemo(() => keeper === session?.address, [keeper, session?.address])
-    const checkCanUse = useMemo(() => checkIsShdOwner, [checkIsShdOwner])
-    // const checkIsInPeriodTime = useMemo(() => new Date() > usageTime, [usageTime])
+    // 判断是否还在使用有效期内
+    const checkIsInPeriodTime = useMemo(() => usageTime?.result ? new Date() <= new Date(usageTime.result.toString()) : false, [usageTime])
+    // const checkCanUse = useMemo(() => checkIsShdOwner && checkIsInPeriodTime, [checkIsInPeriodTime, checkIsShdOwner])
+
 
     const handleCheckCanUse = () => {
-        setUnUseOpen(!checkCanUse)
-        return checkCanUse
+        setUnUseOpen(!checkCanUse?.result)
+        return checkCanUse?.result as boolean
     }
 
     const handleCheckCanWithdow = () => {
-        setUnWithdraw(checkIsShdOwner)
-        return !checkIsShdOwner
+        setUnWithdraw(!checkIsInPeriodTime)
+        return checkIsInPeriodTime
     }
 
     useImperativeHandle(ref, () => ({
