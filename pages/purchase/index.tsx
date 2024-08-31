@@ -4,7 +4,7 @@ import style from './index.module.scss';
 import SuffixText from '@/components/SuffixText';
 import { getAuditAdvertise } from '@/services';
 import { IAdvertise, IShdDetails } from '@/types/response';
-import { useReadContracts, useWriteContract, useWatchContractEvent, usePublicClient, type UseReadContractsReturnType } from 'wagmi'
+import { useReadContracts, useWriteContract, useWatchContractEvent, usePublicClient, type UseReadContractsReturnType, useReadContract } from 'wagmi'
 
 import { useSession } from 'next-auth/react';
 import { contractMsg } from '@/wagmi';
@@ -56,27 +56,27 @@ const Buy = ({ setOpen, open, price, depositOpen, setDepositOpen }: IbuyProps) =
                 functionName: "checkFundsOf",
                 args: [session?.address]
 
-            }, {
-                ...contractMsg,
-                functionName: "_calculateTotalUsageFees",
-                args: ["0"]
-
             }
             , {
                 ...contractMsg,
-                functionName: "_calculateUsageFees",
+                functionName: "_calculateCurrentUsageFees",
                 args: ["0"]
             }
         ]
     })
 
-    const [funds, totalUsageFee, usagefee] = data || []
+    const [funds, usagefee] = data || []
 
 
-    const [priceOpen, setPriceOpen] = useState(false)
+    const [priceOpen, setPriceOpen] = useState(true)
     const [selPrice, setSelPrice] = useState('')
+    const { data: totalUsageFee } = useReadContract({
+        ...contractMsg,
+        functionName: '_calculateDepositFees',
+        args: [selPrice ? parseEther(selPrice) : 0]
+    })
     const submitPrice = () => {
-        if (totalUsageFee?.result as bigint > 0) {
+        if (totalUsageFee as bigint > 0) {
             setPriceOpen(false)
             setDepositOpen(true)
         } else {
@@ -134,7 +134,7 @@ const Buy = ({ setOpen, open, price, depositOpen, setDepositOpen }: IbuyProps) =
 
                 {isSuccess ? <p className='text-black text-opacity-70 mt-4  max-lg:text-sm'>
                     当前质押余额： {funds?.result ? formatEther(funds?.result as bigint) : 0} see <br />
-                    需质押 {totalUsageFee?.result ? formatEther(totalUsageFee?.result as bigint) : 0} see<br />
+                    需质押 {totalUsageFee ? formatEther(totalUsageFee as bigint) : 0} see<br />
                     <span className="md:text-nowrap">每天使用费：{usagefee?.result ? formatEther(usagefee?.result as bigint) : 0} see</span>
                 </p> : <div className='animate-pulse mt-2.5'>
                     <div className="h-4 bg-gray-200 rounded-full mb-2.5"></div>
@@ -146,7 +146,7 @@ const Buy = ({ setOpen, open, price, depositOpen, setDepositOpen }: IbuyProps) =
         </Modal>
 
         <Deposit depositOpen={depositOpen} setDepositOpen={setDepositOpen}
-            errorCb={() => setPriceOpen(true)} totalUsageFee={totalUsageFee?.result ? formatEther(totalUsageFee?.result as bigint) : "0"}></Deposit>
+            errorCb={() => setPriceOpen(true)} totalUsageFee={totalUsageFee ? formatEther(totalUsageFee as bigint) : "0"}></Deposit>
 
     </>
 }

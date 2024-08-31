@@ -8,6 +8,7 @@ const axiosInstance = axios.create({
   timeout: 10000,
   headers: {
     "Content-Type": "multipart/form-data",
+    // "X-Csrftoken": "3V9NxnHlB4TSFhUX5HtUmZ133U37XFmg",
   },
   withCredentials: true,
   httpsAgent: new https.Agent({

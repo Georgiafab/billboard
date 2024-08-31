@@ -93,7 +93,7 @@ export default function SideBar() {
                 </div>
 
             </Popover>}
-            <div className='h-[76px] fixed bottom-0 left-0 w-full flex lg:hidden justify-around items-center px-2 backdrop-blur-md bg-mh shadow-2xl z-30'>
+            <div className='h-[76px] fixed top-[calc(100vh-76px)] left-0 w-full flex lg:hidden justify-around items-center px-2 backdrop-blur-md bg-mh shadow-2xl z-30'>
                 {
                     sidebarList.map(item => {
                         return (

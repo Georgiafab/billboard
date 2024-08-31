@@ -1,7 +1,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Back from '@/components/Back';
-import { Button, Image, Table, Typography } from 'antd';
+import { Button, Image, Spin, Table, Typography } from 'antd';
 import { useSessionStorageState, useLocalStorageState } from 'ahooks';
 import type { TableProps } from 'antd';
 import { ArrawIcon } from '~/icons';
@@ -12,28 +12,38 @@ import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import IndexMobile from './components/IndexMobie';
 import { useRequest } from 'ahooks';
+import { LoadingOutlined } from '@ant-design/icons';
 type GetAudParamsType = {
     page: number,
-    size: number,
     audstatus?: number
 }
+export const emptyText = <p className="h-[calc(100vh-180px)] max-w-[203] m-auto flex items-center justify-center">暂无申请记录，快去首页购买广告进行配置吧</p>
 
 const History = () => {
     const [data, setData] = useState<IAdvertise[]>([])
     const [total, setTotal] = useState<number>(0)
     const [page, setPage] = useState<number>(1)
     const PageSize = 10
-    function getAuditPage(page: number): Promise<IListRes> {
-        const params: GetAudParamsType = { page, size: PageSize }
-        if (currTab !== AUD_STATUS.all) {
-            params.audstatus = currTab
+    function getAuditPage(params: GetAudParamsType | number): Promise<IListRes> {
+        let newParams: GetAudParamsType
+        if (typeof params !== 'object') {
+            newParams = { page: params }
+            if (currTab !== AUD_STATUS.all) {
+                newParams.audstatus = currTab
+            }
+        } else {
+            newParams = params
         }
-        return getAuditAdvertise(params)
+
+        return getAuditAdvertise({ ...newParams, size: PageSize })
+
     }
     const { loading, run } = useRequest(getAuditPage, {
         manual: false,
         onSuccess: (result, params) => {
-            setPage(params[0] || 1)
+            let p0 = params[0]
+            const page = typeof p0 === "object" ? p0?.page : p0
+            setPage(page || 1)
             setData(result.results)
             setTotal(result.count)
         }
@@ -48,21 +58,19 @@ const History = () => {
         'sui-banner-history-detail',
         { defaultValue: {} },
     );
-    const showList = useMemo(() => {
-        if (currTab >= 0) {
-            return data.filter(item => item.audstatus === currTab)
-        }
-        return data
-    }, [currTab, data])
 
-    const handleDetail = (detail: IAdvertise, index: number) => {
-        setStorageDetail({ ...detail, index: page * PageSize + index })
+    const handleDetail = (detail: IAdvertise) => {
+        setStorageDetail({ ...detail, page: page, status: currTab })
         router.push(`/ad/history/detail`)
     }
 
     const haneldChangeTab = (key: AUD_STATUS) => {
         setCurrTab(key)
-        run(key)
+        const params: GetAudParamsType = { page }
+        if (key !== AUD_STATUS.all) {
+            params.audstatus = key
+        }
+        run(params)
     }
 
 
@@ -131,7 +139,7 @@ const History = () => {
                 align: 'center',
                 render: (_: any, record: IAdvertise, index: number) => {
                     return (
-                        <div className="cursor-pointer w-[170px]" onClick={() => handleDetail(record, index)}>
+                        <div className="cursor-pointer w-[170px]" onClick={() => handleDetail(record)}>
                             {
                                 record.audstatus === AUD_STATUS.pending ?
                                     <span className="text-purple hover:text-opacity-70" >去审核</span> :
@@ -150,24 +158,27 @@ const History = () => {
 
                 {/* pc 端 */}
                 <div className='max-lg:hidden'>
-                    {data.length ? <>
-                        <Back text={<>历史申请记录<span className='text-black text-opacity-60 text-2xl'>（{data.length}）</span></>} isNotifi={false}></Back>
+                    <Back text={<>历史申请记录<span className='text-black text-opacity-60 text-2xl'>（{total}）</span></>} isNotifi={false}></Back>
 
-                        <div className='flex items-center my-8 max-md:flex-wrap max-md:my-4'>
-                            {Tabs.map((item, index) => (
-                                <p onClick={() => haneldChangeTab(item.key)}
-                                    className={`mr-4 max-md:mb-2 rounded-[47px] px-5 py-[6px] h-10 text-lg cursor-pointer ${item.key === currTab ? ' bg-purple text-white' : "bg-white text-black"}`}
-                                    key={item.label}>{item.label}</p>
-                            ))}
-                        </div>
-                        <Table pagination={{ total, onChange: run }} loading={loading} className="rounded-t-xl overflow-hidden " scroll={{ x: '1200px' }} rowClassName="bg-white px-20" dataSource={showList} columns={columns}></Table></> : <p className="h-screen max-w-[203] m-auto flex items-center justify-center ">暂无申请记录，快去首页购买广告进行配置吧</p>}
+                    <div className='flex items-center my-8 max-md:flex-wrap max-md:my-4'>
+                        {Tabs.map((item, index) => (
+                            <p onClick={() => haneldChangeTab(item.key)}
+                                className={`mr-4 max-md:mb-2 rounded-[47px] px-5 py-[6px] h-10 text-lg cursor-pointer ${item.key === currTab ? ' bg-purple text-white' : "bg-white text-black"}`}
+                                key={item.label}>{item.label}</p>
+                        ))}
+                    </div>
+                    {data.length ? <>
+
+                        <Table locale={{ emptyText: emptyText }} pagination={{ total, onChange: run }} loading={loading} className="rounded-t-xl overflow-hidden " scroll={{ x: '1200px' }} rowClassName="bg-white px-20" dataSource={data} columns={columns}></Table></> : emptyText}
                 </div>
 
 
                 {/* 移动端 */}
 
-                <div className='lg:hidden'>
-                    <IndexMobile data={showList} pageChange={run} total={total} handleDetail={handleDetail} />
+                <div className='lg:hidden '>
+                    <Spin spinning={loading} indicator={<LoadingOutlined spin />}>
+                        < IndexMobile data={data} pageChange={run} total={total} handleDetail={handleDetail} setCurrTab={haneldChangeTab} currTab={currTab} />
+                    </Spin>
                 </div>
 
             </div>}

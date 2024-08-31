@@ -5,13 +5,14 @@ import { Button, Input, message } from 'antd'
 import style from './transaction.module.scss';
 import { contractMsg } from '@/wagmi';
 import { useSession } from 'next-auth/react';
-import { useReadContracts, useWriteContract } from 'wagmi'
+import { useReadContracts, useReadContract, useWriteContract } from 'wagmi'
 import { formatEther, parseEther } from 'viem';
 import Deposit from '@/components/Deposit';
 import UnUse, { IRef as IUseRef } from '@/components/UnUse';
 type EditType = 'price' | 'withdraw'
 export default function Transaction() {
     const { data: session } = useSession();
+    // _calculateDepositFees
     const { data, isSuccess } = useReadContracts({
         contracts: [
             {
@@ -19,15 +20,10 @@ export default function Transaction() {
                 functionName: "checkFundsOf",
                 args: [session?.address]
 
-            }, {
-                ...contractMsg,
-                functionName: "_calculateTotalUsageFees",
-                args: ["0"]
-
             }
             , {
                 ...contractMsg,
-                functionName: "_calculateUsageFees",
+                functionName: "_calculateCurrentUsageFees",
                 args: ["0"]
             }
             , {
@@ -38,10 +34,16 @@ export default function Transaction() {
         ]
     })
 
-    const [funds, totalUsageFee, usagefee, currPrice] = data || []
+    const [funds, usagefee, currPrice] = data || []
     const cprice = useMemo(() => currPrice?.result ? formatEther(currPrice?.result as bigint) : '0', [currPrice])
     const myFund = useMemo(() => funds?.result ? formatEther(funds?.result as bigint) : '0', [funds])
-    const totalFee = useMemo(() => totalUsageFee?.result ? formatEther(totalUsageFee?.result as bigint) : '0', [totalUsageFee])
+
+    const { data: totalUsageFee } = useReadContract({
+        ...contractMsg,
+        functionName: '_calculateDepositFees',
+        args: [currPrice?.result || 0]
+    })
+    const totalFee = useMemo(() => totalUsageFee ? formatEther(totalUsageFee as bigint) : '0', [totalUsageFee])
     const keypadRef = useRef<IRef>(null)
 
     const unUseRef = useRef<IUseRef>(null)
@@ -96,7 +98,7 @@ export default function Transaction() {
 
         if (price) {
             cancelEdit()
-            if (totalUsageFee?.result as bigint > 0) {
+            if (totalUsageFee as bigint > 0) {
                 setDepositOpen(true)
             } else {
                 writeContractAsync({
@@ -143,10 +145,10 @@ export default function Transaction() {
     return (
         <main className={`bg-gradient-to-b from-[#F9E8D9] to-[#FFFBF7] max-lg:bg-[#FFFEFA] ${style.transaction}`}>
             <Keypad ref={keypadRef} setInputValue={setVal} onChange={keypadOpen} onOk={curr === "withdraw" ? handleWithDraw : changePrice} />
-            <div className="lg:w-[816px] w-11/12 m-auto overflow-hidden z-10 relative">
+            <div className="lg:w-[816px] w-11/12 m-auto overflow-hidden z-10 relative max-lg:pt-3">
                 <Back text="交易配置" isNotifi={false}></Back>
 
-                <div className='w-full bg-white rounded-xl overflow-hidden px-8 py-4 mt-8 drop-shadow-md max-lg:border-gray-light max-md:py-3 max-md:px-5'>
+                <div className='w-full bg-white rounded-xl overflow-hidden px-8 py-4 mt-3 drop-shadow-md max-lg:border-gray-light max-md:py-3 max-md:px-5'>
                     <div className='w-full flex justify-between border-b-gray-light border-b pb-4'>
                         <p>设置售出价</p>
                         {!setEdit.price && <Button type='link' className='text-sm text-black text-opacity-70 p-0 h-auto' onClick={() => handleEdit('price')}>编辑</Button>}
@@ -162,7 +164,7 @@ export default function Transaction() {
 
                     {isSuccess ? <p className='text-black text-opacity-70 pt-4 max-lg:text-xs'>
                         当前质押余额： {myFund} see <br />
-                        需质押 {totalUsageFee?.result ? formatEther(totalUsageFee?.result as bigint) : 0} see<br />
+                        需质押 {totalUsageFee ? formatEther(totalUsageFee as bigint) : 0} see<br />
                         每天使用费：{usagefee?.result ? formatEther(usagefee?.result as bigint) : 0} see
                     </p> : <div className='animate-pulse mt-2.5'>
                         <div className="h-4 bg-gray-200 rounded-full mb-2.5"></div>

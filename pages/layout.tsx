@@ -8,9 +8,9 @@ type Props = {
 export default function Layout({ children, pathname }: Props) {
     useCheckNet()
     return (
-        <>
+        <div className='max-lg:pb-[76px]'>
             {pathname !== '/login' && <>
                 <SideBar></SideBar></>}
-            {children}</>
+            {children}</div>
     )
 }

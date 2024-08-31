@@ -42,7 +42,7 @@ const Back = ({ children, text, isNotifi = true, backRoute, className }: Props) 
         });
     }
     return (
-        <div className="cursor-pointer flex justify-between items-center lg:pt-[60px] max-lg:pt-10 relative  ">
+        <div className="cursor-pointer flex justify-between items-center lg:pt-[60px] max-lg:py-4 relative">
             <h1 className='flex items-center '>
                 <BackIcon className="lg:size-8 size-6 relative" onClick={isNotifi ? openNotification : comfimBack} />
                 <span className={`lg:ml-4 lg:text-[32px] text-xl max-lg:text-center max-lg:absolute max-lg:w-full -z-10 ${className}`} >{text}</span>
