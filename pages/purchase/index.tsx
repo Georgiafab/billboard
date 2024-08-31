@@ -68,7 +68,7 @@ const Buy = ({ setOpen, open, price, depositOpen, setDepositOpen }: IbuyProps) =
     const [funds, usagefee] = data || []
 
 
-    const [priceOpen, setPriceOpen] = useState(true)
+    const [priceOpen, setPriceOpen] = useState(false)
     const [selPrice, setSelPrice] = useState('')
     const { data: totalUsageFee } = useReadContract({
         ...contractMsg,
@@ -313,7 +313,6 @@ const PricesChart: React.FC = () => {
         const events = await contract.queryFilter('PriceUpdate', 0, 'latest');
         const prices: string[] = []
         const dates: string[] = []
-        console.log(events)
         events.forEach((event => {
 
             prices.push(event.args?.newPrice ? formatEther(event.args?.newPrice) : '0')
@@ -325,7 +324,7 @@ const PricesChart: React.FC = () => {
     };
 
     const drawChart = (prices: string[], dates: string[]) => {
-        console.log(prices, dates)
+        // console.log(prices, dates)
         let grid = {
             x: 100,
             y: 40,
