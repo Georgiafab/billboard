@@ -20,7 +20,7 @@ type Props = {
     handleAudit: (status: AUD_STATUS) => void
 }
 
-const DetailMobile = ({ data = [], currIndex: [index, setIndex], links, currDetail, currPage, run, reason: [reason, setReason], handleAudit }: Props) => {
+const DetailMobile = ({ data = [], currIndex: [index, setIndex] = [0, () => { }], links, currDetail, currPage, run, reason: [reason, setReason] = ['', () => { }], handleAudit }: Props) => {
     const carouselRef = useRef<CarouselRef>(null)
     const onChange = useCallback((currentSlide: number) => {
         console.log(currentSlide, 'currentSlide')
