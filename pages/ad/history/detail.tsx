@@ -137,10 +137,10 @@ const Detail = () => {
     return (
         <main>
             {currDetail && <>
-                <Back className="z-10 max-lg:pt-2" isNotifi={false} text={<>订单号{currDetail?.id}<span className='text-base text-black text-opacity-60'>（{AUD_STATUS_TEXT[currDetail.audstatus]}）</span></>}></Back>
-                <div className="2xl:m-auto 2xl:max-w-[1260px] lg:mx-40 lg:my-0 md:mx-0 max-lg:hidden ">
+                <div className="2xl:m-auto 2xl:max-w-[1260px] lg:mx-40 lg:my-0 md:mx-0 ">
+                    <Back className="z-10 max-lg:pt-2" isNotifi={false} text={<>订单号{currDetail?.id}<span className='text-base text-black text-opacity-60'>（{AUD_STATUS_TEXT[currDetail.audstatus]}）</span></>}></Back>
 
-                    <div className='flex items-center w-full'>
+                    <div className='flex items-center w-full max-lg:hidden '>
                         <LeftIcon className={`cursor-pointer  ${dirDisabled[DIRECTION.left] ? 'opacity-30 cursor-not-allowed' : 'opacity-100'}`} onClick={() => changeCurr(DIRECTION.left, currIndex)}></LeftIcon>
                         <div className={`rounded-xl bg-white overflow-hidden mt-8 flex-1 ${dir ? `animate-[${dir === DIRECTION.right ? 'toggleRight' : 'toggleLeft'}_1s_ease-in-out_infinite]` : ''}`}>
                             <div className={`${currDetail?.audstatus === AUD_STATUS.pending ? 'bg-[#2C2B50]' : currDetail?.audstatus === AUD_STATUS.fail ? 'bg-orange' : 'bg-green'} p-5 flex items-center justify-between  flex-wrap`}>
