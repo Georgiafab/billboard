@@ -83,7 +83,7 @@ export default function Ad() {
                         <div className='animate-pulse mt-2.5'>
                             <div className="h-4 bg-gray-200 rounded-full "></div>
                         </div>
-                        : <span className='text-black text-opacity-50 text-sm'>{`${audLen}审核通过`} </span>}
+                        : <span className='text-black text-opacity-50 text-sm'>{`${audLen}条记录`} </span>}
                 </div>
             </div>
             <UnUse ref={unUseRef}></UnUse>

@@ -10,7 +10,8 @@ import { useSession } from "next-auth/react"
 import { auditAdvertise, getAuditAdvertise } from '@/services';
 import { useSignMessage } from 'wagmi'
 import DetailMobile from './components/DetailMobile';
-import { LeftIcon, RightIcon } from '@/public/icons';
+import { LeftIcon, RightIcon, SuccessIcon } from '@/public/icons';
+import NotifAlert from '@/components/NotifAlert';
 
 export enum DIRECTION {
     left = -1,
@@ -48,11 +49,14 @@ const Detail = () => {
         [DIRECTION.right]: !links?.next && currIndex >= list.length - 1
     }), [currIndex, links?.next, links?.previous, list.length])
 
-    function getAdPage(page: number, direction?: DIRECTION): Promise<IListRes> {
+    function getAdPage(page: number, direction?: DIRECTION, id?: number | string): Promise<IListRes> {
         console.log(page, 'page')
-        const params: { size: number, page: number, audstatus?: AUD_STATUS } = { size: 10, page, }
+        let params: { size?: number, page?: number, audstatus?: AUD_STATUS, id?: number | string } = { size: 10, page }
         if (storageDetail?.status !== AUD_STATUS.all) {
             params.audstatus = storageDetail?.status
+        }
+        if (id) {
+            params = { id }
         }
 
         return getAuditAdvertise(params)
@@ -60,17 +64,30 @@ const Detail = () => {
     const { loading, run } = useRequest(getAdPage, {
         manual: true,
         onSuccess: (result, params) => {
+            // 存在id 只刷新当前
+            if (params[2]) {
+                console.log(result)
+                setList((prev) => {
+                    const newArr = [...prev]
+                    // @ts-ignore (后端返回数据格式)
+                    newArr.splice(currIndex, 1, result)
+                    return newArr
+                })
+
+                return
+            }
             setLinks(result.links)
             setPage(params[0] || 1)
             // 判断是第一次进来的时候需要定位到当前的index
             if (storageDetail?.page === params[0]) {
-                const index = result.results.findIndex(item => item.id === storageDetail?.id)
+                const index = (result.results as IAdvertise[]).findIndex(item => item.id === storageDetail?.id)
                 setCurrIndex(index)
             }
-            // 页面切换 加载到了下一页 后 index 也要加一
+            // 页面切换 加载到了下一页 后 index 也要加一, params[2] 是id 有id 不判断切换
             if (params[1]) {
                 params[1] === DIRECTION.left ? setCurrIndex(prev => prev - 1) : setCurrIndex(prev => prev + 1)
             }
+
             setList((prev) => prev.concat(result.results))
         }
     })
@@ -94,8 +111,8 @@ const Detail = () => {
             }
 
         } else {
-            console.log(index, 'currIndex prev')
-            console.log(index, list.length - 1)
+            // console.log(index, 'currIndex prev')
+            // console.log(index, list.length - 1)
             if (index < list.length - 1) {
                 return index + 1
             } else {
@@ -128,18 +145,21 @@ const Detail = () => {
                     audmsg: reason
                 }
             }).then(res => {
-                console.log(res)
+                run(-1, undefined, currDetail.id)
+                setNotifShow(true)
             })
         }).catch(error => {
             message.error(error.shortMessage)
         })
     }
+
+    const [notifShow, setNotifShow] = useState(false)
     return (
         <main>
             {currDetail && <>
                 <div className="2xl:m-auto 2xl:max-w-[1260px] lg:mx-40 lg:my-0 md:mx-0 ">
-                    <Back className="z-10 max-lg:pt-2" isNotifi={false} text={<>订单号{currDetail?.id}<span className='text-base text-black text-opacity-60'>（{AUD_STATUS_TEXT[currDetail.audstatus]}）</span></>}></Back>
-
+                    <div className='w-full max-lg:mx-4'><Back className="z-10 max-lg:pt-2" isNotifi={false} text={<>订单号{currDetail?.id}<span className='text-base text-black text-opacity-60'>（{AUD_STATUS_TEXT[currDetail.audstatus]}）</span></>}></Back></div>
+                    {/* <Button onClick={() => run(-1, undefined, currDetail.id)}>shuaix</Button> */}
                     <div className='flex items-center w-full max-lg:hidden '>
                         <LeftIcon className={`cursor-pointer  ${dirDisabled[DIRECTION.left] ? 'opacity-30 cursor-not-allowed' : 'opacity-100'}`} onClick={() => changeCurr(DIRECTION.left, currIndex)}></LeftIcon>
                         <div className={`rounded-xl bg-white overflow-hidden mt-8 flex-1 ${dir ? `animate-[${dir === DIRECTION.right ? 'toggleRight' : 'toggleLeft'}_1s_ease-in-out_infinite]` : ''}`}>
@@ -221,6 +241,12 @@ const Detail = () => {
                     </div>
                 </div>
             }
+
+
+            <NotifAlert show={notifShow} setShow={setNotifShow}>
+                <SuccessIcon className="inline-block" />
+                <p className='mt-[6px]'>提交成功</p>
+            </NotifAlert>
         </main >
     )
 }

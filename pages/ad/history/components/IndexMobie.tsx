@@ -26,7 +26,7 @@ export default function IndexMobie({ pageChange, total, data, handleDetail, curr
     setCurrTab(Number(key))
   };
   return (
-    <><Back text={<>历史申请记录</>} isNotifi={false}></Back>
+    <> <div className='w-full max-lg:mx-4'><Back text={<>历史申请记录</>} isNotifi={false}></Back></div>
       <div className="w-full flex justify-center pt-2 pb-2">
 
         <Dropdown menu={{ items, onClick: menuClick }} trigger={['click']}>

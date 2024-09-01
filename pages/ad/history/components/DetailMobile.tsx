@@ -23,7 +23,6 @@ type Props = {
 const DetailMobile = ({ data = [], currIndex: [index, setIndex] = [0, () => { }], links, currDetail, currPage, run, reason: [reason, setReason] = ['', () => { }], handleAudit }: Props) => {
     const carouselRef = useRef<CarouselRef>(null)
     const onChange = useCallback((currentSlide: number) => {
-        console.log(currentSlide, 'currentSlide')
         setIndex(currentSlide)
         if (currentSlide >= data.length - 1 && links?.next) {
             run(currPage + 1)
@@ -37,7 +36,6 @@ const DetailMobile = ({ data = [], currIndex: [index, setIndex] = [0, () => { }]
     const [info] = useLocalStorageState<UserInfo>('user-info');
 
     useEffect(() => {
-        console.log(index, 'useEffect index')
         carouselRef.current?.goTo(index, true)
     }, [])
 

@@ -1936,6 +1936,11 @@ video {
     margin-right: 0.75rem;
   }
 
+  .max-lg\:mx-4 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
   .max-lg\:mb-5 {
     margin-bottom: 1.25rem;
   }
@@ -1998,6 +2003,10 @@ video {
 
   .max-lg\:w-11\/12 {
     width: 91.666667%;
+  }
+
+  .max-lg\:max-w-\[90\%\] {
+    max-width: 90%;
   }
 
   .max-lg\:flex-col {
@@ -2229,6 +2238,11 @@ video {
   .md\:mx-0 {
     margin-left: 0px;
     margin-right: 0px;
+  }
+
+  .md\:mx-2 {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
   }
 
   .md\:block {

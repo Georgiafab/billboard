@@ -44,7 +44,7 @@ const History = () => {
             let p0 = params[0]
             const page = typeof p0 === "object" ? p0?.page : p0
             setPage(page || 1)
-            setData(result.results)
+            setData(result.results as IAdvertise[])
             setTotal(result.count)
         }
     })

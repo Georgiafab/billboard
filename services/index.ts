@@ -7,7 +7,7 @@ export const login = async (data: any) => {
   return response;
 };
 export const getAuditAdvertise = async (params?: any) => {
-  const response = await get("/v1/audit/", params);
+  const response = await get(`/v1/audit/${params?.id || ""}`, params);
   return response.data;
 };
 

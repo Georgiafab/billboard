@@ -34,7 +34,7 @@ const Home = () => {
     manual: false,
     onSuccess: (result, params) => {
       setCurrPage(params[0] || 1)
-      setData(result.results)
+      setData(result.results as IAdvertise[])
       setTotal(result.count)
       setLinks(result.links)
     }
