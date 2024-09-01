@@ -158,7 +158,9 @@ const Detail = () => {
         <main>
             {currDetail && <>
                 <div className="2xl:m-auto 2xl:max-w-[1260px] lg:mx-40 lg:my-0 md:mx-0 ">
-                    <div className='w-full max-lg:mx-4'><Back className="z-10 max-lg:pt-2" isNotifi={false} text={<>订单号{currDetail?.id}<span className='text-base text-black text-opacity-60'>（{AUD_STATUS_TEXT[currDetail.audstatus]}）</span></>}></Back></div>
+                    <div className='w-full max-lg:mx-4'>
+                        <Back className="max-lg:pt-2" isNotifi={false} text={<>订单号{currDetail?.id}
+                            <span className='text-base text-black text-opacity-60'>（{AUD_STATUS_TEXT[currDetail.audstatus]}）</span></>}></Back></div>
                     {/* <Button onClick={() => run(-1, undefined, currDetail.id)}>shuaix</Button> */}
                     <div className='flex items-center w-full max-lg:hidden '>
                         <LeftIcon className={`cursor-pointer  ${dirDisabled[DIRECTION.left] ? 'opacity-30 cursor-not-allowed' : 'opacity-100'}`} onClick={() => changeCurr(DIRECTION.left, currIndex)}></LeftIcon>

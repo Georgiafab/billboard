@@ -15,6 +15,7 @@ const Back = ({ children, text, isNotifi = true, backRoute, className }: Props) 
     const router = useRouter()
 
     const comfimBack = () => {
+        console.log("comfimBack")
         backRoute ? router.push(backRoute) : router.back();
     }
     const openNotification = () => {
