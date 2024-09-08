@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "node server.js",
     "p-dev": "npm run css & HTTPS=true next dev",
-    "build": "next build",
-    "start": "next start",
+    "build:dev": "cross-env NODE_ENV=production dotenv -e  .env.development -- next build",
+    "start:dev": "cross-env NODE_ENV=production dotenv -e  .env.development -- next start",
+    "build": "cross-env NODE_ENV=production dotenv -e  .env.production -- next build",
+    "start": "cross-env NODE_ENV=production dotenv -e  .env.production -- next start",
     "lint": "next lint",
     "css": "npx tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css --watch"
   },
@@ -42,6 +44,9 @@
     "@types/node": "^18.19.3",
     "@types/react": "^18.3.0",
     "autoprefixer": "^10.4.19",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.2",
     "eslint": "^8.15.0",
     "eslint-config-next": "^14.2.3",
     "postcss": "^8.4.39",
