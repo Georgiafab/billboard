@@ -4,6 +4,17 @@ const fs = require("fs");
 const nextConfig = {
   debug: true,
   // reactStrictMode: true,
+  transpilePackages: [
+    "antd",
+    "@ant-design",
+    "rc-util",
+    "rc-pagination",
+    "rc-picker",
+    "rc-notification",
+    "rc-tooltip",
+    "rc-tree",
+    "rc-table",
+  ],
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push({
       test: /\.svg$/,
