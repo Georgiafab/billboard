@@ -22,7 +22,7 @@ const LoginButton = ({ type }: { type: "metamask" | "WalletConnect" }) => {
                     return (
                         <button
                             type="button"
-                            disabled={!ready}
+                            // disabled={!ready}
                             onClick={() => { connect(); setCustomConnect(true) }}
                             className={`${style.loginButton} ${style[type]}  `}>
                             <img src={`/images/${type}.svg`} alt={type} />

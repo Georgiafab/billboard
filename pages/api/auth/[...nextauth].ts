@@ -20,7 +20,6 @@ export function getAuthOptions(req: IncomingMessage): NextAuthOptions {
             JSON.parse(credentials?.message || "{}")
           );
           let message = siwe.prepareMessage();
-
           const nextAuthUrl =
             process.env.NEXTAUTH_URL ||
             (process.env.VERCEL_URL

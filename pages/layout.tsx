@@ -11,6 +11,8 @@ export default function Layout({ children, pathname }: Props) {
     return (
         <>
             <Head>
+                <title>一块广告牌</title>
+                <meta name="description" content="自治世界中的共享广告牌"></meta>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" />
             </Head>
             <div className='max-lg:pb-[76px]'>
